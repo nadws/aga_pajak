@@ -24,7 +24,7 @@ class ExportbayarBK implements FromView, WithEvents
 
     public function view(): View
     {
-        $pembelian = DB::select("SELECT a.tgl, a.no_nota,b.nm_suplier, a.suplier_akhir, a.total_harga, a.lunas,  c.qty
+        $pembelian = DB::select("SELECT a.tgl, a.no_nota,b.nm_suplier, a.suplier_akhir, a.total_harga, a.lunas,  c.qty, a.lunas
         FROM invoice_bk as a 
         left join tb_suplier as b on b.id_suplier = a.id_suplier
         left join (

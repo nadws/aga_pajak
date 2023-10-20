@@ -43,7 +43,8 @@
                     $bca2 = empty($bca->bayar) ? '0' : $bca->bayar;
                     $mandiri2 = empty($mandiri->bayar) ? '0' : $mandiri->bayar;
                 @endphp
-                <td>{{ $p->total_harga - $kas2 - $bca2 - $mandiri2 <= 0 ? 'Paid' : 'Unpaid' }}</td>
+                <td>{{ $p->lunas == 'D' ? 'Draft' : ($p->total_harga - $kas2 - $bca2 - $mandiri2 <= 0 ? 'Paid' : 'Unpaid') }}
+                </td>
                 <td>{{ empty($kas->bayar) ? '0' : $kas->bayar }}</td>
                 <td>{{ empty($bca->bayar) ? '0' : $bca->bayar }}</td>
                 <td>{{ empty($mandiri->bayar) ? '0' : $mandiri->bayar }}</td>
