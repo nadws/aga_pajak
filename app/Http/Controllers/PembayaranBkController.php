@@ -114,7 +114,7 @@ class PembayaranBkController extends Controller
         SELECT c.no_nota , sum(c.debit) as debit, sum(c.kredit) as kredit  FROM bayar_bk as c
         group by c.no_nota
         ) as c on c.no_nota = a.no_nota
-        where a.total_harga + c.debit - c.kredit = '0'
+        where round(a.total_harga) + round(c.debit) - round(c.kredit) = '0'
         order by a.id_invoice_bk ASC
         ");
 

@@ -136,7 +136,7 @@
                                 </td>
                                 <td>
                                     <span
-                                        class="badge {{ $p->lunas == 'D' ? 'bg-warning' : ($p->total_harga + $p->debit - $p->kredit == 0 ? 'bg-success' : 'bg-danger') }}">
+                                        class="badge {{ $p->lunas == 'D' ? 'bg-warning' : (round($p->total_harga) + round($p->debit) - round($p->kredit) == 0 ? 'bg-success' : 'bg-danger') }}">
                                         {{ $p->lunas == 'D' ? 'Draft' : (round($p->total_harga) + round($p->debit) - round($p->kredit) == 0 ? 'Paid' : 'Unpaid') }}
                                     </span>
                                 </td>
