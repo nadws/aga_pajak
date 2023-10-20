@@ -138,6 +138,7 @@
                                     <span
                                         class="badge {{ $p->lunas == 'D' ? 'bg-warning' : ($p->total_harga + $p->debit - $p->kredit == 0 ? 'bg-success' : 'bg-danger') }}">
                                         {{ $p->lunas == 'D' ? 'Draft' : ($p->total_harga + $p->debit - $p->kredit == 0 ? 'Paid' : 'Unpaid') }}
+                                        / {{ $p->total_harga }} / {{ $p->debit }} / {{ $p->kredit }}
                                     </span>
                                 </td>
                                 <td>{{ $p->admin }}</td>
