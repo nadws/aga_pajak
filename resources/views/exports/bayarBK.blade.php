@@ -39,11 +39,11 @@
                 <td>{{ $p->qty }}</td>
                 <td>{{ $p->total_harga }}</td>
                 @php
-                    $kas = empty($kas->bayar) ? '0' : $kas->bayar;
-                    $bca = empty($bca->bayar) ? '0' : $bca->bayar;
-                    $mandiri = empty($mandiri->bayar) ? '0' : $mandiri->bayar;
+                    $kas2 = empty($kas->bayar) ? '0' : $kas->bayar;
+                    $bca2 = empty($bca->bayar) ? '0' : $bca->bayar;
+                    $mandiri2 = empty($mandiri->bayar) ? '0' : $mandiri->bayar;
                 @endphp
-                <td>{{ $p->total_harga - $kas - $bca - $mandiri <= 0 ? 'Paid' : 'Unpaid' }}</td>
+                <td>{{ $p->total_harga - $kas2 - $bca2 - $mandiri2 <= 0 ? 'Paid' : 'Unpaid' }}</td>
                 <td>{{ empty($kas->bayar) ? '0' : $kas->bayar }}</td>
                 <td>{{ empty($bca->bayar) ? '0' : $bca->bayar }}</td>
                 <td>{{ empty($mandiri->bayar) ? '0' : $mandiri->bayar }}</td>
