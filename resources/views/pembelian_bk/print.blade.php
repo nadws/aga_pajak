@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{$title}}</title>
+    <title>{{ $title }}</title>
 </head>
 
 <style>
@@ -93,6 +93,12 @@
         justify-content: center;
         margin: 90px;
     }
+
+    th,
+    td {
+        padding: 5px;
+        /* Atur padding pada sel-sel tabel */
+    }
 </style>
 
 <body>
@@ -104,12 +110,10 @@
 
         </div>
         <div class="subpage">
-
-
-
             <table style="font-size: small; white-space: nowrap;  " width="100%">
                 <tr>
-                    <td rowspan="3" width="80%" align="left"><img src="/assets/login/img/empat.svg" width="100" alt="">
+                    <td rowspan="3" width="80%" align="left"><img src="/assets/login/img/empat.svg"
+                            width="100" alt="">
                     </td>
                     <td>&nbsp;</td>
                     <td>&nbsp;</td>
@@ -149,27 +153,29 @@
                 <thead>
                     <tr>
                         <th style="text-align: center">Produk</th>
-                        <th>Qty</th>
+                        <th style="text-align: right">Qty</th>
                         <th>Satuan</th>
-                        <th> Harga</th>
-                        <th>Total</th>
+                        <th style="text-align: right"> Harga</th>
+                        <th style="text-align: right">Total</th>
                     </tr>
                 </thead>
                 <tbody>
                     @php
-                    $qty_total = 0;
+                        $qty_total = 0;
                     @endphp
                     @foreach ($produk as $no => $p)
-                    @php
-                    $qty_total += $p->qty;
-                    @endphp
-                    <tr>
-                        <td>{{$p->nm_produk}}</td>
-                        <td>{{number_format($p->qty,0)}}</td>
-                        <td>{{$p->nm_satuan}}</td>
-                        <td>{{number_format($p->h_satuan,0)}}</td>
-                        <td>{{number_format($p->qty == '0' ? '0' : $p->qty * $p->h_satuan,0)}}</td>
-                    </tr>
+                        @php
+                            $qty_total += $p->qty;
+                        @endphp
+                        <tr>
+                            <td>{{ $p->nm_produk }}</td>
+                            <td align="right">{{ number_format($p->qty, 0) }}</td>
+                            <td>{{ $p->nm_satuan }}</td>
+                            <td align="right">{{ number_format($p->h_satuan, 0) }}</td>
+                            <td align="right">
+                                {{ $p->id_produk == '7' ? $p->h_satuan : number_format($p->qty == '0' ? '0' : $p->qty * $p->h_satuan, 0) }}
+                            </td>
+                        </tr>
                     @endforeach
                     <tr>
                         <td colspan="5" rowspan="4" style="height: 100px;">&nbsp;</td>
@@ -184,7 +190,7 @@
                         </th>
                         <th></th>
                         <th style="text-align: right;">
-                            <?= number_format($pembelian->total_harga == '0' ? '0':$pembelian->total_harga /$qty_total,0 ) ?>
+                            <?= number_format($pembelian->total_harga == '0' ? '0' : $pembelian->total_harga / $qty_total, 0) ?>
                         </th>
                         <th style="text-align: right;">
                             <?= number_format($pembelian->total_harga, 0) ?>
@@ -211,7 +217,8 @@
 
             <table style="font-size: small; white-space: nowrap;  " width="100%">
                 <tr>
-                    <td rowspan="3" align="left" width="80%"><img src="/assets/login/img/empat.svg" width="100" alt="">
+                    <td rowspan="3" align="left" width="80%"><img src="/assets/login/img/empat.svg"
+                            width="100" alt="">
                     </td>
                     <td>&nbsp;</td>
                     <td>&nbsp;</td>
@@ -247,31 +254,33 @@
                 </tr>
             </table>
             <br>
-            <table style="text-align: center; border-collapse: collapse;" width="100%" border="1">
+            <table style="text-align: center; border-collapse: collapse; padding: 5px" width="100%" border="1">
                 <thead>
                     <tr>
                         <th style="text-align: center">Produk</th>
-                        <th>Qty</th>
+                        <th style="text-align: right">Qty</th>
                         <th>Satuan</th>
-                        <th> Harga</th>
-                        <th>Total</th>
+                        <th style="text-align: right"> Harga</th>
+                        <th style="text-align: right">Total</th>
                     </tr>
                 </thead>
                 <tbody>
                     @php
-                    $qty_total = 0;
+                        $qty_total = 0;
                     @endphp
                     @foreach ($produk as $no => $p)
-                    @php
-                    $qty_total += $p->qty;
-                    @endphp
-                    <tr>
-                        <td>{{$p->nm_produk}}</td>
-                        <td>{{number_format($p->qty,0)}}</td>
-                        <td>{{$p->nm_satuan}}</td>
-                        <td align="right">{{number_format($p->h_satuan,0)}}</td>
-                        <td align="right">{{number_format($p->qty == '0' ? '0' : $p->qty * $p->h_satuan,0)}}</td>
-                    </tr>
+                        @php
+                            $qty_total += $p->qty;
+                        @endphp
+                        <tr>
+                            <td>{{ $p->nm_produk }}</td>
+                            <td align="right">{{ number_format($p->qty, 0) }}</td>
+                            <td>{{ $p->nm_satuan }}</td>
+                            <td align="right">{{ number_format($p->h_satuan, 0) }}</td>
+                            <td align="right">
+                                {{ $p->id_produk == '7' ? $p->h_satuan : number_format($p->qty == '0' ? '0' : $p->qty * $p->h_satuan, 0) }}
+                            </td>
+                        </tr>
                     @endforeach
                     <tr>
                         <td colspan="5" rowspan="4" style="height: 100px;">&nbsp;</td>
@@ -286,7 +295,7 @@
                         </th>
                         <th></th>
                         <th style="text-align: right;">
-                            <?= number_format($pembelian->total_harga == '0' ? '0':$pembelian->total_harga /$qty_total,0 ) ?>
+                            <?= number_format($pembelian->total_harga == '0' ? '0' : $pembelian->total_harga / $qty_total, 0) ?>
                         </th>
                         <th style="text-align: right;">
                             <?= number_format($pembelian->total_harga, 0) ?>
@@ -298,51 +307,50 @@
             </table>
             <br>
             @if (empty($bayar->ket))
-
             @else
-            <table style="text-align: center; border-collapse: collapse;" width="100%" border="1">
-                <thead>
-                    <tr>
-                        <th style="text-align: center">Produk</th>
-                        <th>Qty</th>
-                        <th>Satuan</th>
-                        <th>Harga</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{{$bayar->ket}}</td>
-                        <td align="right">0</td>
-                        <td></td>
-                        <td align="right">{{number_format($bayar->debit,0)}}</td>
-                        <td align="right">{{number_format($bayar->debit,0)}}</td>
-                    </tr>
+                <table style="text-align: center; border-collapse: collapse;" width="100%" border="1">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center">Produk</th>
+                            <th style="text-align: right">Qty</th>
+                            <th>Satuan</th>
+                            <th style="text-align: right">Harga</th>
+                            <th style="text-align: right">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ $bayar->ket }}</td>
+                            <td align="right">0</td>
+                            <td></td>
+                            <td align="right">{{ number_format($bayar->debit, 0) }}</td>
+                            <td align="right">{{ number_format($bayar->debit, 0) }}</td>
+                        </tr>
 
-                </tbody>
-                <tfoot>
+                    </tbody>
+                    <tfoot>
 
-                    <tr>
-                        <th style="text-align: center;">Grand Total</th>
-                        <th style="text-align: right;">
-                            {{number_format($qty_total)}}
-                        </th>
-                        <th></th>
-                        <th style="text-align: right;">
-                            {{number_format($pembelian->total_harga == '0' ? '0': ($pembelian->total_harga +
-                            $bayar->debit)
-                            /$qty_total,0 )}}
-                        </th>
-                        <th style="text-align: right;">
-                            {{number_format($pembelian->total_harga + $bayar->debit, 0)}}
-                        </th>
-                    </tr>
+                        <tr>
+                            <th style="text-align: center;">Grand Total</th>
+                            <th style="text-align: right;">
+                                {{ number_format($qty_total) }}
+                            </th>
+                            <th></th>
+                            <th style="text-align: right;">
+                                {{ number_format(
+                                    $pembelian->total_harga == '0' ? '0' : ($pembelian->total_harga + $bayar->debit) / $qty_total,
+                                    0,
+                                ) }}
+                            </th>
+                            <th style="text-align: right;">
+                                {{ number_format($pembelian->total_harga + $bayar->debit, 0) }}
+                            </th>
+                        </tr>
 
 
-                </tfoot>
+                    </tfoot>
 
-            </table>
-
+                </table>
             @endif
 
 

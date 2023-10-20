@@ -1,4 +1,4 @@
-<x-theme.app title="{{$title}}" table="Y" sizeCard="12">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
 
     <x-slot name="cardHeader">
         <div class="row justify-content-end">
@@ -11,24 +11,30 @@
 
 
     <x-slot name="cardBody">
-        <form action="{{route('save_pembelian_bk')}}" method="post" class="save_jurnal">
+        <form action="{{ route('save_pembelian_bk') }}" method="post" class="save_jurnal">
             @csrf
             <section class="row">
 
                 <div class="col-lg-2 col-6">
                     <label for="">Tanggal</label>
-                    <input type="date" class="form-control tgl_nota" name="tgl" value="{{date('Y-m-d')}}">
+                    <input type="date" class="form-control tgl_nota" name="tgl" value="{{ date('Y-m-d') }}">
                 </div>
                 <div class="col-lg-2 col-6">
                     <label for="">No Nota</label>
-                    <input type="text" class="form-control nota_bk" name="no_nota" value="{{$sub_po}}" readonly>
+                    <input type="text" class="form-control nota_bk" name="no_nota" value="{{ $sub_po }}"
+                        readonly>
+                </div>
+                <div class="col-lg-2 col-6">
+                    <label for="">No Lot</label>
+                    <input type="text" class="form-control nota_bk" name="no_lot" value="{{ $no_lot }}"
+                        readonly>
                 </div>
                 <div class="col-lg-2 col-6">
                     <label for="">Suplier Awal</label>
                     <select name="suplier_awal" id="select2" class="" required>
                         <option value="">Pilih Suplier</option>
                         @foreach ($suplier as $s)
-                        <option value="{{$s->id_suplier}}">{{$s->nm_suplier}}</option>
+                            <option value="{{ $s->id_suplier }}">{{ $s->nm_suplier }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -62,18 +68,18 @@
                                         </button> --}}
                                     </td>
                                     <td>
-                                        <select name="id_produk[]" id="" class="select2_add pilih_produk pilih_produk1"
-                                            count='1'>
+                                        <select name="id_produk[]" id=""
+                                            class="select2_add pilih_produk pilih_produk1" count='1'>
                                             <option value="">Pilih Produk</option>
                                             @foreach ($produk as $p)
-                                            <option value="{{$p->id_produk}}">{{$p->nm_produk}}</option>
+                                                <option value="{{ $p->id_produk }}">{{ $p->nm_produk }}</option>
                                             @endforeach
                                         </select>
                                     </td>
 
                                     <td style="vertical-align: top;">
-                                        <input type="text" class="form-control qty qty1 input-nanda" count='1'
-                                            style="vertical-align: top; width: 80px;" value="0">
+                                        <input type="text" class="form-control qty qty1 input-nanda input-nanda1"
+                                            count='1' style="vertical-align: top; width: 80px;" value="0">
                                         <input type="hidden" name="qty[]" class="form-control qty_biasa qty_biasa1"
                                             count='1' style="vertical-align: top" value="0">
 
@@ -95,12 +101,12 @@
                                         <input type="text" class="form-control total_harga1 text-end " value=""
                                             count="1" style="width: 150px" readonly>
                                         <input type="hidden"
-                                            class="form-control total_harga_biasa total_harga_biasa1 text-end" value=""
-                                            readonly>
+                                            class="form-control total_harga_biasa total_harga_biasa1 text-end"
+                                            value="" readonly>
                                     </td>
                                     <td style="vertical-align: top;">
-                                        <button type="button" class="btn rounded-pill remove_baris" count="1"><i
-                                                class="fas fa-trash text-danger"></i>
+                                        <button type="button" class="btn rounded-pill remove_baris"
+                                            count="1"><i class="fas fa-trash text-danger"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -144,7 +150,7 @@
                             <select name="id_akun_lainnya" id="" class="select2_add inp-lain">
                                 <option value="">Pilih Akun</option>
                                 @foreach ($akun as $a)
-                                <option value="{{$a->id_akun}}">{{$a->nm_akun}}</option>
+                                    <option value="{{ $a->id_akun }}">{{ $a->nm_akun }}</option>
                                 @endforeach
 
                             </select>
@@ -156,7 +162,8 @@
                         <div class="col-lg-4 pilihan_l">
                             <label for="">Rupiah</label>
                             <input type="text" class="form-control inp-lain debit-lain">
-                            <input type="hidden" class="form-control inp-lain debit-lain_biasa" name="debit_tambahan">
+                            <input type="hidden" class="form-control inp-lain debit-lain_biasa"
+                                name="debit_tambahan">
                         </div>
 
                     </div>
@@ -190,13 +197,15 @@
     </x-slot>
     <x-slot name="cardFooter">
         <div class="btn-group dropup me-1 mb-1 float-end">
-            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true"
-                aria-expanded="false">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
                 Simpan
             </button>
             <div class="dropdown-menu">
-                <button type="submit" name="button" value="simpan" class="dropdown-item" href="#">Simpan</button>
-                <button type="submit" name="button" value="draft" class="dropdown-item" href="#">Draft</button>
+                <button type="submit" name="button" value="simpan" class="dropdown-item"
+                    href="#">Simpan</button>
+                <button type="submit" name="button" value="draft" class="dropdown-item"
+                    href="#">Draft</button>
             </div>
         </div>
         {{-- <button type="submit" class="float-end btn btn-primary button-save">Simpan</button> --}}
@@ -204,176 +213,188 @@
             <span class="spinner-border spinner-border-sm " role="status" aria-hidden="true"></span>
             Loading...
         </button>
-        <a href="{{route('jurnal')}}" class="float-end btn btn-outline-primary me-2">Batal</a>
+        <a href="{{ route('jurnal') }}" class="float-end btn btn-outline-primary me-2">Batal</a>
         </form>
     </x-slot>
 
 
 
     @section('scripts')
+        <script>
+            $(document).ready(function() {
+                $(document).on("change", ".pilih_produk", function() {
+                    var count = $(this).attr("count");
+                    var id_produk = $(".pilih_produk" + count).val();
+                    $.ajax({
+                        url: "/get_satuan_produk?id_produk=" + id_produk,
+                        type: "Get",
 
-
-    <script>
-        $(document).ready(function () {
-            $(document).on("change", ".pilih_produk", function () {
-                var count = $(this).attr("count");
-                var id_produk = $(".pilih_produk" + count).val();
-                $.ajax({
-                    url: "/get_satuan_produk?id_produk=" + id_produk,
-                    type: "Get",
-                   
-                    success: function (data) {
-                        $(".satuan" + count).html(data);
-                    },
+                        success: function(data) {
+                            $('.qty' + count).attr('id_produk', +id_produk);
+                            $('.h_satuan' + count).attr('id_produk', +id_produk);
+                            $(".satuan" + count).html(data);
+                        },
+                    });
                 });
-            });
-            $(document).on("keyup", ".qty", function () {
-                var count = $(this).attr("count");
-                var input = $(this).val();		
-                input = input.replace(/[^\d\,]/g, "");
-                input = input.replace(".", ",");
-                input = input.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                
-                if (input === "") {
-                    $(this).val("");
-                    $('.qty_biasa' + count).val(0)
-                } else {
-                    $(this).val(input);
-                    input = input.replaceAll(".", "");
-                    input2 = input.replace(",", ".");
-                    $('.qty_biasa' + count).val(input2)
-                    
-                }
+                $(document).on("keyup", ".qty", function() {
+                    var count = $(this).attr("count");
+                    var id_produk = $(this).attr('id_produk');
+                    var input = $(this).val();
+                    input = input.replace(/[^\d\,]/g, "");
+                    input = input.replace(".", ",");
+                    input = input.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
 
-                
+                    if (input === "") {
+                        $(this).val("");
+                        $('.qty_biasa' + count).val(0)
+                    } else {
+                        $(this).val(input);
+                        input = input.replaceAll(".", "");
+                        input2 = input.replace(",", ".");
+                        $('.qty_biasa' + count).val(input2)
 
-                
-                var h_satuan = $(".h_satuan_biasa" + count).val()
-                var total = parseFloat(input2) * parseFloat(h_satuan);
-                var totalRupiah = total.toLocaleString("id-ID", {
-                    style: "currency",
-                    currency: "IDR",
+                    }
+
+
+
+
+                    var h_satuan = $(".h_satuan_biasa" + count).val();
+                    if (id_produk == '7') {
+                        var total = parseFloat(h_satuan);
+                    } else {
+                        var total = parseFloat(input2) * parseFloat(h_satuan);
+                    }
+
+                    var totalRupiah = total.toLocaleString("id-ID", {
+                        style: "currency",
+                        currency: "IDR",
+                    });
+
+                    $('.total_harga_biasa' + count).val(total);
+                    var debit = $(".total_harga" + count).val(totalRupiah);
+
+                    var total_all = 0;
+                    $(".total_harga_biasa").each(function() {
+                        total_all += parseFloat($(this).val());
+                    });
+
+                    var totalRupiahall = total_all.toLocaleString("id-ID", {
+                        style: "currency",
+                        currency: "IDR",
+                    });
+                    var tl = $(".total_biasa").val(total_all);
+                    var debit = $(".total").text(totalRupiahall);
+
+
+                });
+                $(document).on("keyup", ".debit-lain", function() {
+                    var count = $(this).attr("count");
+                    var input = $(this).val();
+                    input = input.replace(/[^\d\,]/g, "");
+                    input = input.replace(".", ",");
+                    input = input.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+
+                    if (input === "") {
+                        $(this).val("");
+                        $('.debit-lain_biasa').val(0)
+                    } else {
+                        $(this).val(input);
+                        input = input.replaceAll(".", "");
+                        input2 = input.replace(",", ".");
+                        $('.debit-lain_biasa').val(input2)
+
+                    }
+
+
+                });
+                $(document).on("keyup", ".h_satuan", function() {
+                    var count = $(this).attr("count");
+                    var id_produk = $(this).attr('id_produk');
+                    var input = $(this).val();
+                    input = input.replace(/[^\d\,]/g, "");
+                    input = input.replace(".", ",");
+                    input = input.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+
+                    if (input === "") {
+                        $(this).val("");
+                        $('.h_satuan_biasa' + count).val(0)
+                    } else {
+                        $(this).val("Rp " + input);
+                        input = input.replaceAll(".", "");
+                        input2 = input.replace(",", ".");
+                        $('.h_satuan_biasa' + count).val(input2)
+
+                    }
+                    var qty_biasa = $(".qty_biasa" + count).val()
+                    if (id_produk == '7') {
+                        var total = parseFloat(input2);
+                    } else {
+                        var total = parseFloat(input2) * parseFloat(qty_biasa);
+                    }
+
+                    var totalRupiah = total.toLocaleString("id-ID", {
+                        style: "currency",
+                        currency: "IDR",
+                    });
+                    $('.total_harga_biasa' + count).val(total);
+                    var debit = $(".total_harga" + count).val(totalRupiah);
+
+                    var total_all = 0;
+                    $(".total_harga_biasa").each(function() {
+                        total_all += parseFloat($(this).val());
+                    });
+
+                    var totalRupiahall = total_all.toLocaleString("id-ID", {
+                        style: "currency",
+                        currency: "IDR",
+                    });
+                    var tl = $(".total_biasa").val(total_all);
+                    var debit = $(".total").text(totalRupiahall);
                 });
 
-                $('.total_harga_biasa' + count).val(total);
-                var debit = $(".total_harga" + count).val(totalRupiah);
-
-                var total_all = 0;
-                $(".total_harga_biasa").each(function () {
-                    total_all += parseFloat($(this).val());
+                var count = 2;
+                $(document).on("click", ".tbh_baris", function() {
+                    count = count + 1;
+                    $.ajax({
+                        url: "/tambah_baris_bk?count=" + count,
+                        type: "Get",
+                        success: function(data) {
+                            $("#tb_baris").append(data);
+                            $(".select").select2();
+                        },
+                    });
                 });
 
-                var totalRupiahall = total_all.toLocaleString("id-ID", {
-                    style: "currency",
-                    currency: "IDR",
-                });
-                var tl = $(".total_biasa").val(total_all);
-                var debit = $(".total").text(totalRupiahall);
+                $(document).on("click", ".remove_baris", function() {
+                    var delete_row = $(this).attr("count");
+                    $(".baris" + delete_row).remove();
 
-                
-            });
-            $(document).on("keyup", ".debit-lain", function () {
-                var count = $(this).attr("count");
-                var input = $(this).val();		
-                input = input.replace(/[^\d\,]/g, "");
-                input = input.replace(".", ",");
-                input = input.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                
-                if (input === "") {
-                    $(this).val("");
-                    $('.debit-lain_biasa').val(0)
-                } else {
-                    $(this).val(input);
-                    input = input.replaceAll(".", "");
-                    input2 = input.replace(",", ".");
-                    $('.debit-lain_biasa').val(input2)
-                    
-                }
 
-                
-            });
-            $(document).on("keyup", ".h_satuan", function () {
-                var count = $(this).attr("count");
-                var input = $(this).val();		
-                input = input.replace(/[^\d\,]/g, "");
-                input = input.replace(".", ",");
-                input = input.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                
-                if (input === "") {
-                    $(this).val("");
-                    $('.h_satuan_biasa' + count).val(0)
-                } else {
-                    $(this).val("Rp " + input);
-                    input = input.replaceAll(".", "");
-                    input2 = input.replace(",", ".");
-                    $('.h_satuan_biasa' + count).val(input2)
-                    
-                }
-                var qty_biasa = $(".qty_biasa" + count).val()
-                var total = parseFloat(input2) * parseFloat(qty_biasa);
-                var totalRupiah = total.toLocaleString("id-ID", {
-                    style: "currency",
-                    currency: "IDR",
-                });
-                $('.total_harga_biasa' + count).val(total);
-                var debit = $(".total_harga" + count).val(totalRupiah);
-
-                var total_all = 0;
-                $(".total_harga_biasa").each(function () {
-                    total_all += parseFloat($(this).val());
                 });
 
-                var totalRupiahall = total_all.toLocaleString("id-ID", {
-                    style: "currency",
-                    currency: "IDR",
+                $(".pilihan_l").hide();
+                $(document).on("click", "#Pilihan_Lainnya", function() {
+                    if ($(this).prop("checked") == true) {
+                        $(".pilihan_l").show();
+                        $(".inp-lain").removeAttr("disabled");
+                    } else if ($(this).prop("checked") == false) {
+                        $(".pilihan_l").hide();
+                    }
                 });
-                var tl = $(".total_biasa").val(total_all);
-                var debit = $(".total").text(totalRupiahall);
-            });
 
-            var count = 2;
-            $(document).on("click", ".tbh_baris", function () {
-                count = count + 1;
-                $.ajax({
-                    url: "/tambah_baris_bk?count=" + count,
-                    type: "Get",
-                    success: function (data) {
-                        $("#tb_baris").append(data);
-                        $(".select").select2();
-                    },
+                $(document).on("change", ".tgl_nota", function() {
+                    var tgl = $(this).val();
+                    $.ajax({
+                        type: "get",
+                        url: "/nota_invoice_bk?tgl=" + tgl,
+                        success: function(data) {
+                            $('.nota_bk').val(data);
+                        }
+                    });
                 });
+
+
             });
-
-            $(document).on("click", ".remove_baris", function () {
-            var delete_row = $(this).attr("count");
-            $(".baris" + delete_row).remove();
-
-            
-            });
-
-            $(".pilihan_l").hide();
-            $(document).on("click", "#Pilihan_Lainnya", function () {
-                if ($(this).prop("checked") == true) {
-                    $(".pilihan_l").show();
-                    $(".inp-lain").removeAttr("disabled");
-                } else if ($(this).prop("checked") == false) {
-                    $(".pilihan_l").hide();
-                }
-            });
-
-            $(document).on("change", ".tgl_nota", function () {
-               var tgl = $(this).val();
-               $.ajax({
-                type: "get",
-                url: "/nota_invoice_bk?tgl=" + tgl,
-                success: function (data) {
-                    $('.nota_bk').val(data);
-                }
-               });
-            });
-
-
-        });
-    </script>
+        </script>
     @endsection
 </x-theme.app>

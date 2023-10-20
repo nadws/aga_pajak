@@ -2,7 +2,7 @@
     <x-slot name="cardHeader">
         <div class="row justify-content-end">
             <div class="col-lg-6">
-                <h6 class="float-start mt-1">{{ $title }} : {{tanggal($tgl1)}} ~ {{tanggal($tgl2)}}</h6>
+                <h6 class="float-start mt-1">{{ $title }} : {{ tanggal($tgl1) }} ~ {{ tanggal($tgl2) }}</h6>
             </div>
             <div class="col-lg-6">
 
@@ -46,6 +46,7 @@
                             <th class="dhead" width="5">#</th>
                             <th class="dhead">Tanggal</th>
                             <th class="dhead">No Nota</th>
+                            <th class="dhead">No Lot</th>
                             <th class="dhead">Suplier Awal</th>
                             <th class="dhead">Suplier Akhir</th>
                             <th class="dhead" style="text-align: right">Total Harga</th>
@@ -65,6 +66,7 @@
                                 <td>{{ $no + 1 }}</td>
                                 <td>{{ tanggal($p->tgl) }}</td>
                                 <td>{{ $p->no_nota }}</td>
+                                <td>{{ $p->no_lot }}</td>
                                 <td>{{ ucwords(strtolower($p->nm_suplier)) }}</td>
                                 <td>{{ ucwords(strtolower($p->suplier_akhir)) }}</td>
                                 <td align="right">Rp. {{ number_format($p->total_harga, 0) }}</td>
@@ -161,7 +163,7 @@
 
         <form action="{{ route('grading') }}" method="post">
             @csrf
-            <x-theme.modal title="Campur BKIN" idModal="grading">
+            <x-theme.modal title="Campur BKIN" size="modal-lg" idModal="grading">
                 <div id="grading_nota2"></div>
             </x-theme.modal>
         </form>

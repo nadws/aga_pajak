@@ -30,7 +30,7 @@ class BkinExport  implements FromView, WithEvents
     {
 
 
-        $pembelian = DB::select("SELECT a.id_invoice_bk, a.tgl, a.no_nota,b.nm_suplier, a.suplier_akhir, a.total_harga, a.lunas, c.kredit, c.debit, a.approve, d.no_nota as nota_grading,e.gr_beli, d.gr_basah, d.gr_kering, d.pcs_awal, d.tgl as tgl_grading, d.no_campur
+        $pembelian = DB::select("SELECT a.id_invoice_bk, a.no_lot, a.tgl, a.no_nota,b.nm_suplier, a.suplier_akhir, a.total_harga, a.lunas, c.kredit, c.debit, a.approve, d.no_nota as nota_grading,e.gr_beli, d.gr_basah, d.gr_kering, d.pcs_awal, d.tgl as tgl_grading, d.no_campur
             FROM invoice_bk as a 
             left join tb_suplier as b on b.id_suplier = a.id_suplier
             left join (
@@ -59,11 +59,11 @@ class BkinExport  implements FromView, WithEvents
         return [
             AfterSheet::class    => function (AfterSheet $event) {
                 $totalrow = $this->totalrow + 1;
-                $cellRange = 'A1:N1';
+                $cellRange = 'A1:O1';
                 // All headers
                 $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(12);
                 $event->sheet->setAutoFilter($cellRange);
-                $event->sheet->getStyle('A1:N1')->applyFromArray([
+                $event->sheet->getStyle('A1:O1')->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
@@ -76,7 +76,7 @@ class BkinExport  implements FromView, WithEvents
                         'bold' => true
                     ]
                 ]);
-                $event->sheet->getStyle('A2:N' . $totalrow)->applyFromArray([
+                $event->sheet->getStyle('A2:O' . $totalrow)->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,

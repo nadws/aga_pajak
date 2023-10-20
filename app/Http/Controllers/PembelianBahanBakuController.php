@@ -47,7 +47,7 @@ class PembelianBahanBakuController extends Controller
     {
         $tgl1 =  $this->tgl1;
         $tgl2 =  $this->tgl2;
-        $pembelian = DB::select("SELECT a.id_invoice_bk, a.tgl, a.no_nota,b.nm_suplier, a.suplier_akhir, a.total_harga, a.lunas, c.kredit, c.debit, a.approve, d.no_nota as nota_grading
+        $pembelian = DB::select("SELECT a.id_invoice_bk, a.no_lot, a.tgl, a.no_nota,b.nm_suplier, a.suplier_akhir, a.total_harga, a.lunas, c.kredit, c.debit, a.approve, d.no_nota as nota_grading
             FROM invoice_bk as a 
             left join tb_suplier as b on b.id_suplier = a.id_suplier
             left join (
@@ -66,7 +66,7 @@ class PembelianBahanBakuController extends Controller
             'listbulan' => $listBulan,
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
-            
+
             'user' => User::where('posisi_id', 1)->get(),
             'halaman' => 2,
             'create' => SettingHal::btnHal(9, $id_user),
@@ -84,7 +84,7 @@ class PembelianBahanBakuController extends Controller
     public function add(Request $r)
     {
         $b = date('m');
-        $max = DB::table('pembelian')->whereMonth('tgl', $b)->latest('urutan_nota')->first();;
+        $max = DB::table('pembelian')->whereMonth('tgl', $b)->latest('urutan_nota')->first();
 
         $year = date("Y");
         $year = DB::table('tahun')->where('tahun', $year)->first();
@@ -96,6 +96,15 @@ class PembelianBahanBakuController extends Controller
         $date = date('m');
         $bulan = DB::table('bulan')->where('bulan', $date)->first();
         $sub_po = "BI$year->kode" . "$bulan->kode" . str_pad($nota_t, 3, '0', STR_PAD_LEFT);
+
+        $max_lot = DB::table('pembelian')->latest('no_lot')->first();
+
+        if (empty($max_lot->no_lot)) {
+            $max_l = '1001';
+        } else {
+            $max_l = $max_lot->no_lot + 1;
+        }
+
         $data =  [
             'title' => 'Tambah Bahan Baku',
             'suplier' => DB::table('tb_suplier')->get(),
@@ -103,7 +112,8 @@ class PembelianBahanBakuController extends Controller
             'produk' => DB::table('tb_produk')->get(),
             'bulan' => $bulan,
             'akun' => DB::table('akun')->get(),
-            'sub_po' => $sub_po
+            'sub_po' => $sub_po,
+            'no_lot' => $max_l
 
         ];
         return view('pembelian_bk.add', $data);
@@ -154,6 +164,14 @@ class PembelianBahanBakuController extends Controller
         $bulan = DB::table('bulan')->where('bulan', $b)->first();
         $sub_po = "BI$year->kode" . "$bulan->kode" . str_pad($nota_t, 3, '0', STR_PAD_LEFT);
 
+        $max_lot = DB::table('pembelian')->latest('no_lot')->first();
+
+        if (empty($max_lot->no_lot)) {
+            $max_l = '1001';
+        } else {
+            $max_l = $max_lot->no_lot + 1;
+        }
+
         for ($x = 0; $x < count($id_produk); $x++) {
             $data = [
                 'tgl' => $tgl,
@@ -161,6 +179,7 @@ class PembelianBahanBakuController extends Controller
                 'id_produk' => $id_produk[$x],
                 // 'suplier_awal' => $suplier_awal,
                 // 'suplier_akhir' => $suplier_akhir,
+                'no_lot' => $max_l,
                 'qty' => $qty[$x],
                 'h_satuan' => $h_satuan[$x],
                 'urutan_nota' => $nota_t,
@@ -177,6 +196,7 @@ class PembelianBahanBakuController extends Controller
                 'id_suplier' => $suplier_awal,
                 'tgl' => $tgl,
                 'no_nota' => $sub_po,
+                'no_lot' => $max_l,
                 'suplier_akhir' => $suplier_akhir,
                 'total_harga' => $total_harga,
                 'tgl_bayar' => '0000-00-00',
@@ -189,6 +209,7 @@ class PembelianBahanBakuController extends Controller
                 'id_suplier' => $suplier_awal,
                 'tgl' => $tgl,
                 'no_nota' => $sub_po,
+                'no_lot' => $max_l,
                 'suplier_akhir' => $suplier_akhir,
                 'total_harga' => $total_harga,
                 'tgl_bayar' => '0000-00-00',
@@ -312,6 +333,7 @@ class PembelianBahanBakuController extends Controller
                 'tgl' => $tgl,
                 'no_nota' => $nota,
                 'id_produk' => $id_produk[$x],
+                'no_lot' => $r->no_lot,
                 // 'suplier_awal' => $suplier_awal,
                 // 'suplier_akhir' => $suplier_akhir,
                 'qty' => $qty[$x],
@@ -330,6 +352,7 @@ class PembelianBahanBakuController extends Controller
                 'id_suplier' => $suplier_awal,
                 'tgl' => $tgl,
                 'no_nota' => $nota,
+                'no_lot' => $r->no_lot,
                 'suplier_akhir' => $suplier_akhir,
                 'total_harga' => $total_harga,
                 'tgl_bayar' => '0000-00-00',
@@ -342,6 +365,7 @@ class PembelianBahanBakuController extends Controller
                 'id_suplier' => $suplier_awal,
                 'tgl' => $tgl,
                 'no_nota' => $nota,
+                'no_lot' => $r->no_lot,
                 'suplier_akhir' => $suplier_akhir,
                 'total_harga' => $total_harga,
                 'tgl_bayar' => '0000-00-00',
