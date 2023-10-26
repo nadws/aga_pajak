@@ -46,6 +46,41 @@
             font-size: 13px;
         }
 
+        .table-container {
+            max-height: 400px;
+            /* Atur tinggi maksimum sesuai kebutuhan */
+            overflow-y: scroll;
+            /* Aktifkan scroll vertikal jika perlu */
+        }
+
+        #tableSearch thead {
+            position: sticky;
+            top: 0;
+            background-color: #fff;
+            z-index: 1;
+        }
+
+
+        .table-container::-webkit-scrollbar {
+            width: 6px;
+            /* Atur lebar scrollbar sesuai keinginan */
+        }
+
+        /* Warna latar belakang scrollbar */
+        .table-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        /* Warna scrollbar itu sendiri */
+        .table-container::-webkit-scrollbar-thumb {
+            background: #667dcf;
+        }
+
+        /* Warna scrollbar saat dihover */
+        .table-container::-webkit-scrollbar-thumb:hover {
+            background: #667dcf;
+        }
+
         .dhead {
             background-color: #435EBE !important;
             color: white;

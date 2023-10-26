@@ -308,7 +308,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/load_populasi/{id_kandang}', 'load_populasi')->name('load_populasi');
             Route::post('/tambah_populasi', 'tambah_populasi')->name('tambah_populasi');
             Route::post('/tambah_karung', 'tambah_karung')->name('tambah_karung');
-            
+
             // perencanaan
             Route::get('/load_perencanaan/{id_kandang}', 'load_perencanaan')->name('load_perencanaan');
             Route::post('/tambah_perencanaan', 'tambah_perencanaan')->name('tambah_perencanaan');

@@ -8,6 +8,7 @@ use App\Http\Controllers\CashflowController;
 use App\Http\Controllers\ControlflowController;
 use App\Http\Controllers\CrudPermissionController;
 use App\Http\Controllers\FakturPenjualanController;
+use App\Http\Controllers\GudangBkController;
 use App\Http\Controllers\GudangController;
 use App\Http\Controllers\JurnalController;
 use App\Http\Controllers\JurnalPenyesuaianController;
@@ -366,3 +367,12 @@ Route::controller(OpnamemtdController::class)->group(function () {
     Route::get('/terima_opname', 'terima_opname')->name('terima_opname');
     Route::get('/history_opname_mtd', 'history_opname_mtd')->name('history_opname_mtd');
 });
+
+Route::controller(GudangBkController::class)
+    ->prefix('gudangBk')
+    ->name('gudangBk.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/export_gudang_bk', 'export_gudang_bk')->name('export_gudang_bk');
+        Route::post('/import_gudang_bk', 'import_gudang_bk')->name('import_gudang_bk');
+    });

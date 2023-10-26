@@ -154,7 +154,13 @@ class NavbarController extends Controller
                 'route' => 'pembelian_bk',
                 'img' => 'buy.png',
                 'deskripsi' => 'membuat pengajuan pembelian ke pemasok',
-            ]
+            ],
+            [
+                'judul' => 'Gudang BK',
+                'route' => 'gudangBk.index',
+                'img' => 'warehouse3.png',
+                'deskripsi' => 'membuat pengajuan pembelian ke pemasok',
+            ],
 
         ];
         $title = 'Pembelian';
