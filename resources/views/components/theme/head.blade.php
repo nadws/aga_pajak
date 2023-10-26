@@ -30,6 +30,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/mask@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Alpine Core -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
@@ -38,15 +41,16 @@
     {{--
     <link rel="stylesheet" href="{{ asset('mycss.css') }}"> --}}
     <style>
-        
         body {
             font-family: 'Roboto', sans-serif;
             font-size: 13px;
         }
+
         .dhead {
-                background-color: #435EBE !important;
-                color: white;
-            }
+            background-color: #435EBE !important;
+            color: white;
+        }
+
         #image-preview img {
             width: 200px;
             height: 200px;

@@ -1,4 +1,4 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="12" cont="container-fluid">
     <x-slot name="cardHeader">
         <div class="row justify-content-end">
             <div class="col-lg-6">
@@ -10,11 +10,15 @@
                     <x-theme.button modal="T" href="{{ route('pembelian_bk.add') }}" icon="fa-plus"
                         addClass="float-end" teks="Buat Baru" />
                 @endif
+                <x-theme.button modal="Y" idModal="import" icon="fas fa-upload" addClass="float-end"
+                    teks="Import" />
 
                 @if (!empty($export))
                     <x-theme.button modal="T" href="/export_bk?tgl1={{ $tgl1 }}&tgl2={{ $tgl2 }}"
                         icon="fa-file-excel" addClass="float-end float-end btn btn-success me-2" teks="Export" />
                 @endif
+                {{-- <x-theme.button modal="T" href="/export_bk_m?tgl1={{ $tgl1 }}&tgl2={{ $tgl2 }}"
+                    icon="fa-file-excel" addClass="float-end float-end btn btn-success me-2" teks="Export M" /> --}}
 
                 <x-theme.btn_filter title="Filter Pembelian Bk" />
 
@@ -23,13 +27,14 @@
         </div>
     </x-slot>
     <x-slot name="cardBody">
+        {{-- @include('pembelian_bk.nav') --}}
         <form action="{{ route('approve_invoice_bk') }}" method="post">
             @csrf
-            @if (!empty($approve))
+            {{-- @if (!empty($approve))
                 <button class="float-end btn btn-primary btn-sm"><i class="fas fa-check"></i> Approve</button>
                 <br>
                 <br>
-            @endif
+            @endif --}}
             <section class="row">
                 <div class="col-lg-8"></div>
                 <div class="col-lg-4 mb-2">
@@ -40,35 +45,50 @@
 
 
                 </div>
-                <table class="table table-hover" id="tableSearch" width="100%">
+                <table class="table table-hover " id="tableSearch" width="100%">
                     <thead>
                         <tr>
-                            <th class="dhead" width="5">#</th>
-                            <th class="dhead">Tanggal</th>
-                            <th class="dhead">No Nota</th>
-                            <th class="dhead">No Lot</th>
-                            <th class="dhead">Suplier Awal</th>
-                            <th class="dhead">Suplier Akhir</th>
-                            <th class="dhead" style="text-align: right">Total Harga</th>
-                            <th class="dhead" style="text-align: center">Status</th>
-                            <th class="dhead" style="text-align: center">Grading</th>
-                            @if (!empty($approve))
-                                <th class="dhead" style="text-align: center">Approve <br> <input type="checkbox"
-                                        name="" id="checkAll" id="">
+                            <th class="dhead text-center" rowspan="2" width="5">#</th>
+                            <th class="dhead text-center" rowspan="2">Tanggal</th>
+                            <th class="dhead text-center" rowspan="2">No Nota</th>
+                            <th class="dhead text-center" rowspan="2">No Lot</th>
+                            <th class="dhead text-center" rowspan="2">Suplier Awal</th>
+                            <th class="dhead text-center" rowspan="2">Suplier Akhir</th>
+                            <th class="dhead" rowspan="2" style="text-align: right">Total Harga</th>
+                            <th class="dhead" colspan="5" style="text-align: center">Status</th>
+
+                            {{-- @if (!empty($approve))
+                                <th rowspan="2" class="dhead" style="text-align: center">Approve <br> <input
+                                        type="checkbox" name="" id="checkAll" id="">
                                 </th>
-                            @endif
-                            <th class="dhead">Aksi</th>
+                            @endif --}}
+                            <th rowspan="2" class="dhead">Aksi</th>
+                        </tr>
+                        <tr>
+                            <th class="dhead" style="text-align: center">Pembayaran</th>
+                            <th class="dhead" style="text-align: center">Grading</th>
+                            <th class="dhead" style="text-align: center">Export <br> <button type="submit"
+                                    name="submit" value="export" class="badge bg-success"><i
+                                        class="fas fa-file-excel"></i></button>
+                                <br><input type="checkbox" name="" id="checkAll" id="">
+                            </th>
+                            <th class="dhead" style="text-align: center">Harga</th>
+                            <th class="dhead" style="text-align: center">Approve <br> <button type="submit"
+                                    name="submit" value="approve" class="badge bg-primary"><i
+                                        class="fas fa-check"></i></button> <br>
+                                <input type="checkbox" name="" id="checkAll2" id="">
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($pembelian as $no => $p)
                             <tr>
-                                <td>{{ $no + 1 }}</td>
-                                <td>{{ tanggal($p->tgl) }}</td>
-                                <td>{{ $p->no_nota }}</td>
-                                <td>{{ $p->no_lot }}</td>
-                                <td>{{ ucwords(strtolower($p->nm_suplier)) }}</td>
-                                <td>{{ ucwords(strtolower($p->suplier_akhir)) }}</td>
+                                <td class="text-center">{{ $no + 1 }}</td>
+                                <td class="text-center">{{ tanggal($p->tgl) }}</td>
+                                <td class="text-center">{{ $p->no_nota }}</td>
+                                <td class="text-center">{{ $p->no_lot }}</td>
+                                <td class="text-center">{{ ucwords(strtolower($p->nm_suplier)) }}</td>
+                                <td class="text-center">{{ ucwords(strtolower($p->suplier_akhir)) }}</td>
                                 <td align="right">Rp. {{ number_format($p->total_harga, 0) }}</td>
 
                                 <td align="center">
@@ -77,6 +97,7 @@
                                         {{ $p->lunas == 'D' ? 'Draft' : ($p->total_harga + $p->debit - $p->kredit == 0 ? 'Paid' : 'Unpaid') }}
                                     </span>
                                 </td>
+
                                 <td align="center">
                                     @if (empty($p->nota_grading))
                                         <i class="fas fa-times text-danger"></i>
@@ -87,14 +108,34 @@
                                     @endif
 
                                 </td>
+
+                                <td class="text-center">
+                                    @if (empty($p->nota_grading) || empty($p->nota_bk_campur))
+                                        <i class="fas fa-times text-danger"></i>
+                                        <input type="checkbox" name="ceknota_excel[]" id=""
+                                            value="{{ $p->no_nota }}" hidden>
+                                    @else
+                                        <input type="checkbox" name="ceknota_excel[]" class="checkbox-item-excel"
+                                            id="" value="{{ $p->no_nota }}">
+                                    @endif
+                                </td>
+                                <td align="center">
+                                    @if (empty($p->nota_grading) || empty($p->nota_bk_campur))
+                                        <i class="fas fa-times text-danger"></i>
+                                    @else
+                                        <span class="badge {{ $p->rupiah == '0' ? 'bg-danger' : 'bg-success' }}">
+                                            {!! $p->rupiah == '0' ? 'Harga ?' : 'Harga <i class="fas fa-check"></i>' !!}
+                                        </span>
+                                    @endif
+                                </td>
                                 @if (!empty($approve))
                                     <td style="text-align: center">
                                         @if ($p->approve == 'Y')
-                                            <i class="fas fa-check text-success"></i>
+                                            <i class="fas fa-check text-primary"></i>
                                             <input type="hidden" name="ceknota[]" id="" value="Y">
                                         @else
-                                            <input type="checkbox" name="ceknota[]" class="checkbox-item" id=""
-                                                value="{{ $p->no_nota }}">
+                                            <input type="checkbox" name="ceknota[]" class="checkbox-item"
+                                                id="" value="{{ $p->no_nota }}">
                                         @endif
 
                                     </td>
@@ -174,6 +215,19 @@
 
         </x-theme.modal>
 
+        <form action="{{ route('import_buku_campur') }}" method="post" enctype="multipart/form-data">
+            @csrf
+            <x-theme.modal title="Import Buku Campur" idModal="import" btnSave="Y">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <label for="">File</label>
+                        <input type="file" class="form-control" name="file">
+                    </div>
+                </div>
+
+            </x-theme.modal>
+        </form>
+
         <form action="{{ route('delete_bk') }}" method="get">
             <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="exampleModalLabel"
                 aria-hidden="true">
@@ -206,6 +260,13 @@
     @section('scripts')
         <script>
             $(document).ready(function() {
+                new DataTable('#tableSearch', {
+                    scrollX: true, // Aktifkan scroll horizontal
+                    scrollY: '400px', // Aktifkan scroll vertikal dengan tinggi 300px (sesuaikan dengan kebutuhan Anda)
+                    scrollCollapse: true, // Collapse scrollbars ketika tidak semua data ditampilkan
+                    searching: false,
+                    paging: false,
+                });
                 pencarian('pencarian', 'tableSearch')
 
                 $(document).on('click', '.delete_nota', function() {
@@ -225,8 +286,22 @@
                     });
 
                 });
+
+                function load_grade(no_nota) {
+                    $.ajax({
+                        type: "get",
+                        url: "{{ route('load_grade') }}",
+                        data: {
+                            no_nota: no_nota
+                        },
+                        success: function(r) {
+                            $("#load_grade").html(r);
+                        }
+                    });
+                }
                 $(document).on('click', '.grading_notatambah', function() {
                     var no_nota = $(this).attr('no_nota');
+
 
                     $.ajax({
                         type: "get",
@@ -235,15 +310,112 @@
                             $('#grading_nota2').html(data);
                             $('.nota_grading').val(no_nota);
                             $('.nota_grading_text').text(no_nota);
+                            load_grade(no_nota)
                         }
                     });
 
 
                 });
 
+
                 $(document).on('click', '#checkAll', function() {
                     // Setel properti checked dari kotak centang individu sesuai dengan status "cek semua"
+                    $('.checkbox-item-excel').prop('checked', $(this).prop('checked'));
+                });
+                $(document).on('click', '#checkAll2', function() {
+                    // Setel properti checked dari kotak centang individu sesuai dengan status "cek semua"
                     $('.checkbox-item').prop('checked', $(this).prop('checked'));
+                });
+                $(document).on('click', '.hapus_grade', function() {
+                    var id_grade = $(this).attr('id_grade');
+                    var no_nota = $(this).attr('no_nota');
+                    Swal.fire({
+                        title: 'Apakah yakin ingin menghapus?',
+                        text: "Data yang dihapus tidak bisa dikembalikan lagi!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Hapus',
+                        cancelButtonText: 'Batalkan'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: "Get",
+                                url: "{{ route('delete_tipe_grade') }}",
+                                data: {
+                                    id_grade: id_grade
+                                },
+                                success: function(response) {
+                                    load_grade(no_nota);
+                                    Toastify({
+                                        text: "Data berhasil dihapus",
+                                        duration: 3000,
+                                        style: {
+                                            background: "#EAF7EE",
+                                            color: "#7F8B8B"
+                                        },
+                                        close: true,
+                                        avatar: "https://cdn-icons-png.flaticon.com/512/190/190411.png"
+                                    }).showToast();
+                                }
+                            });
+
+                        }
+                    })
+
+                });
+
+
+                $(document).on('click', '.btn-save', function() {
+                    var nm_grade = $("input[name='nm_grade']").val();
+                    var no_nota = $("input[name='no_nota']").val();
+                    if (nm_grade !== "") {
+                        $.ajax({
+                            url: "{{ route('save_grade') }}",
+                            method: "Get",
+                            data: {
+                                nm_grade: nm_grade
+                            },
+                            success: function(response) {
+                                load_grade(no_nota);
+                                Toastify({
+                                    text: "Data berhasil disimpan",
+                                    duration: 3000,
+                                    style: {
+                                        background: "#EAF7EE",
+                                        color: "#7F8B8B"
+                                    },
+                                    close: true,
+                                    avatar: "https://cdn-icons-png.flaticon.com/512/190/190411.png"
+                                }).showToast();
+                            },
+                            error: function() {
+                                Toastify({
+                                    text: "Terjadi kesalahan dalam menyimpan data",
+                                    duration: 3000,
+                                    style: {
+                                        background: "#FCEDE9",
+                                        color: "#7F8B8B"
+                                    },
+                                    close: true,
+                                    avatar: "https://cdn-icons-png.flaticon.com/512/564/564619.png"
+                                }).showToast();
+                            }
+                        });
+                    } else {
+                        Toastify({
+                            text: "Nama Grade tidak boleh kosong",
+                            duration: 3000,
+                            position: 'center',
+                            style: {
+                                background: "#FCEDE9",
+                                color: "#7F8B8B"
+                            },
+                            close: true,
+                            avatar: "https://cdn-icons-png.flaticon.com/512/564/564619.png"
+                        }).showToast();
+                    }
                 });
 
             });

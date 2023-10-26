@@ -1,91 +1,69 @@
-{{-- <div class="row">
-    <div class="col-lg-12">
-        <h5>{{$invoice->no_nota}}</h5>
-    </div>
-    @if (empty($grading))
-    <div class="col-lg-4">
-        <label for="">Tanggal</label>
-        <input type="date" class="form-control" name="tgl" required>
-    </div>
-    <div class="col-lg-4">
-        <label for="">No Campur</label>
-        <input type="text" class="form-control" name="no_campur">
-        <input type="hidden" class="form-control nota_grading" name="no_nota" required>
-    </div>
-    <div class="col-lg-4">
-        <label for="">Gram Basah</label>
-        <input type="text" class="form-control" name="gr_basah" value="0" required>
-    </div>
-    <div class="col-lg-4 mt-2">
-        <label for="">Pcs Awal</label>
-        <input type="text" class="form-control" name="pcs_awal" value="0" required>
-    </div>
-    <div class="col-lg-4 mt-2">
-        <label for="">Gr Kering</label>
-        <input type="text" class="form-control" name="gr_kering" value="0" required>
-    </div>
-    @else
-    <div class="col-lg-4">
-        <label for="">Tanggal</label>
-        <input type="date" class="form-control" name="tgl" value="{{$grading->tgl}}" readonly>
-    </div>
-    <div class="col-lg-4">
-        <label for="">No Campur</label>
-        <input type="text" class="form-control" name="no_campur" value="{{$grading->no_campur}}"
-            {{empty($grading->no_campur) ? '' : 'readonly'}}>
-        <input type="hidden" class="form-control nota_grading" name="no_nota" value="{{$grading->no_nota}}">
-    </div>
-    <div class="col-lg-4">
-        <label for="">Gram Basah</label>
-        <input type="text" class="form-control" name="gr_basah" value="{{$grading->gr_basah}}" {{$grading->gr_basah ==
-        '0' ? '' : 'readonly'}}>
-    </div>
-    <div class="col-lg-4 mt-2">
-        <label for="">Pcs Awal</label>
-        <input type="text" class="form-control" name="pcs_awal" value="{{$grading->pcs_awal}}" {{$grading->pcs_awal ==
-        '0' ? '' : 'readonly'}}>
-    </div>
-    <div class="col-lg-4 mt-2">
-        <label for="">Gr Kering</label>
-        <input type="text" class="form-control" name="gr_kering" value="{{$grading->gr_kering}}" {{$grading->gr_kering
-        ==
-        '0' ? '' : 'readonly'}}>
-    </div>
-    @endif
-
-</div> --}}
-
 <div class="row">
+    <div class="col-lg-6">
+        <h6>No Lot :{{ $invoice->no_lot }}</h6>
+    </div>
+    <div class="col-lg-6">
+        <h6 class="text-end">No Nota :{{ $invoice->no_nota }}</h6>
+    </div>
     <div class="col-lg-12">
-        <h5> Nota : {{$invoice->no_nota}}</h5>
-        <br>
         <div class="table-responsive">
+            <h6>Grading</h6>
             <table class="table table-bordered ">
                 <thead>
                     <tr>
-                        <th style="text-align: center;white-space: nowrap;">Tanggal</th>
-                        <th style="text-align: center;white-space: nowrap;">No Grade</th>
-                        <th style="text-align: right; white-space: nowrap;">Gr Basah</th>
-                        <th style="text-align: right; white-space: nowrap;">Pcs Awal</th>
-                        <th style="text-align: right; white-space: nowrap;">Gr Gdg Kering</th>
-                        <th style="text-align: right; white-space: nowrap;">Susut Gram Beli / Kering</th>
-                        <th style="text-align: right; white-space: nowrap;">Gr Kering / Basah</th>
+                        <th class="dhead" style="text-align: center;white-space: nowrap;">Tanggal</th>
+                        <th class="dhead" style="text-align: center;white-space: nowrap;">No BK Campur</th>
+                        <th class="dhead" style="text-align: right; white-space: nowrap;">Gr Basah</th>
+                        <th class="dhead" style="text-align: right; white-space: nowrap;">Pcs Awal</th>
+                        <th class="dhead" style="text-align: right; white-space: nowrap;">Gr Gdg Kering</th>
+                        <th class="dhead" style="text-align: right; white-space: nowrap;">Susut Gram Beli / Kering</th>
+                        <th class="dhead" style="text-align: right; white-space: nowrap;">Gr Kering / Basah</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td align="center">{{date('d-m-Y',strtotime($grading->tgl))}}</td>
-                        <td align="center">{{$grading->no_campur}}</td>
-                        <td style="text-align: right">{{number_format($grading->gr_basah,0)}}</td>
-                        <td style="text-align: right">{{number_format($grading->pcs_awal,0)}}</td>
-                        <td style="text-align: right">{{number_format($grading->gr_kering,0)}}</td>
-                        <td style="text-align: right">{{number_format((1 - ($grading->qty / $grading->gr_kering)) *
-                            -100,0)}} %</td>
-                        <td style="text-align: right">{{number_format((1 - ($grading->gr_kering / $grading->gr_basah)) *
-                            100,0)}} %</td>
+                        <td align="center">{{ date('d-m-Y', strtotime($grading->tgl)) }}</td>
+                        <td align="center">{{ $grading->no_campur }}</td>
+                        <td style="text-align: right">{{ number_format($grading->gr_basah, 0) }}</td>
+                        <td style="text-align: right">{{ number_format($grading->pcs_awal, 0) }}</td>
+                        <td style="text-align: right">{{ number_format($grading->gr_kering, 0) }}</td>
+                        <td style="text-align: right">
+                            {{ number_format((1 - $grading->qty / $grading->gr_kering) * -100, 0) }}
+                            %</td>
+                        <td style="text-align: right">
+                            {{ number_format((1 - $grading->gr_kering / $grading->gr_basah) * 100, 0) }}
+                            %</td>
                     </tr>
                 </tbody>
             </table>
         </div>
+    </div>
+    <div class="col-lg-12">
+        <hr>
+    </div>
+    <div class="col-lg-8">
+        <h6>Buku Campur</h6>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th class="dhead">Grade</th>
+                    <th class="text-end dhead">Pcs</th>
+                    <th class="text-end dhead">Gr</th>
+                    <th class="text-end dhead">Rupiah</th>
+                </tr>
+            </thead>
+            <tbody style="background-color: #F2F7FF">
+                @foreach ($buku_campur as $g)
+                    <tr>
+                        <td>
+                            {{ $g->nm_grade }}
+                        </td>
+                        <td class="text-end">{{ $g->pcs }}</td>
+                        <td class="text-end">{{ $g->gr }}</td>
+                        <td class="text-end">{{ number_format($g->rupiah, 0) }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
     </div>
 </div>

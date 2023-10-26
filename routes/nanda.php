@@ -3,6 +3,7 @@
 use App\Http\Controllers\AktivaController;
 use App\Http\Controllers\AkunController;
 use App\Http\Controllers\BukuBesarController;
+use App\Http\Controllers\BukuCampurController;
 use App\Http\Controllers\CashflowController;
 use App\Http\Controllers\ControlflowController;
 use App\Http\Controllers\CrudPermissionController;
@@ -220,6 +221,16 @@ Route::controller(PembelianBahanBakuController::class)->group(function () {
     Route::get('/get_grading2', 'get_grading2')->name('get_grading2');
     Route::get('/nota_invoice_bk', 'nota_invoice_bk')->name('nota_invoice_bk');
     Route::get('/export_bk', 'export_bk')->name('export_bk');
+    Route::get('/export_bk_m', 'export_bk_m')->name('export_bk_m');
+    Route::get('/delete_tipe_grade', 'delete_tipe_grade')->name('delete_tipe_grade');
+    Route::get('/load_grade', 'load_grade')->name('load_grade');
+    Route::get('/save_grade', 'save_grade')->name('save_grade');
+});
+
+Route::controller(BukuCampurController::class)->group(function () {
+    Route::get('/buku_campur', 'index')->name('buku_campur');
+    Route::get('/export_buku_campur', 'export_buku_campur')->name('export_buku_campur');
+    Route::post('/import_buku_campur', 'import_buku_campur')->name('import_buku_campur');
 });
 
 Route::controller(PembayaranBkController::class)->group(function () {

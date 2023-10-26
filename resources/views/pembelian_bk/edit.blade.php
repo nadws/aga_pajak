@@ -27,8 +27,9 @@
                 </div>
                 <div class="col-lg-2 col-6">
                     <label for="">No Lot</label>
-                    <input type="text" class="form-control nota_bk" name="no_lot" value="{{ $invoice->no_lot }}"
-                        readonly>
+                    <input type="text" class="form-control nota_bk" name="no_lot" value="{{ $invoice->no_lot }}">
+                    <input type="hidden" class="form-control nota_bk" name="approve_bk_campur"
+                        value="{{ $invoice->approve_bk_campur }}">
                 </div>
                 <div class="col-lg-2 col-6">
                     <label for="">Suplier Awal</label>
@@ -94,7 +95,8 @@
 
                                     <td style="vertical-align: top;">
                                         <input type="text" class="form-control qty qty{{ $no + 1 }}"
-                                            count='{{ $no + 1 }}' style="vertical-align: top"
+                                            id_produk="{{ $g->id_produk }}" count='{{ $no + 1 }}'
+                                            style="vertical-align: top"
                                             value="{{ number_format($g->qty, 0, ',', '.') }}">
                                         <input type="hidden" name="qty[]"
                                             class="form-control qty_biasa qty_biasa{{ $no + 1 }}" count='1'
@@ -121,6 +123,7 @@
                                     <td style="vertical-align: top;">
                                         <input type="text"
                                             class="form-control h_satuan h_satuan{{ $no + 1 }} text-end"
+                                            id_produk="{{ $g->id_produk }}"
                                             value="Rp {{ number_format($g->h_satuan, 0, ',', '.') }}"
                                             count="{{ $no + 1 }}">
                                         <input type="hidden"
@@ -296,11 +299,14 @@
 
                         success: function(data) {
                             $(".satuan" + count).html(data);
+                            $('.qty' + count).attr('id_produk', +id_produk);
+                            $('.h_satuan' + count).attr('id_produk', +id_produk);
                         },
                     });
                 });
                 $(document).on("keyup", ".qty", function() {
                     var count = $(this).attr("count");
+                    var id_produk = $(this).attr('id_produk');
                     var input = $(this).val();
                     input = input.replace(/[^\d\,]/g, "");
                     input = input.replace(".", ",");
@@ -321,7 +327,11 @@
 
 
                     var h_satuan = $(".h_satuan_biasa" + count).val()
-                    var total = parseFloat(input2) * parseFloat(h_satuan);
+                    if (id_produk == '7') {
+                        var total = parseFloat(h_satuan);
+                    } else {
+                        var total = parseFloat(input2) * parseFloat(h_satuan);
+                    }
                     var totalRupiah = total.toLocaleString("id-ID", {
                         style: "currency",
                         currency: "IDR",
@@ -346,6 +356,7 @@
                 });
                 $(document).on("keyup", ".h_satuan", function() {
                     var count = $(this).attr("count");
+                    var id_produk = $(this).attr('id_produk');
                     var input = $(this).val();
                     input = input.replace(/[^\d\,]/g, "");
                     input = input.replace(".", ",");
@@ -362,7 +373,12 @@
 
                     }
                     var qty_biasa = $(".qty_biasa" + count).val()
-                    var total = parseFloat(input2) * parseFloat(qty_biasa);
+                    if (id_produk == '7') {
+                        var total = parseFloat(input2);
+                    } else {
+                        var total = parseFloat(input2) * parseFloat(qty_biasa);
+                    }
+
                     var totalRupiah = total.toLocaleString("id-ID", {
                         style: "currency",
                         currency: "IDR",
