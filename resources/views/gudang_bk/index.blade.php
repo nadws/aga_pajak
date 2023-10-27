@@ -1,4 +1,4 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="10">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="9">
 
     <x-slot name="cardHeader">
         <div class="row justify-content-end">
@@ -31,14 +31,20 @@
                     <div class="table-container">
                         <table class="table table-hover" id="tableSearch" width="100%">
                             <thead>
+                                @php
+                                $ttlRp = 0;
+                                    foreach($gudang as $g) {
+                                        $ttlRp += $g->rupiah;
+                                    }
+                                @endphp
                                 <tr>
                                     <th class="dhead">#</th>
-                                    <th class="dhead">No Nota</th>
                                     <th class="dhead">No Lot</th>
                                     <th class="dhead">Grade</th>
                                     <th class="text-end dhead">Pcs</th>
                                     <th class="text-end dhead">Gram</th>
-                                    <th class="text-end dhead">Rupiah</th>
+                                    <th class="text-end dhead">Rp/gr</th>
+                                    <th class="text-end dhead">Rupiah <br>(Rp {{ number_format($ttlRp,0) }})</th>
                                     @if ($nm_gudang == 'bk')
                                         <th class="dhead text-center">
                                             <button type="submit" name="submit" value="export"
@@ -55,11 +61,11 @@
                                 @foreach ($gudang as $no => $g)
                                     <tr>
                                         <td>{{ $no + 1 }}</td>
-                                        <td>{{ $g->no_nota }}</td>
                                         <td>{{ $g->no_lot }}</td>
                                         <td>{{ $g->nm_grade }}</td>
                                         <td class="text-end">{{ $g->pcs }}</td>
                                         <td class="text-end">{{ $g->gr }}</td>
+                                        <td class="text-end">{{ number_format($g->rupiah / $g->gr,0) }}</td>
                                         <td class="text-end">Rp {{ number_format($g->rupiah, 0) }}</td>
                                         @if ($nm_gudang == 'bk')
                                             <td class="text-center"><input type="checkbox" class="checkbox-item"

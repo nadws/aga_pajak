@@ -100,7 +100,7 @@ class GudangBkController extends Controller
         $spreadsheet->setActiveSheetIndex(0);
         $sheet1 = $spreadsheet->getActiveSheet();
         $sheet1->setTitle('Gudang BK');
-        $sheet1->getStyle('A1:J1')->applyFromArray($style_atas);
+        $sheet1->getStyle('A1:K1')->applyFromArray($style_atas);
 
         $sheet1->setCellValue('A1', 'ID');
         $sheet1->setCellValue('B1', 'No Nota');
@@ -108,10 +108,11 @@ class GudangBkController extends Controller
         $sheet1->setCellValue('D1', 'Grade');
         $sheet1->setCellValue('E1', 'Pcs');
         $sheet1->setCellValue('F1', 'Gram');
-        $sheet1->setCellValue('G1', 'Rupiah');
-        $sheet1->setCellValue('H1', 'Gudang BK');
-        $sheet1->setCellValue('I1', 'Gudang Produksi');
-        $sheet1->setCellValue('J1', 'Gudang Reject');
+        $sheet1->setCellValue('G1', 'Rp/gr');
+        $sheet1->setCellValue('H1', 'Rupiah');
+        $sheet1->setCellValue('I1', 'Gudang BK');
+        $sheet1->setCellValue('J1', 'Gudang Produksi');
+        $sheet1->setCellValue('K1', 'Gudang Reject');
 
         $kolom = 2;
         for ($x = 0; $x < count($r->id_buku_campur); $x++) {
@@ -129,13 +130,14 @@ class GudangBkController extends Controller
             $sheet1->setCellValue('D' . $kolom, $pembelian->nm_grade);
             $sheet1->setCellValue('E' . $kolom, $pembelian->pcs);
             $sheet1->setCellValue('F' . $kolom, $pembelian->gr);
-            $sheet1->setCellValue('G' . $kolom, $pembelian->rupiah);
-            $sheet1->setCellValue('H' . $kolom, $pembelian->gudang == 'bk' ? 'Y' : 'T');
-            $sheet1->setCellValue('I' . $kolom, $pembelian->gudang == 'produksi' ? 'Y' : 'T');
-            $sheet1->setCellValue('J' . $kolom, $pembelian->gudang == 'reject' ? 'Y' : 'T');
+            $sheet1->setCellValue('G' . $kolom, $pembelian->rupiah / $pembelian->gr);
+            $sheet1->setCellValue('H' . $kolom, $pembelian->rupiah);
+            $sheet1->setCellValue('I' . $kolom, $pembelian->gudang == 'bk' ? 'Y' : 'T');
+            $sheet1->setCellValue('J' . $kolom, $pembelian->gudang == 'produksi' ? 'Y' : 'T');
+            $sheet1->setCellValue('K' . $kolom, $pembelian->gudang == 'reject' ? 'Y' : 'T');
             $kolom++;
         }
-        $sheet1->getStyle('A2:J' . $kolom - 1)->applyFromArray($style);
+        $sheet1->getStyle('A2:K' . $kolom - 1)->applyFromArray($style);
         $namafile = "Gudang Bk.xlsx";
 
         $writer = new Xlsx($spreadsheet);
@@ -178,20 +180,20 @@ class GudangBkController extends Controller
 
             try {
                 foreach ($data as $rowData) {
-                    if (($rowData[7] == 'Y' && $rowData[8] == 'Y') ||
-                        ($rowData[7] == 'Y' && $rowData[9] == 'Y') ||
-                        ($rowData[9] == 'Y' && $rowData[8] == 'Y') ||
-                        ($rowData[7] == 'Y' && $rowData[8] == 'Y' && $rowData[9] == 'Y')
+                    if (($rowData[8] == 'Y' && $rowData[9] == 'Y') ||
+                        ($rowData[8] == 'Y' && $rowData[10] == 'Y') ||
+                        ($rowData[10] == 'Y' && $rowData[9] == 'Y') ||
+                        ($rowData[8] == 'Y' && $rowData[9] == 'Y' && $rowData[9] == 'Y')
                     ) {
                         $importGagal = true;
                         break;
                     }
 
-                    if ($rowData[7] == 'Y') {
+                    if ($rowData[8] == 'Y') {
                         $gudang = 'bk';
-                    } elseif ($rowData[8] == 'Y') {
-                        $gudang = 'produksi';
                     } elseif ($rowData[9] == 'Y') {
+                        $gudang = 'produksi';
+                    } elseif ($rowData[10] == 'Y') {
                         $gudang = 'reject';
                     }
 
