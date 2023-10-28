@@ -14,6 +14,7 @@ class GudangBkModel extends Model
     {
         return self::select('*')
             ->leftJoin('grade', 'grade.id_grade', '=', 'buku_campur.id_grade')
+            ->leftJoin('grading', 'grading.no_nota', '=', 'buku_campur.no_nota')
             ->where('buku_campur.gudang', $nmgudang)
             ->get();
     }
