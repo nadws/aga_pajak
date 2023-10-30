@@ -45,15 +45,14 @@
                                     <th class="text-end dhead">Gram</th>
                                     <th class="text-end dhead">Rp/gr</th>
                                     <th class="text-end dhead">Rupiah <br>(Rp {{ number_format($ttlRp, 0) }})</th>
-                                    @if ($nm_gudang == 'bk')
-                                        <th class="dhead text-center">
-                                            <button type="submit" name="submit" value="export"
-                                                class="badge bg-success"><i class="fas fa-file-excel"></i></button>
-                                            <br>
-                                            <input type="checkbox" id="checkAll" name="" id="">
-                                        </th>
-                                    @else
-                                    @endif
+
+                                    <th class="dhead text-center">
+                                        <button type="submit" name="submit" value="export" class="badge bg-success"><i
+                                                class="fas fa-file-excel"></i></button>
+                                        <br>
+                                        <input type="checkbox" id="checkAll" name="" id="">
+                                    </th>
+
 
                                 </tr>
                             </thead>
@@ -68,12 +67,11 @@
                                         <td class="text-end">{{ $g->gr }}</td>
                                         <td class="text-end">{{ number_format($g->rupiah / $g->gr, 0) }}</td>
                                         <td class="text-end">Rp {{ number_format($g->rupiah, 0) }}</td>
-                                        @if ($nm_gudang == 'bk')
-                                            <td class="text-center"><input type="checkbox" class="checkbox-item"
-                                                    name="id_buku_campur[]" value="{{ $g->id_buku_campur }}"
-                                                    id=""></td>
-                                        @else
-                                        @endif
+
+                                        <td class="text-center"><input type="checkbox" class="checkbox-item"
+                                                name="id_buku_campur[]" value="{{ $g->id_buku_campur }}"
+                                                id=""></td>
+
 
                                     </tr>
                                 @endforeach

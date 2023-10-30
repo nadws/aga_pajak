@@ -129,8 +129,8 @@
                                             </span>
                                         @endif
                                     </td>
-                                    @if (!empty($approve))
-                                        <td style="text-align: center">
+                                    <td style="text-align: center">
+                                        @if (!empty($approve))
                                             @if ($p->approve == 'Y')
                                                 <i class="fas fa-check text-primary"></i>
                                                 <input type="hidden" name="ceknota[]" id=""
@@ -139,9 +139,8 @@
                                                 <input type="checkbox" name="ceknota[]" class="checkbox-item"
                                                     id="" value="{{ $p->no_nota }}">
                                             @endif
-
-                                        </td>
-                                    @endif
+                                        @endif
+                                    </td>
                                     <td>
                                         <div class="btn-group" role="group">
                                             <span class="btn btn-sm" data-bs-toggle="dropdown">
