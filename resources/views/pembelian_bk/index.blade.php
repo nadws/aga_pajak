@@ -7,8 +7,8 @@
             <div class="col-lg-6">
 
                 @if (!empty($create))
-                    <x-theme.button modal="T" href="{{ route('pembelian_bk.add') }}" icon="fa-plus"
-                        addClass="float-end" teks="Buat Baru" />
+                    <x-theme.button modal="T" href="#" icon="fa-plus" addClass="float-end buat_baru"
+                        teks="Buat Baru" />
                 @endif
                 <x-theme.button modal="Y" idModal="import" icon="fas fa-upload" addClass="float-end"
                     teks="Import" />
@@ -302,8 +302,6 @@
                 }
                 $(document).on('click', '.grading_notatambah', function() {
                     var no_nota = $(this).attr('no_nota');
-
-
                     $.ajax({
                         type: "get",
                         url: "/get_grading2?no_nota=" + no_nota,
@@ -417,6 +415,21 @@
                             avatar: "https://cdn-icons-png.flaticon.com/512/564/564619.png"
                         }).showToast();
                     }
+                });
+
+                $('.buat_baru').on('click', function(event) {
+                    event.preventDefault(); // Mencegah perilaku default (misalnya, submit form)
+                    $.ajax({
+                        url: "{{ route('add_new_bk') }}",
+                        type: 'GET',
+                        success: function(response) {
+                            // Pindah ke URL baru tanpa refresh
+                            window.location.href = response.url;
+                        },
+                        error: function(error) {
+                            console.log(error);
+                        }
+                    });
                 });
 
             });

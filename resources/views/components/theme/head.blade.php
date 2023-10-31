@@ -57,7 +57,7 @@
             position: sticky;
             top: 0;
             background-color: #fff;
-            z-index: 1;
+            z-index: 1010;
         }
 
 

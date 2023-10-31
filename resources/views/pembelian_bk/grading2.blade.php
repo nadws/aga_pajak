@@ -1,10 +1,93 @@
 <div class="row">
-    <div class="col-lg-6">
-        <h6>No Lot :{{ $invoice->no_lot }}</h6>
+    <div class="col-lg-12 border border-dark">
+        <table style="font-size: small; white-space: nowrap;  " width="100%">
+            <tr>
+                <td rowspan="3" align="left" width="80%"><img src="/assets/login/img/empat.svg" width="100"
+                        alt="">
+                </td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>Tanggal</td>
+                <td>&nbsp;</td>
+                <td>:</td>
+                <td>&nbsp;</td>
+                <td style="text-align: center;">
+                    <?= date('d-F-Y', strtotime($pembelian->tgl)) ?>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>No Faktur</td>
+                <td>&nbsp;</td>
+                <td>:</td>
+                <td>&nbsp;</td>
+                <td style="text-transform: uppercase;">
+                    <?= $pembelian->no_nota ?>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>Kpd Yth, Bpk/Ibu</td>
+                <td>&nbsp;</td>
+                <td>:</td>
+                <td>&nbsp;</td>
+                <td>
+                    <?= strtoupper($pembelian->suplier_akhir) ?>
+                </td>
+            </tr>
+        </table>
+        <br>
+        <table class="table-bordered table table-xs" width="100%" border="1">
+            <thead>
+                <tr>
+                    <td class="text-center fw-bold">Produk</td>
+                    <td class="text-end fw-bold">Qty</td>
+                    <td class="fw-bold text-center">Satuan</td>
+                    <td class="text-end fw-bold"> Harga</td>
+                    <td class="text-end fw-bold">Total</td>
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                    $qty_total = 0;
+                @endphp
+                @foreach ($produk as $no => $p)
+                    @php
+                        $qty_total += $p->qty;
+                    @endphp
+                    <tr>
+                        <td class="text-center ">{{ $p->nm_produk }}</td>
+                        <td align="right">{{ number_format($p->qty, 0) }}</td>
+                        <td class="text-center">{{ $p->nm_satuan }}</td>
+                        <td align="right">{{ number_format($p->h_satuan, 0) }}</td>
+                        <td align="right">
+                            {{ $p->id_produk == '7' ? $p->h_satuan : number_format($p->qty == '0' ? '0' : $p->qty * $p->h_satuan, 0) }}
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td class="fw-bold" style="text-align: center;">Total</td>
+                    <td class="fw-bold" style="text-align: right;">
+                        <?= number_format($qty_total, 0) ?>
+                    </td>
+                    <td></td>
+                    <td class="fw-bold" style="text-align: right;">
+                        <?= number_format($pembelian->total_harga == '0' ? '0' : $pembelian->total_harga / $qty_total, 0) ?>
+                        </th>
+                    <td class="fw-bold" style="text-align: right;">
+                        <?= number_format($pembelian->total_harga, 0) ?>
+                        </th>
+                </tr>
+
+
+            </tfoot>
+        </table>
     </div>
-    <div class="col-lg-6">
-        <h6 class="text-end">No Nota :{{ $invoice->no_nota }}</h6>
-    </div>
+
     <div class="col-lg-12">
         <hr>
     </div>
@@ -69,7 +152,8 @@
                 open1: false,
             }">
                 <div class="col-lg-12">
-                    <button type="button" class="btn btn-primary btn-sm btn-buka mb-4" @click="open1 = ! open1">Tambah
+                    <button type="button" class="btn btn-primary btn-sm btn-buka mb-4"
+                        @click="open1 = ! open1">Tambah
                         Grade</button>
                 </div>
 
