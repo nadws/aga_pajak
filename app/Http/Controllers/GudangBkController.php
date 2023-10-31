@@ -100,7 +100,7 @@ class GudangBkController extends Controller
         $spreadsheet->setActiveSheetIndex(0);
         $sheet1 = $spreadsheet->getActiveSheet();
         $sheet1->setTitle('Gudang BK');
-        $sheet1->getStyle('A1:K1')->applyFromArray($style_atas);
+        $sheet1->getStyle('A1:N1')->applyFromArray($style_atas);
 
         $sheet1->setCellValue('A1', 'ID');
         $sheet1->setCellValue('B1', 'Tanggal');
@@ -110,58 +110,75 @@ class GudangBkController extends Controller
         $sheet1->setCellValue('F1', 'Gram');
         $sheet1->setCellValue('G1', 'Rp/gr');
         $sheet1->setCellValue('H1', 'Rupiah');
-        $sheet1->setCellValue('I1', 'Gudang BK');
-        $sheet1->setCellValue('J1', 'Gudang Produksi');
-        $sheet1->setCellValue('K1', 'Gudang Reject');
+        $sheet1->setCellValue('I1', 'Keterangan');
+        $sheet1->setCellValue('J1', 'Lok/tgl');
+        $sheet1->setCellValue('K1', 'No Produksi');
+        $sheet1->setCellValue('L1', 'Gudang BK');
+        $sheet1->setCellValue('M1', 'Gudang Produksi');
+        $sheet1->setCellValue('N1', 'Gudang Reject');
 
         $kolom = 2;
-        if (empty($r->id_buku_campur)) {
-            $pembelian = DB::select("SELECT *
-            FROM buku_campur as a
-            left join grade as b on b.id_grade = a.id_grade
-            left join grading as c on c.no_nota = a.no_nota
-            group by a.id_buku_campur
-            ");
-            foreach ($pembelian as $d) {
-                $sheet1->setCellValue('A' . $kolom, $d->id_buku_campur);
-                $sheet1->setCellValue('B' . $kolom, $d->tgl);
-                $sheet1->setCellValue('C' . $kolom, $d->no_lot);
-                $sheet1->setCellValue('D' . $kolom, $d->nm_grade);
-                $sheet1->setCellValue('E' . $kolom, $d->pcs);
-                $sheet1->setCellValue('F' . $kolom, $d->gr);
-                $sheet1->setCellValue('G' . $kolom, $d->rupiah / $d->gr);
-                $sheet1->setCellValue('H' . $kolom, $d->rupiah);
-                $sheet1->setCellValue('I' . $kolom, $d->gudang == 'bk' ? 'Y' : 'T');
-                $sheet1->setCellValue('J' . $kolom, $d->gudang == 'produksi' ? 'Y' : 'T');
-                $sheet1->setCellValue('K' . $kolom, $d->gudang == 'reject' ? 'Y' : 'T');
-                $kolom++;
-            }
-        } else {
-            for ($x = 0; $x < count($r->id_buku_campur); $x++) {
-                $id_buku_campur = $r->id_buku_campur[$x];
-                $pembelian = DB::selectOne("SELECT *
-                FROM buku_campur as a
-                left join grade as b on b.id_grade = a.id_grade
-                left join grading as c on c.no_nota = a.no_nota
-                where a.id_buku_campur = '$id_buku_campur'
-                group by a.id_buku_campur
-                ");
-
-                $sheet1->setCellValue('A' . $kolom, $pembelian->id_buku_campur);
-                $sheet1->setCellValue('B' . $kolom, $pembelian->tgl);
-                $sheet1->setCellValue('C' . $kolom, $pembelian->no_lot);
-                $sheet1->setCellValue('D' . $kolom, $pembelian->nm_grade);
-                $sheet1->setCellValue('E' . $kolom, $pembelian->pcs);
-                $sheet1->setCellValue('F' . $kolom, $pembelian->gr);
-                $sheet1->setCellValue('G' . $kolom, $pembelian->rupiah / $pembelian->gr);
-                $sheet1->setCellValue('H' . $kolom, $pembelian->rupiah);
-                $sheet1->setCellValue('I' . $kolom, $pembelian->gudang == 'bk' ? 'Y' : 'T');
-                $sheet1->setCellValue('J' . $kolom, $pembelian->gudang == 'produksi' ? 'Y' : 'T');
-                $sheet1->setCellValue('K' . $kolom, $pembelian->gudang == 'reject' ? 'Y' : 'T');
-                $kolom++;
-            }
+        $th = [
+            'ID', 'Tanggal', 'no lot'
+        ];
+        foreach($th as $i => $t) {
+            $sheet1->setCellValue('N1', 'Gudang Reject');
         }
-        $sheet1->getStyle('A2:K' . $kolom - 1)->applyFromArray($style);
+                // $sheet1->setCellValue('A' . $kolom, $d->id_buku_campur);
+
+        // if (empty($r->id_buku_campur)) {
+        //     $pembelian = DB::select("SELECT *
+        //     FROM buku_campur as a
+        //     left join grade as b on b.id_grade = a.id_grade
+        //     left join grading as c on c.no_nota = a.no_nota
+        //     group by a.id_buku_campur
+        //     ");
+        //     foreach ($pembelian as $d) {
+        //         $sheet1->setCellValue('A' . $kolom, $d->id_buku_campur);
+        //         $sheet1->setCellValue('B' . $kolom, $d->tgl);
+        //         $sheet1->setCellValue('C' . $kolom, $d->no_lot);
+        //         $sheet1->setCellValue('D' . $kolom, $d->nm_grade);
+        //         $sheet1->setCellValue('E' . $kolom, $d->pcs);
+        //         $sheet1->setCellValue('F' . $kolom, $d->gr);
+        //         $sheet1->setCellValue('G' . $kolom, $d->rupiah / $d->gr);
+        //         $sheet1->setCellValue('H' . $kolom, $d->rupiah);
+        //         $sheet1->setCellValue('I' . $kolom, $d->ket);
+        //         $sheet1->setCellValue('J' . $kolom, $d->lok_tgl);
+        //         $sheet1->setCellValue('K' . $kolom, $d->no_produksi);
+        //         $sheet1->setCellValue('L' . $kolom, $d->gudang == 'bk' ? 'Y' : 'T');
+        //         $sheet1->setCellValue('M' . $kolom, $d->gudang == 'produksi' ? 'Y' : 'T');
+        //         $sheet1->setCellValue('N' . $kolom, $d->gudang == 'reject' ? 'Y' : 'T');
+        //         $kolom++;
+        //     }
+        // } else {
+        //     for ($x = 0; $x < count($r->id_buku_campur); $x++) {
+        //         $id_buku_campur = $r->id_buku_campur[$x];
+        //         $pembelian = DB::selectOne("SELECT *
+        //         FROM buku_campur as a
+        //         left join grade as b on b.id_grade = a.id_grade
+        //         left join grading as c on c.no_nota = a.no_nota
+        //         where a.id_buku_campur = '$id_buku_campur'
+        //         group by a.id_buku_campur
+        //         ");
+
+        //         $sheet1->setCellValue('A' . $kolom, $pembelian->id_buku_campur);
+        //         $sheet1->setCellValue('B' . $kolom, $pembelian->tgl);
+        //         $sheet1->setCellValue('C' . $kolom, $pembelian->no_lot);
+        //         $sheet1->setCellValue('D' . $kolom, $pembelian->nm_grade);
+        //         $sheet1->setCellValue('E' . $kolom, $pembelian->pcs);
+        //         $sheet1->setCellValue('F' . $kolom, $pembelian->gr);
+        //         $sheet1->setCellValue('G' . $kolom, $pembelian->rupiah / $pembelian->gr);
+        //         $sheet1->setCellValue('H' . $kolom, $pembelian->rupiah);
+        //         $sheet1->setCellValue('I' . $kolom, $pembelian->ket);
+        //         $sheet1->setCellValue('J' . $kolom, $pembelian->lok_tgl);
+        //         $sheet1->setCellValue('K' . $kolom, $pembelian->no_produksi);
+        //         $sheet1->setCellValue('L' . $kolom, $pembelian->gudang == 'bk' ? 'Y' : 'T');
+        //         $sheet1->setCellValue('M' . $kolom, $pembelian->gudang == 'produksi' ? 'Y' : 'T');
+        //         $sheet1->setCellValue('N' . $kolom, $pembelian->gudang == 'reject' ? 'Y' : 'T');
+        //         $kolom++;
+        //     }
+        // }
+        $sheet1->getStyle('A2:N' . $kolom - 1)->applyFromArray($style);
         $namafile = "Gudang Bk.xlsx";
 
         $writer = new Xlsx($spreadsheet);
@@ -204,25 +221,30 @@ class GudangBkController extends Controller
 
             try {
                 foreach ($data as $rowData) {
-                    if (($rowData[8] == 'Y' && $rowData[9] == 'Y') ||
-                        ($rowData[8] == 'Y' && $rowData[10] == 'Y') ||
-                        ($rowData[10] == 'Y' && $rowData[9] == 'Y') ||
-                        ($rowData[8] == 'Y' && $rowData[9] == 'Y' && $rowData[10] == 'Y')
+                    $rowBk = 11;
+
+                    if (($rowData[$rowBk] == 'Y' && $rowData[$rowBk+1] == 'Y') ||
+                        ($rowData[$rowBk] == 'Y' && $rowData[$rowBk+2] == 'Y') ||
+                        ($rowData[$rowBk+2] == 'Y' && $rowData[$rowBk+1] == 'Y') ||
+                        ($rowData[$rowBk] == 'Y' && $rowData[$rowBk+1] == 'Y' && $rowData[$rowBk+2] == 'Y')
                     ) {
                         $importGagal = true;
                         break;
                     }
 
-                    if ($rowData[8] == 'Y') {
+                    if ($rowData[$rowBk] == 'Y') {
                         $gudang = 'bk';
-                    } elseif ($rowData[9] == 'Y') {
+                    } elseif ($rowData[$rowBk+1] == 'Y') {
                         $gudang = 'produksi';
-                    } elseif ($rowData[10] == 'Y') {
+                    } elseif ($rowData[$rowBk+2] == 'Y') {
                         $gudang = 'reject';
                     }
 
                     DB::table('buku_campur')->where('id_buku_campur', $rowData[0])->update([
                         'gudang' => $gudang,
+                        'ket' => $rowData[8],
+                        'lok_tgl' => $rowData[9],
+                        'no_produksi' => $rowData[10],
                     ]);
                 }
 
