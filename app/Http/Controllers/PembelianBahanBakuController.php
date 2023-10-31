@@ -91,6 +91,10 @@ class PembelianBahanBakuController extends Controller
         ];
         return view('pembelian_bk.index', $data);
     }
+    function add_new()
+    {
+        return response()->json(['url' => route('pembelian_bk.add')]);
+    }
 
     public function add(Request $r)
     {
@@ -619,10 +623,22 @@ class PembelianBahanBakuController extends Controller
     }
     public function get_grading2(Request $r)
     {
+        $pembelian = DB::selectOne("SELECT a.tgl, a.no_nota,b.nm_suplier, a.suplier_akhir, a.total_harga, a.lunas
+        FROM invoice_bk as a 
+        left join tb_suplier as b on b.id_suplier = a.id_suplier
+        where a.no_nota = '$r->no_nota'
+        ");
+
+        $produk = DB::select("SELECT * FROM pembelian as a 
+        left join tb_produk as b on b.id_produk = a.id_produk 
+        left join tb_satuan as c on c.id_satuan = b.satuan_id
+        WHERE a.no_nota ='$r->no_nota'");
         $data = [
             'grading' => DB::table('grading')->where('no_nota', $r->no_nota)->first(),
             'invoice' => DB::table('invoice_bk')->where('no_nota', $r->no_nota)->first(),
-            'grade' => DB::table('grade')->get()
+            'grade' => DB::table('grade')->get(),
+            'pembelian' => $pembelian,
+            'produk' => $produk
         ];
 
         return view('pembelian_bk.grading2', $data);

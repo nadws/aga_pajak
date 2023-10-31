@@ -47,7 +47,7 @@
         }
 
         .table-container {
-            max-height: 400px;
+            max-height: 500px;
             /* Atur tinggi maksimum sesuai kebutuhan */
             overflow-y: scroll;
             /* Aktifkan scroll vertikal jika perlu */
@@ -57,7 +57,7 @@
             position: sticky;
             top: 0;
             background-color: #fff;
-            z-index: 1;
+            z-index: 1010;
         }
 
 

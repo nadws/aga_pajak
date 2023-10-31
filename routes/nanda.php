@@ -226,6 +226,7 @@ Route::controller(PembelianBahanBakuController::class)->group(function () {
     Route::get('/delete_tipe_grade', 'delete_tipe_grade')->name('delete_tipe_grade');
     Route::get('/load_grade', 'load_grade')->name('load_grade');
     Route::get('/save_grade', 'save_grade')->name('save_grade');
+    Route::get('/add_new_bk', 'add_new')->name('add_new_bk');
 });
 
 Route::controller(BukuCampurController::class)->group(function () {

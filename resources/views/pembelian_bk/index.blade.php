@@ -7,8 +7,8 @@
             <div class="col-lg-6">
 
                 @if (!empty($create))
-                    <x-theme.button modal="T" href="{{ route('pembelian_bk.add') }}" icon="fa-plus"
-                        addClass="float-end" teks="Buat Baru" />
+                    <x-theme.button modal="T" href="#" icon="fa-plus" addClass="float-end buat_baru"
+                        teks="Buat Baru" />
                 @endif
                 <x-theme.button modal="Y" idModal="import" icon="fas fa-upload" addClass="float-end"
                     teks="Import" />
@@ -129,8 +129,8 @@
                                             </span>
                                         @endif
                                     </td>
-                                    @if (!empty($approve))
-                                        <td style="text-align: center">
+                                    <td style="text-align: center">
+                                        @if (!empty($approve))
                                             @if ($p->approve == 'Y')
                                                 <i class="fas fa-check text-primary"></i>
                                                 <input type="hidden" name="ceknota[]" id=""
@@ -139,9 +139,8 @@
                                                 <input type="checkbox" name="ceknota[]" class="checkbox-item"
                                                     id="" value="{{ $p->no_nota }}">
                                             @endif
-
-                                        </td>
-                                    @endif
+                                        @endif
+                                    </td>
                                     <td>
                                         <div class="btn-group" role="group">
                                             <span class="btn btn-sm" data-bs-toggle="dropdown">
@@ -303,8 +302,6 @@
                 }
                 $(document).on('click', '.grading_notatambah', function() {
                     var no_nota = $(this).attr('no_nota');
-
-
                     $.ajax({
                         type: "get",
                         url: "/get_grading2?no_nota=" + no_nota,
@@ -418,6 +415,21 @@
                             avatar: "https://cdn-icons-png.flaticon.com/512/564/564619.png"
                         }).showToast();
                     }
+                });
+
+                $('.buat_baru').on('click', function(event) {
+                    event.preventDefault(); // Mencegah perilaku default (misalnya, submit form)
+                    $.ajax({
+                        url: "{{ route('add_new_bk') }}",
+                        type: 'GET',
+                        success: function(response) {
+                            // Pindah ke URL baru tanpa refresh
+                            window.location.href = response.url;
+                        },
+                        error: function(error) {
+                            console.log(error);
+                        }
+                    });
                 });
 
             });
