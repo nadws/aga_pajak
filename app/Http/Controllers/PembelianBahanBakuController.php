@@ -705,7 +705,7 @@ class PembelianBahanBakuController extends Controller
     function load_grade(Request $r)
     {
         $data = [
-            'grade' => DB::table('grade')->where('aktif', 'T')->get(),
+            'grade' => DB::table('grade')->where('aktif', 'T')->orderBy('urutan', 'ASC')->get(),
             'no_nota' => $r->no_nota,
             'invoice' => DB::table('invoice_bk')->where('no_nota', $r->no_nota)->first()
         ];
