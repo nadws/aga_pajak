@@ -122,24 +122,17 @@ class BukuCampurController extends Controller
             $spreadsheet->setActiveSheetIndex(0);
             $sheet1 = $spreadsheet->getActiveSheet();
             $sheet1->setTitle('Invoice BK');
-            $sheet1->getStyle('A1:O1')->applyFromArray($style_atas);
+            $sheet1->getStyle('A1:I1')->applyFromArray($style_atas);
 
             $sheet1->setCellValue('A1', 'Tanggal');
-            $sheet1->setCellValue('B1', 'Suplier Awal');
-            $sheet1->setCellValue('C1', 'Nota BK');
-            $sheet1->setCellValue('D1', 'Nota Lot');
+            $sheet1->setCellValue('B1', 'No Nota');
+            $sheet1->setCellValue('C1', 'No Lot');
+            $sheet1->setCellValue('D1', 'Suplier Awal');
             $sheet1->setCellValue('E1', 'Suplier Akhir');
-            $sheet1->setCellValue('F1', 'Keterangan');
-            $sheet1->setCellValue('G1', 'Gr Beli');
-            $sheet1->setCellValue('H1', 'Total Nota Bk');
-            $sheet1->setCellValue('I1', 'Gr Basah');
-            $sheet1->setCellValue('J1', 'Pcs Awal');
-            $sheet1->setCellValue('K1', 'Gr Kering');
-            $sheet1->setCellValue('L1', 'Gr Kering');
-            $sheet1->setCellValue('M1', 'Susut');
-            $sheet1->setCellValue('N1', 'No Buku Campur');
-            $sheet1->setCellValue('O1', 'TGL Grade');
-
+            $sheet1->setCellValue('F1', 'Gr Basah');
+            $sheet1->setCellValue('G1', 'Pcs');
+            $sheet1->setCellValue('H1', 'Gr Kering');
+            $sheet1->setCellValue('I1', 'Total Harga');
 
             $kolom = 2;
             for ($x = 0; $x < count($r->ceknota); $x++) {

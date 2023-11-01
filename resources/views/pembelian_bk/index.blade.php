@@ -43,9 +43,7 @@
                         <td><input type="text" id="pencarian" class="form-control float-end"></td>
                     </table>
 
-
                 </div>
-
                 <table class="table table-hover " id="tableSearch" width="100%">
                     <thead>
                         <tr>
