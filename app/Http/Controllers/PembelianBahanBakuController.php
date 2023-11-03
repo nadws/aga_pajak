@@ -482,22 +482,32 @@ class PembelianBahanBakuController extends Controller
             $spreadsheet->setActiveSheetIndex(0);
             $sheet1 = $spreadsheet->getActiveSheet();
             $sheet1->setTitle('Invoice BK');
-            $sheet1->getStyle('A1:N1')->applyFromArray($style_atas);
+            $sheet1->getStyle('A1:T1')->applyFromArray($style_atas);
 
-            $sheet1->setCellValue('A1', 'Tanggal');
-            $sheet1->setCellValue('B1', 'Suplier Awal');
-            $sheet1->setCellValue('C1', 'Nota BK');
-            $sheet1->setCellValue('D1', 'Nota Lot');
-            $sheet1->setCellValue('E1', 'Suplier Akhir');
-            $sheet1->setCellValue('F1', 'Keterangan');
-            $sheet1->setCellValue('G1', 'Gr Beli');
-            $sheet1->setCellValue('H1', 'Total Nota Bk');
-            $sheet1->setCellValue('I1', 'Gr Basah');
-            $sheet1->setCellValue('J1', 'Pcs Awal');
-            $sheet1->setCellValue('K1', 'Gr Kering');
-            $sheet1->setCellValue('L1', 'Susut');
-            $sheet1->setCellValue('M1', 'No Buku Campur');
-            $sheet1->setCellValue('N1', 'TGL Grade');
+            $akun_kas = DB::table('akun')->where('id_akun', '4')->first();
+            $akun_bca = DB::table('akun')->where('id_akun', '30')->first();
+            $akun_mandiri = DB::table('akun')->where('id_akun', '10')->first();
+
+            $sheet1->setCellValue('A1', '#');
+            $sheet1->setCellValue('B1', 'Tanggal');
+            $sheet1->setCellValue('C1', 'Suplier Awal');
+            $sheet1->setCellValue('D1', 'Nota BK');
+            $sheet1->setCellValue('E1', 'Nota Lot');
+            $sheet1->setCellValue('F1', 'Suplier Akhir');
+            $sheet1->setCellValue('G1', 'Keterangan');
+            $sheet1->setCellValue('H1', 'Gr Beli');
+            $sheet1->setCellValue('I1', 'Total Nota Bk');
+            $sheet1->setCellValue('J1', 'Gr Basah');
+            $sheet1->setCellValue('K1', 'Pcs Awal');
+            $sheet1->setCellValue('L1', 'Gr Kering');
+            $sheet1->setCellValue('M1', 'Susut');
+            $sheet1->setCellValue('N1', 'No Buku Campur');
+            $sheet1->setCellValue('O1', 'TGL Grade');
+            $sheet1->setCellValue('P1', 'Status');
+            $sheet1->setCellValue('Q1', $akun_kas->nm_akun);
+            $sheet1->setCellValue('R1', $akun_bca->nm_akun);
+            $sheet1->setCellValue('S1', $akun_mandiri->nm_akun);
+            $sheet1->setCellValue('T1', 'Sisa Hutang');
 
             $kolom = 2;
 
@@ -505,12 +515,8 @@ class PembelianBahanBakuController extends Controller
             uasort($tes, function ($a, $b) {
                 return strcmp($a, $b);
             });
-
-
-
-
             foreach ($tes as $nota) {
-                $pembelian = DB::selectOne("SELECT a.tgl, a.no_nota, a.no_lot, b.nm_suplier, a.suplier_akhir, c.gr_basah, c.pcs_awal, c.gr_kering, a.total_harga, f.total_harga as ttl_hrg, a.approve_bk_campur, g.gr_basah as gr_basah_apr, g.pcs_awal as pcs_awal_apr, g.gr_kering as gr_kering_apr, e.gr_beli, c.tgl as tgl_grading, c.no_campur
+                $pembelian = DB::selectOne("SELECT a.id_invoice_bk, a.tgl, a.no_nota, a.no_lot, b.nm_suplier, a.suplier_akhir, c.gr_basah, c.pcs_awal, c.gr_kering, a.total_harga, f.total_harga as ttl_hrg, a.approve_bk_campur, g.gr_basah as gr_basah_apr, g.pcs_awal as pcs_awal_apr, g.gr_kering as gr_kering_apr, e.gr_beli, c.tgl as tgl_grading, c.no_campur, a.lunas
                 FROM invoice_bk as a 
                 left join tb_suplier as  b on b.id_suplier = a.id_suplier
                 left join grading as c on c.no_nota = a.no_nota
@@ -524,25 +530,47 @@ class PembelianBahanBakuController extends Controller
                 where a.no_nota = '$nota'
                 order by a.no_nota ASC
                 ");
+                $kas = DB::selectOne("SELECT a.no_nota, a.id_akun, sum(a.kredit) as bayar
+                FROM bayar_bk as a
+                where a.no_nota = '$nota' and a.id_akun = '4'
+                group by a.no_nota;");
+                $bca = DB::selectOne("SELECT a.no_nota, a.id_akun, sum(a.kredit) as bayar
+                FROM bayar_bk as a
+                where a.no_nota = '$nota' and a.id_akun = '30'
+                group by a.no_nota;");
+                $mandiri = DB::selectOne("SELECT a.no_nota, a.id_akun, sum(a.kredit) as bayar
+                FROM bayar_bk as a
+                where a.no_nota = '$nota' and a.id_akun = '10'
+                group by a.no_nota;");
 
-                $sheet1->setCellValue('A' . $kolom, $pembelian->tgl);
-                $sheet1->setCellValue('B' . $kolom, $pembelian->nm_suplier);
-                $sheet1->setCellValue('C' . $kolom, $pembelian->no_nota);
-                $sheet1->setCellValue('D' . $kolom, $pembelian->no_lot);
-                $sheet1->setCellValue('E' . $kolom, $pembelian->suplier_akhir);
-                $sheet1->setCellValue('F' . $kolom, '');
-                $sheet1->setCellValue('G' . $kolom, $pembelian->gr_beli);
-                $sheet1->setCellValue('H' . $kolom, $pembelian->approve_bk_campur == 'Y' ? $pembelian->ttl_hrg : $pembelian->total_harga);
-                $sheet1->setCellValue('I' . $kolom, $pembelian->approve_bk_campur == 'Y' ? $pembelian->gr_basah_apr : $pembelian->gr_basah);
-                $sheet1->setCellValue('J' . $kolom, $pembelian->approve_bk_campur == 'Y' ? $pembelian->pcs_awal_apr : $pembelian->pcs_awal);
-                $sheet1->setCellValue('K' . $kolom, $pembelian->approve_bk_campur == 'Y' ? $pembelian->gr_kering_apr :  $pembelian->gr_kering);
-                $sheet1->setCellValue('L' . $kolom, $pembelian->approve_bk_campur == 'Y' ? round((1 - $pembelian->gr_beli / $pembelian->gr_kering_apr) * 100) : round((1 - $pembelian->gr_beli /  $pembelian->gr_kering) * -100));
-                $sheet1->setCellValue('M' . $kolom, $pembelian->no_campur);
-                $sheet1->setCellValue('N' . $kolom, $pembelian->tgl_grading);
+                $sheet1->setCellValue('A' . $kolom, $pembelian->id_invoice_bk);
+                $sheet1->setCellValue('B' . $kolom, $pembelian->tgl);
+                $sheet1->setCellValue('C' . $kolom, $pembelian->nm_suplier);
+                $sheet1->setCellValue('D' . $kolom, $pembelian->no_nota);
+                $sheet1->setCellValue('E' . $kolom, $pembelian->no_lot);
+                $sheet1->setCellValue('F' . $kolom, $pembelian->suplier_akhir);
+                $sheet1->setCellValue('G' . $kolom, '');
+                $sheet1->setCellValue('H' . $kolom, $pembelian->gr_beli);
+                $sheet1->setCellValue('I' . $kolom, $pembelian->approve_bk_campur == 'Y' ? $pembelian->ttl_hrg : $pembelian->total_harga);
+                $sheet1->setCellValue('J' . $kolom, $pembelian->approve_bk_campur == 'Y' ? $pembelian->gr_basah_apr : $pembelian->gr_basah);
+                $sheet1->setCellValue('K' . $kolom, $pembelian->approve_bk_campur == 'Y' ? $pembelian->pcs_awal_apr : $pembelian->pcs_awal);
+                $sheet1->setCellValue('L' . $kolom, $pembelian->approve_bk_campur == 'Y' ? $pembelian->gr_kering_apr :  $pembelian->gr_kering);
+                $sheet1->setCellValue('M' . $kolom, $pembelian->approve_bk_campur == 'Y' ? round((1 - $pembelian->gr_beli / $pembelian->gr_kering_apr) * 100) : round((1 - $pembelian->gr_beli /  $pembelian->gr_kering) * -100));
+                $sheet1->setCellValue('N' . $kolom, $pembelian->no_campur);
+                $sheet1->setCellValue('O' . $kolom, $pembelian->tgl_grading);
+                $kas2 = empty($kas->bayar) ? '0' : $kas->bayar;
+                $bca2 = empty($bca->bayar) ? '0' : $bca->bayar;
+                $mandiri2 = empty($mandiri->bayar) ? '0' : $mandiri->bayar;
+                $sheet1->setCellValue('P' . $kolom, $pembelian->lunas == 'D' ? 'Draft' : ($pembelian->total_harga - $kas2 - $bca2 - $mandiri2 <= 0 ? 'Paid' : 'Unpaid'));
+                $sheet1->setCellValue('Q' . $kolom,  empty($kas->bayar) ? '0' : $kas->bayar);
+                $sheet1->setCellValue('R' . $kolom,  empty($bca->bayar) ? '0' : $bca->bayar);
+                $sheet1->setCellValue('S' . $kolom,  empty($mandiri->bayar) ? '0' : $mandiri->bayar);
+                $sheet1->setCellValue('T' . $kolom,  $pembelian->total_harga - $kas2 - $bca2 - $mandiri2);
+
                 $kolom++;
             }
 
-            $sheet1->getStyle('A2:N' . $kolom - 1)->applyFromArray($style);
+            $sheet1->getStyle('A2:T' . $kolom - 1)->applyFromArray($style);
 
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(1);
