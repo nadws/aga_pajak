@@ -1,4 +1,4 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="9">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="10">
 
     <x-slot name="cardHeader">
         <div class="row justify-content-end">
@@ -28,7 +28,7 @@
                 <div class="col-lg-12 mt-2">
 
                     <div class="table-container">
-                        <table class="table table-hover" id="tableSearch" width="100%">
+                        <table class="table table-hover table-bordered" id="tableSearch" width="100%">
                             <thead>
                                 @php
                                     $ttlRp = 0;
@@ -45,12 +45,19 @@
                                     <th class="text-end dhead">Gram</th>
                                     <th class="text-end dhead">Rp/gr</th>
                                     <th class="text-end dhead">Rupiah <br>(Rp {{ number_format($ttlRp, 0) }})</th>
-
+                                    <th class="dhead">Ket</th>
+                                    <th class="dhead">Lok/Tgl</th>
+                                    <th class="dhead">No Produksi</th>
+                                    @if ($nm_gudang == 'produksi')
+                                        <th class="text-end dhead">Pcs diambil</th>
+                                        <th class="text-end dhead">Gr diambil</th>
+                                    @endif
                                     <th class="dhead text-center">
                                         <button type="submit" name="submit" value="export" class="badge bg-success"><i
                                                 class="fas fa-file-excel"></i></button>
                                         <br>
                                         <input type="checkbox" id="checkAll" name="" id="">
+                                        <input type="hidden" name="gudang" value="{{ $nm_gudang }}" id="">
                                     </th>
 
 
@@ -67,6 +74,13 @@
                                         <td class="text-end">{{ $g->gr }}</td>
                                         <td class="text-end">{{ number_format($g->rupiah / $g->gr, 0) }}</td>
                                         <td class="text-end">Rp {{ number_format($g->rupiah, 0) }}</td>
+                                        <td>{{ $g->ket }}</td>
+                                        <td>{{ $g->lok_tgl }}</td>
+                                        <td>{{ $g->no_produksi }}</td>
+                                        @if ($nm_gudang == 'produksi')
+                                            <td class="text-end">{{ $g->pcs_diambil }}</td>
+                                            <td class="text-end">{{ $g->gr_diambil }}</td>
+                                        @endif
 
                                         <td class="text-center"><input type="checkbox" class="checkbox-item"
                                                 name="id_buku_campur[]" value="{{ $g->id_buku_campur }}"
@@ -89,6 +103,7 @@
                     <div class="col-lg-12">
                         <label for="">File</label>
                         <input type="file" class="form-control" name="file">
+                        <input type="hidden" name="gudang" value="{{ $nm_gudang }}" id="">
                     </div>
                 </div>
 
