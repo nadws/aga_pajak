@@ -100,7 +100,7 @@ class GudangBkController extends Controller
         $spreadsheet->setActiveSheetIndex(0);
         $sheet1 = $spreadsheet->getActiveSheet();
         $sheet1->setTitle('Gudang BK');
-        $sheet1->getStyle('A1:N1')->applyFromArray($style_atas);
+        $sheet1->getStyle('A1:O1')->applyFromArray($style_atas);
 
         $sheet1->setCellValue('A1', 'ID');
         $sheet1->setCellValue('B1', 'Tanggal');
@@ -116,9 +116,10 @@ class GudangBkController extends Controller
         $sheet1->setCellValue('L1', 'Gudang BK');
         $sheet1->setCellValue('M1', 'Gudang Produksi');
         $sheet1->setCellValue('N1', 'Gudang Reject');
+        $sheet1->setCellValue('O1', 'Hapus');
 
         $kolom = 2;
-        
+
 
         if (empty($r->id_buku_campur)) {
             $pembelian = DB::select("SELECT *
@@ -142,17 +143,39 @@ class GudangBkController extends Controller
                 $sheet1->setCellValue('L' . $kolom, $d->gudang == 'bk' ? 'Y' : 'T');
                 $sheet1->setCellValue('M' . $kolom, $d->gudang == 'produksi' ? 'Y' : 'T');
                 $sheet1->setCellValue('N' . $kolom, $d->gudang == 'reject' ? 'Y' : 'T');
+                $sheet1->setCellValue('O' . $kolom, $d->gabung);
                 $kolom++;
             }
         } else {
             for ($x = 0; $x < count($r->id_buku_campur); $x++) {
                 $id_buku_campur = $r->id_buku_campur[$x];
-                $pembelian = DB::selectOne("SELECT *
+                // $pembelian = DB::selectOne("SELECT *
+                // FROM buku_campur as a
+                // left join grade as b on b.id_grade = a.id_grade
+                // left join grading as c on c.no_nota = a.no_nota
+                // where a.id_buku_campur = '$id_buku_campur'
+                // group by a.id_buku_campur
+                // ");
+                $pembelian = DB::selectOne("SELECT 
+                a.id_buku_campur, a.approve,
+                if(a.approve = 'T',c.tgl,d.tgl) as tgl, 
+                a.no_lot, 
+                if(a.approve = 'T',b.nm_grade,d.nm_grade) as nm_grade, 
+                if(a.approve = 'T',a.pcs,d.pcs) as pcs, 
+                if(a.approve = 'T',a.gr,d.gr) as gr, 
+                if(a.approve = 'T',a.rupiah,d.rupiah) as rupiah, 
+                if(a.approve = 'T',a.ket,d.ket) as ket,
+                if(a.approve = 'T',a.lok_tgl,d.lok_tgl) as lok_tgl,
+                if(a.approve = 'T',a.no_produksi,d.no_produksi) as no_produksi, 
+                a.gabung,
+                a.gudang
+
+
                 FROM buku_campur as a
                 left join grade as b on b.id_grade = a.id_grade
                 left join grading as c on c.no_nota = a.no_nota
+                left join buku_campur_approve as d on d.id_buku_campur = a.id_buku_campur
                 where a.id_buku_campur = '$id_buku_campur'
-                group by a.id_buku_campur
                 ");
 
                 $sheet1->setCellValue('A' . $kolom, $pembelian->id_buku_campur);
@@ -169,10 +192,11 @@ class GudangBkController extends Controller
                 $sheet1->setCellValue('L' . $kolom, $pembelian->gudang == 'bk' ? 'Y' : 'T');
                 $sheet1->setCellValue('M' . $kolom, $pembelian->gudang == 'produksi' ? 'Y' : 'T');
                 $sheet1->setCellValue('N' . $kolom, $pembelian->gudang == 'reject' ? 'Y' : 'T');
+                $sheet1->setCellValue('O' . $kolom, $pembelian->gabung);
                 $kolom++;
             }
         }
-        $sheet1->getStyle('A2:N' . $kolom - 1)->applyFromArray($style);
+        $sheet1->getStyle('A2:O' . $kolom - 1)->applyFromArray($style);
         $namafile = "Gudang Bk.xlsx";
 
         $writer = new Xlsx($spreadsheet);
@@ -217,10 +241,10 @@ class GudangBkController extends Controller
                 foreach ($data as $rowData) {
                     $rowBk = 11;
 
-                    if (($rowData[$rowBk] == 'Y' && $rowData[$rowBk+1] == 'Y') ||
-                        ($rowData[$rowBk] == 'Y' && $rowData[$rowBk+2] == 'Y') ||
-                        ($rowData[$rowBk+2] == 'Y' && $rowData[$rowBk+1] == 'Y') ||
-                        ($rowData[$rowBk] == 'Y' && $rowData[$rowBk+1] == 'Y' && $rowData[$rowBk+2] == 'Y')
+                    if (($rowData[$rowBk] == 'Y' && $rowData[$rowBk + 1] == 'Y') ||
+                        ($rowData[$rowBk] == 'Y' && $rowData[$rowBk + 2] == 'Y') ||
+                        ($rowData[$rowBk + 2] == 'Y' && $rowData[$rowBk + 1] == 'Y') ||
+                        ($rowData[$rowBk] == 'Y' && $rowData[$rowBk + 1] == 'Y' && $rowData[$rowBk + 2] == 'Y')
                     ) {
                         $importGagal = true;
                         break;
@@ -228,17 +252,32 @@ class GudangBkController extends Controller
 
                     if ($rowData[$rowBk] == 'Y') {
                         $gudang = 'bk';
-                    } elseif ($rowData[$rowBk+1] == 'Y') {
+                    } elseif ($rowData[$rowBk + 1] == 'Y') {
                         $gudang = 'produksi';
-                    } elseif ($rowData[$rowBk+2] == 'Y') {
+                    } elseif ($rowData[$rowBk + 2] == 'Y') {
                         $gudang = 'reject';
                     }
 
                     DB::table('buku_campur')->where('id_buku_campur', $rowData[0])->update([
+                        'approve' => 'Y',
+                        'gabung' => $rowData[14],
                         'gudang' => $gudang,
+                    ]);
+
+                    DB::table('buku_campur_approve')->where('id_buku_campur', $rowData[0])->delete();
+                    DB::table('buku_campur_approve')->insert([
+                        'id_buku_campur' => $rowData[0],
+                        'tgl' => $rowData[1],
+                        'no_lot' => $rowData[2],
+                        'nm_grade' => $rowData[3],
+                        'pcs' => $rowData[4],
+                        'gr' => $rowData[5],
+                        'rupiah' => $rowData[7],
                         'ket' => $rowData[8],
                         'lok_tgl' => $rowData[9],
                         'no_produksi' => $rowData[10],
+                        'gudang' => $gudang,
+
                     ]);
                 }
 
