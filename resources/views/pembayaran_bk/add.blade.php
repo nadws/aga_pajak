@@ -93,6 +93,7 @@
                                         <option value="4">KAS BESAR</option>
                                         <option value="10">BANK MANDIRI NO.REK 031-00-5108889-9</option>
                                         <option value="30">Bca No. Rek 0513020888 (untuk Hutang)</option>
+                                        <option value="6">BANK BCA NO. REK 0511780062</option>
                                         <option value="45">PENDAPATAN  DILUAR USAHA</option>
                                     </select>
                                 </td>

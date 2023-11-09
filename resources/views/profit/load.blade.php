@@ -10,7 +10,7 @@
         $totalBiaya = 0;
         $totalLaba = 0;
 
-        function getAkun($id_kategori,$tgl1, $tgl2, $jenis)
+        function getAkun($id_kategori, $tgl1, $tgl2, $jenis)
         {
             $jenis = $jenis == 1 ? 'b.kredit' : 'b.debit';
 
@@ -25,7 +25,7 @@
             left join akun as c on c.id_akun = a.id_akun
             where a.kategori_id = '$id_kategori';");
         }
-        
+
     @endphp
     <table class="table table-bordered">
         <tr>
@@ -40,12 +40,12 @@
                 </th>
             </tr>
             @foreach (getAkun($d->id, $tgl1, $tgl2, 1) as $a)
-            @php
-                $totalPendapatan += $a->kredit;
-            @endphp
+                @php
+                    $totalPendapatan += $a->kredit;
+                @endphp
                 <tr>
-                    <td colspan="2"  style="padding-left: 20px">{{ ucwords(strtolower($a->nm_akun)) }}</td>
-                    <td style="text-align: right">Rp. {{ number_format($a->kredit,2) }}</td>
+                    <td colspan="2" style="padding-left: 20px">{{ ucwords(strtolower($a->nm_akun)) }}</td>
+                    <td style="text-align: right">Rp. {{ number_format($a->kredit, 2) }}</td>
                 </tr>
             @endforeach
         @endforeach
@@ -71,12 +71,12 @@
                 </th>
             </tr>
             @foreach (getAkun($d->id, $tgl1, $tgl2, 2) as $a)
-            @php
-                $totalBiaya += $a->debit;
-            @endphp
+                @php
+                    $totalBiaya += $a->debit;
+                @endphp
                 <tr>
                     <td colspan="2" style="padding-left: 20px">{{ ucwords(strtolower($a->nm_akun)) }}</td>
-                    <td style="text-align: right">Rp. {{ number_format($a->debit,2) }}</td>
+                    <td style="text-align: right">Rp. {{ number_format($a->debit, 2) }}</td>
                 </tr>
             @endforeach
         @endforeach
