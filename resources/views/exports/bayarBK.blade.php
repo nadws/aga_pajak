@@ -12,6 +12,7 @@
             <th width="143px">KAS BESAR</th>
             <th width="143px">Bca No. Rek 0513020888 (untuk Hutang)</th>
             <th width="143px">BANK MANDIRI NO.REK 031-00-5108889-9</th>
+            <th width="143px">BANK BCA NO. REK 0511780062</th>
         </tr>
     </thead>
     <tbody>
@@ -29,6 +30,10 @@
         FROM bayar_bk as a
         where a.no_nota = '$p->no_nota' and a.id_akun = '10'
         group by a.no_nota;");
+                $bca22 = DB::selectOne("SELECT a.no_nota, a.id_akun, sum(a.kredit) as bayar
+        FROM bayar_bk as a
+        where a.no_nota = '$p->no_nota' and a.id_akun = '6'
+        group by a.no_nota;");
             @endphp
             <tr>
                 <td>{{ $no + 1 }}</td>
@@ -42,12 +47,14 @@
                     $kas2 = empty($kas->bayar) ? '0' : $kas->bayar;
                     $bca2 = empty($bca->bayar) ? '0' : $bca->bayar;
                     $mandiri2 = empty($mandiri->bayar) ? '0' : $mandiri->bayar;
+                    $bca222 = empty($bca22->bayar) ? '0' : $bca22->bayar;
                 @endphp
-                <td>{{ $p->lunas == 'D' ? 'Draft' : ($p->total_harga - $kas2 - $bca2 - $mandiri2 <= 0 ? 'Paid' : 'Unpaid') }}
+                <td>{{ $p->lunas == 'D' ? 'Draft' : ($p->total_harga - $kas2 - $bca2 - $mandiri2 - $bca222 <= 0 ? 'Paid' : 'Unpaid') }}
                 </td>
                 <td>{{ empty($kas->bayar) ? '0' : $kas->bayar }}</td>
                 <td>{{ empty($bca->bayar) ? '0' : $bca->bayar }}</td>
                 <td>{{ empty($mandiri->bayar) ? '0' : $mandiri->bayar }}</td>
+                <td>{{ $bca222 }}</td>
             </tr>
         @endforeach
     </tbody>
