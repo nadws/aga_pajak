@@ -40,7 +40,7 @@
                 group by a.no_nota;");
             @endphp
             <tr>
-                <td>{{ $no + 1 }}</td>
+                <td>{{ $p->id_invoice_bk }}</td>
                 <td>{{ $p->tgl }}</td>
                 <td>{{ strtoupper($p->nm_suplier) }}</td>
                 <td>{{ $p->no_nota }}</td>

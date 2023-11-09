@@ -340,7 +340,7 @@ class PembelianBahanBakuController extends Controller
         $urutan_nota = $r->urutan_nota;
 
         DB::table('pembelian')->where('no_nota', $nota)->delete();
-        DB::table('invoice_bk')->where('no_nota', $nota)->delete();
+        // DB::table('invoice_bk')->where('no_nota', $nota)->delete();
         DB::table('bayar_bk')->where(['no_nota' => $nota, 'bayar' => 'T'])->delete();
 
         for ($x = 0; $x < count($id_produk); $x++) {
@@ -375,7 +375,7 @@ class PembelianBahanBakuController extends Controller
                 'approve_bk_campur' => $r->approve_bk_campur,
                 'admin' => Auth::user()->name,
             ];
-            DB::table('invoice_bk')->insert($data);
+            DB::table('invoice_bk')->where('no_nota', $nota)->update($data);
         } else {
             $data = [
                 'id_suplier' => $suplier_awal,
@@ -389,7 +389,7 @@ class PembelianBahanBakuController extends Controller
                 'approve_bk_campur' => $r->approve_bk_campur,
                 'admin' => Auth::user()->name,
             ];
-            DB::table('invoice_bk')->insert($data);
+            DB::table('invoice_bk')->where('no_nota', $nota)->update($data);
         }
         if (empty($r->debit_tambahan) || $r->debit_tambahan == '0') {
             # code...

@@ -1,4 +1,4 @@
-<x-theme.app title="{{ $title }}" table="Y" sizeCard="10">
+<x-theme.app title="{{ $title }}" table="Y" sizeCard="12">
 
     <x-slot name="cardHeader">
         <div class="row justify-content-end">
@@ -51,6 +51,8 @@
                                     @if ($nm_gudang == 'produksi')
                                         <th class="text-end dhead">Pcs diambil</th>
                                         <th class="text-end dhead">Gr diambil</th>
+                                        <th class="text-end dhead">Pcs sisa</th>
+                                        <th class="text-end dhead">Gr sisa</th>
                                     @endif
                                     <th class="dhead text-center">
                                         <button type="submit" name="submit" value="export" class="badge bg-success"><i
@@ -80,6 +82,8 @@
                                         @if ($nm_gudang == 'produksi')
                                             <td class="text-end">{{ $g->pcs_diambil }}</td>
                                             <td class="text-end">{{ $g->gr_diambil }}</td>
+                                            <td class="text-end">{{ $g->pcs - $g->pcs_diambil }}</td>
+                                            <td class="text-end">{{ $g->gr - $g->gr_diambil }}</td>
                                         @endif
 
                                         <td class="text-center"><input type="checkbox" class="checkbox-item"
