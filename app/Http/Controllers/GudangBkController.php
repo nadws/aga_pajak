@@ -101,126 +101,79 @@ class GudangBkController extends Controller
         $sheet1 = $spreadsheet->getActiveSheet();
         $sheet1->setTitle('Gudang BK');
 
-        $batas_hurf = $r->gudang == 'produksi' ? 'Q1' : 'O1';
-        $sheet1->getStyle("A1:$batas_hurf")->applyFromArray($style_atas);
+
+        $sheet1->getStyle("A1:P1")->applyFromArray($style_atas);
 
         $sheet1->setCellValue('A1', 'ID');
-        $sheet1->setCellValue('B1', 'Tanggal');
-        $sheet1->setCellValue('C1', 'No Lot');
-        $sheet1->setCellValue('D1', 'Grade');
-        $sheet1->setCellValue('E1', 'Pcs');
-        $sheet1->setCellValue('F1', 'Gram');
-        $sheet1->setCellValue('G1', 'Rp/gr');
-        $sheet1->setCellValue('H1', 'Rupiah');
-        $sheet1->setCellValue('I1', 'Keterangan');
-        $sheet1->setCellValue('J1', 'Lok/tgl');
-        $sheet1->setCellValue('K1', 'No Produksi');
-        $sheet1->setCellValue('L1', 'Gudang BK');
-        $sheet1->setCellValue('M1', 'Gudang Produksi');
-        $sheet1->setCellValue('N1', 'Gudang Reject');
-        $sheet1->setCellValue('O1', 'Hapus');
-        if ($r->gudang == 'produksi') {
-            $sheet1->setCellValue('P1', 'Pcs Ambil');
-            $sheet1->setCellValue('Q1', 'Gr Ambil');
-        }
+        $sheet1->setCellValue('B1', 'Buku');
+        $sheet1->setCellValue('C1', 'Suplier Awal');
+        $sheet1->setCellValue('D1', 'Date');
+        $sheet1->setCellValue('E1', 'Grade');
+        $sheet1->setCellValue('F1', 'Pcs');
+        $sheet1->setCellValue('G1', 'Gram');
+        $sheet1->setCellValue('H1', 'Rp/Gr');
+        $sheet1->setCellValue('I1', 'Lot');
+        $sheet1->setCellValue('J1', 'Keterangan');
+        $sheet1->setCellValue('K1', 'Ttl Rp');
+        $sheet1->setCellValue('L1', 'Lok');
+        $sheet1->setCellValue('M1', 'Gudang BK');
+        $sheet1->setCellValue('N1', 'Gudang Produksi');
+        $sheet1->setCellValue('O1', 'Gudang Reject');
+        $sheet1->setCellValue('P1', 'Hapus');
 
         $kolom = 2;
 
 
         if (empty($r->id_buku_campur)) {
-            $pembelian = DB::select("SELECT 
-            a.id_buku_campur, a.approve,
-            if(a.approve = 'T',c.tgl,d.tgl) as tgl, 
-            a.no_lot, 
-            if(a.approve = 'T',b.nm_grade,d.nm_grade) as nm_grade, 
-            if(a.approve = 'T',a.pcs,d.pcs) as pcs, 
-            if(a.approve = 'T',a.gr,d.gr) as gr, 
-            if(a.approve = 'T',a.rupiah,d.rupiah) as rupiah, 
-            if(a.approve = 'T',a.ket,d.ket) as ket,
-            if(a.approve = 'T',a.lok_tgl,d.lok_tgl) as lok_tgl,
-            if(a.approve = 'T',a.no_produksi,d.no_produksi) as no_produksi, 
-            a.gabung, a.gudang,
-            d.pcs_diambil, d.gr_diambil
+            $pembelian = GudangBkModel::getPembelianBk($r->gudang);
 
-
-            FROM buku_campur as a
-            left join grade as b on b.id_grade = a.id_grade
-            left join grading as c on c.no_nota = a.no_nota
-            left join buku_campur_approve as d on d.id_buku_campur = a.id_buku_campur
-            where a.gudang = '$r->gudang'
-            ");
             foreach ($pembelian as $d) {
                 $sheet1->setCellValue('A' . $kolom, $d->id_buku_campur);
-                $sheet1->setCellValue('B' . $kolom, $d->tgl);
-                $sheet1->setCellValue('C' . $kolom, $d->no_lot);
-                $sheet1->setCellValue('D' . $kolom, $d->nm_grade);
-                $sheet1->setCellValue('E' . $kolom, $d->pcs);
-                $sheet1->setCellValue('F' . $kolom, $d->gr);
-                $sheet1->setCellValue('G' . $kolom, $d->rupiah / $d->gr);
+                $sheet1->setCellValue('B' . $kolom, $d->buku);
+                $sheet1->setCellValue('C' . $kolom, $d->suplier_awal);
+                $sheet1->setCellValue('D' . $kolom, $d->tgl);
+                $sheet1->setCellValue('E' . $kolom, $d->nm_grade);
+                $sheet1->setCellValue('F' . $kolom, $d->pcs);
+                $sheet1->setCellValue('G' . $kolom, $d->gr);
                 $sheet1->setCellValue('H' . $kolom, $d->rupiah);
-                $sheet1->setCellValue('I' . $kolom, $d->ket);
-                $sheet1->setCellValue('J' . $kolom, $d->lok_tgl);
-                $sheet1->setCellValue('K' . $kolom, $d->no_produksi);
-                $sheet1->setCellValue('L' . $kolom, $d->gudang == 'bk' ? 'Y' : 'T');
-                $sheet1->setCellValue('M' . $kolom, $d->gudang == 'produksi' ? 'Y' : 'T');
-                $sheet1->setCellValue('N' . $kolom, $d->gudang == 'reject' ? 'Y' : 'T');
-                $sheet1->setCellValue('O' . $kolom, $d->gabung);
-                if ($r->gudang == 'produksi') {
-                    $sheet1->setCellValue('P' . $kolom, $d->pcs_diambil);
-                    $sheet1->setCellValue('Q' . $kolom, $d->gr_diambil);
-                }
+                $sheet1->setCellValue('I' . $kolom, $d->no_lot);
+                $sheet1->setCellValue('J' . $kolom, $d->ket);
+                $sheet1->setCellValue('K' . $kolom, $d->rupiah * $d->gr);
+                $sheet1->setCellValue('L' . $kolom, $d->lok_tgl);
+                $sheet1->setCellValue('M' . $kolom, $d->gudang == 'bk' ? 'Y' : 'T');
+                $sheet1->setCellValue('N' . $kolom, $d->gudang == 'produksi' ? 'Y' : 'T');
+                $sheet1->setCellValue('O' . $kolom, $d->gudang == 'reject' ? 'Y' : 'T');
+                $sheet1->setCellValue('P' . $kolom, $d->gabung);
+
                 $kolom++;
             }
         } else {
 
             for ($x = 0; $x < count($r->id_buku_campur); $x++) {
                 $id_buku_campur = $r->id_buku_campur[$x];
-                $pembelian = DB::selectOne("SELECT 
-                a.id_buku_campur, a.approve,
-                if(a.approve = 'T',c.tgl,d.tgl) as tgl, 
-                a.no_lot, 
-                if(a.approve = 'T',b.nm_grade,d.nm_grade) as nm_grade, 
-                if(a.approve = 'T',a.pcs,d.pcs) as pcs, 
-                if(a.approve = 'T',a.gr,d.gr) as gr, 
-                if(a.approve = 'T',a.rupiah,d.rupiah) as rupiah, 
-                if(a.approve = 'T',a.ket,d.ket) as ket,
-                if(a.approve = 'T',a.lok_tgl,d.lok_tgl) as lok_tgl,
-                if(a.approve = 'T',a.no_produksi,d.no_produksi) as no_produksi, 
-                a.gabung, a.gudang,
-                d.pcs_diambil, d.gr_diambil
-
-
-                FROM buku_campur as a
-                left join grade as b on b.id_grade = a.id_grade
-                left join grading as c on c.no_nota = a.no_nota
-                left join buku_campur_approve as d on d.id_buku_campur = a.id_buku_campur
-                where a.id_buku_campur = '$id_buku_campur'
-                ");
+                $pembelian = GudangBkModel::getPembelianBkExport($id_buku_campur);
 
                 $sheet1->setCellValue('A' . $kolom, $pembelian->id_buku_campur);
-                $sheet1->setCellValue('B' . $kolom, $pembelian->tgl);
-                $sheet1->setCellValue('C' . $kolom, $pembelian->no_lot);
-                $sheet1->setCellValue('D' . $kolom, $pembelian->nm_grade);
-                $sheet1->setCellValue('E' . $kolom, $pembelian->pcs);
-                $sheet1->setCellValue('F' . $kolom, $pembelian->gr);
-                $sheet1->setCellValue('G' . $kolom, $pembelian->rupiah / $pembelian->gr);
+                $sheet1->setCellValue('B' . $kolom, $pembelian->buku);
+                $sheet1->setCellValue('C' . $kolom, $pembelian->suplier_awal);
+                $sheet1->setCellValue('D' . $kolom, $pembelian->tgl);
+                $sheet1->setCellValue('E' . $kolom, $pembelian->nm_grade);
+                $sheet1->setCellValue('F' . $kolom, $pembelian->pcs);
+                $sheet1->setCellValue('G' . $kolom, $pembelian->gr);
                 $sheet1->setCellValue('H' . $kolom, $pembelian->rupiah);
-                $sheet1->setCellValue('I' . $kolom, $pembelian->ket);
-                $sheet1->setCellValue('J' . $kolom, $pembelian->lok_tgl);
-                $sheet1->setCellValue('K' . $kolom, $pembelian->no_produksi);
-                $sheet1->setCellValue('L' . $kolom, $pembelian->gudang == 'bk' ? 'Y' : 'T');
-                $sheet1->setCellValue('M' . $kolom, $pembelian->gudang == 'produksi' ? 'Y' : 'T');
-                $sheet1->setCellValue('N' . $kolom, $pembelian->gudang == 'reject' ? 'Y' : 'T');
-                $sheet1->setCellValue('O' . $kolom, $pembelian->gabung);
-                if ($r->gudang == 'produksi') {
-                    $sheet1->setCellValue('P' . $kolom, $pembelian->pcs_diambil);
-                    $sheet1->setCellValue('Q' . $kolom, $pembelian->gr_diambil);
-                }
+                $sheet1->setCellValue('I' . $kolom, $pembelian->no_lot);
+                $sheet1->setCellValue('J' . $kolom, $pembelian->ket);
+                $sheet1->setCellValue('K' . $kolom, $pembelian->rupiah * $pembelian->gr);
+                $sheet1->setCellValue('L' . $kolom, $pembelian->lok_tgl);
+                $sheet1->setCellValue('M' . $kolom, $pembelian->gudang == 'bk' ? 'Y' : 'T');
+                $sheet1->setCellValue('N' . $kolom, $pembelian->gudang == 'produksi' ? 'Y' : 'T');
+                $sheet1->setCellValue('O' . $kolom, $pembelian->gudang == 'reject' ? 'Y' : 'T');
+                $sheet1->setCellValue('P' . $kolom, $pembelian->gabung);
+
                 $kolom++;
             }
         }
-        $batas_hurf2 = $r->gudang == 'produksi' ? 'Q' : 'O';
-        $sheet1->getStyle('A2:' . $batas_hurf2 . $kolom - 1)->applyFromArray($style);
+        $sheet1->getStyle('A2:P' . $kolom - 1)->applyFromArray($style);
         $namafile = "Gudang Bk.xlsx";
 
         $writer = new Xlsx($spreadsheet);
@@ -263,7 +216,7 @@ class GudangBkController extends Controller
 
             try {
                 foreach ($data as $rowData) {
-                    $rowBk = 11;
+                    $rowBk = 12;
 
                     if (($rowData[$rowBk] == 'Y' && $rowData[$rowBk + 1] == 'Y') ||
                         ($rowData[$rowBk] == 'Y' && $rowData[$rowBk + 2] == 'Y') ||
@@ -284,135 +237,73 @@ class GudangBkController extends Controller
 
                     if (empty($rowData[0])) {
                         DB::table('buku_campur')->insert([
-                            'no_lot' => $rowData[2],
+                            'no_lot' => $rowData[8],
                             'id_grade' => '1',
-                            'pcs' => $rowData[4],
-                            'gr' => $rowData[5],
+                            'pcs' => $rowData[5],
+                            'gr' => $rowData[6],
                             'rupiah' => $rowData[7],
-                            'ket' => $rowData[8],
-                            'lok_tgl' => $rowData[9],
-                            'no_produksi' => $rowData[10],
+                            'ket' => empty($rowData[9]) ? ' ' : $rowData[9],
+                            'lok_tgl' => empty($rowData[11]) ? ' ' : $rowData[11],
                             'approve' => 'Y',
-                            'gabung' => $rowData[14],
+                            'gabung' => $rowData[15],
                             'gudang' => $gudang,
 
                         ]);
                         $idBukuCampur = DB::getPdo()->lastInsertId();
-                        if ($r->gudang == 'produksi') {
-                            DB::table('buku_campur_approve')->insert([
-                                'id_buku_campur' => $idBukuCampur,
-                                'tgl' => $rowData[1],
-                                'no_lot' => $rowData[2],
-                                'nm_grade' => $rowData[3],
-                                'pcs' => $rowData[4],
-                                'gr' => $rowData[5],
-                                'rupiah' => $rowData[7],
-                                'ket' => $rowData[8],
-                                'lok_tgl' => $rowData[9],
-                                'no_produksi' => $rowData[10],
-                                'gudang' => $gudang,
-                                'pcs_diambil' => $rowData[15],
-                                'gr_diambil' => $rowData[16],
 
-                            ]);
-                        } else {
-
-
-                            DB::table('buku_campur_approve')->insert([
-                                'id_buku_campur' => $idBukuCampur,
-                                'tgl' => $rowData[1],
-                                'no_lot' => $rowData[2],
-                                'nm_grade' => $rowData[3],
-                                'pcs' => $rowData[4],
-                                'gr' => $rowData[5],
-                                'rupiah' => $rowData[7],
-                                'ket' => $rowData[8],
-                                'lok_tgl' => $rowData[9],
-                                'no_produksi' => $rowData[10],
-                                'gudang' => $gudang,
-
-                            ]);
-                        }
+                        DB::table('buku_campur_approve')->insert([
+                            'id_buku_campur' => $idBukuCampur,
+                            'buku' => $rowData[1],
+                            'suplier_awal' => $rowData[2],
+                            'tgl' => $rowData[3],
+                            'nm_grade' => $rowData[4],
+                            'pcs' => $rowData[5],
+                            'gr' => $rowData[6],
+                            'no_lot' => $rowData[8],
+                            'ket' => empty($rowData[9]) ? ' ' : $rowData[9],
+                            'rupiah' => $rowData[7],
+                            'lok_tgl' => empty($rowData[11]) ? ' ' : $rowData[11],
+                            'gudang' => $gudang,
+                        ]);
                     } else {
                         DB::table('buku_campur')->where('id_buku_campur', $rowData[0])->update([
                             'approve' => 'Y',
-                            'gabung' => $rowData[14],
+                            'gabung' => $rowData[15],
                             'gudang' => $gudang,
                         ]);
 
                         $bk_approve = DB::table('buku_campur_approve')->where('id_buku_campur', $rowData[0])->first();
-                        if ($r->gudang == 'produksi') {
-                            if (empty($bk_approve)) {
-                                DB::table('buku_campur_approve')->insert([
-                                    'id_buku_campur' => $rowData[0],
-                                    'tgl' => $rowData[1],
-                                    'no_lot' => $rowData[2],
-                                    'nm_grade' => $rowData[3],
-                                    'pcs' => $rowData[4],
-                                    'gr' => $rowData[5],
-                                    'rupiah' => $rowData[7],
-                                    'ket' => $rowData[8],
-                                    'lok_tgl' => $rowData[9],
-                                    'no_produksi' => $rowData[10],
-                                    'gudang' => $gudang,
-                                    'pcs_diambil' => $rowData[15],
-                                    'gr_diambil' => $rowData[16],
 
-                                ]);
-                            } else {
-                                DB::table('buku_campur_approve')->where('id_buku_campur', $rowData[0])->update([
-                                    'id_buku_campur' => $rowData[0],
-                                    'tgl' => $rowData[1],
-                                    'no_lot' => $rowData[2],
-                                    'nm_grade' => $rowData[3],
-                                    'pcs' => $rowData[4],
-                                    'gr' => $rowData[5],
-                                    'rupiah' => $rowData[7],
-                                    'ket' => $rowData[8],
-                                    'lok_tgl' => $rowData[9],
-                                    'no_produksi' => $rowData[10],
-                                    'gudang' => $gudang,
-                                    'pcs_diambil' => $rowData[15],
-                                    'gr_diambil' => $rowData[16],
-
-                                ]);
-                            }
+                        if (empty($bk_approve)) {
+                            DB::table('buku_campur_approve')->insert([
+                                'id_buku_campur' => $rowData[0],
+                                'buku' => $rowData[1],
+                                'suplier_awal' => $rowData[2],
+                                'tgl' => $rowData[3],
+                                'nm_grade' => $rowData[4],
+                                'pcs' => $rowData[5],
+                                'gr' => $rowData[6],
+                                'no_lot' => $rowData[8],
+                                'ket' => empty($rowData[9]) ? ' ' : $rowData[9],
+                                'rupiah' => $rowData[7],
+                                'lok_tgl' => empty($rowData[11]) ? ' ' : $rowData[11],
+                                'gudang' => $gudang,
+                            ]);
                         } else {
-                            if (empty($bk_approve)) {
-                                DB::table('buku_campur_approve')->insert([
-                                    'id_buku_campur' => $rowData[0],
-                                    'tgl' => $rowData[1],
-                                    'no_lot' => $rowData[2],
-                                    'nm_grade' => $rowData[3],
-                                    'pcs' => $rowData[4],
-                                    'gr' => $rowData[5],
-                                    'rupiah' => $rowData[7],
-                                    'ket' => $rowData[8],
-                                    'lok_tgl' => $rowData[9],
-                                    'no_produksi' => $rowData[10],
-                                    'gudang' => $gudang,
-                                    'pcs_diambil' => $rowData[15],
-                                    'gr_diambil' => $rowData[16],
-
-                                ]);
-                            } else {
-                                DB::table('buku_campur_approve')->where('id_buku_campur', $rowData[0])->update([
-                                    'id_buku_campur' => $rowData[0],
-                                    'tgl' => $rowData[1],
-                                    'no_lot' => $rowData[2],
-                                    'nm_grade' => $rowData[3],
-                                    'pcs' => $rowData[4],
-                                    'gr' => $rowData[5],
-                                    'rupiah' => $rowData[7],
-                                    'ket' => $rowData[8],
-                                    'lok_tgl' => $rowData[9],
-                                    'no_produksi' => $rowData[10],
-                                    'gudang' => $gudang,
-                                    'pcs_diambil' => $rowData[15],
-                                    'gr_diambil' => $rowData[16],
-
-                                ]);
-                            }
+                            DB::table('buku_campur_approve')->where('id_buku_campur', $rowData[0])->update([
+                                'id_buku_campur' => $rowData[0],
+                                'buku' => $rowData[1],
+                                'suplier_awal' => $rowData[2],
+                                'tgl' => $rowData[3],
+                                'nm_grade' => $rowData[4],
+                                'pcs' => $rowData[5],
+                                'gr' => $rowData[6],
+                                'no_lot' => $rowData[8],
+                                'ket' => empty($rowData[9]) ? ' ' : $rowData[9],
+                                'rupiah' => $rowData[7],
+                                'lok_tgl' => empty($rowData[11]) ? ' ' : $rowData[11],
+                                'gudang' => $gudang,
+                            ]);
                         }
                     }
                 }

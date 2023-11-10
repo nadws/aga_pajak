@@ -33,27 +33,22 @@
                                 @php
                                     $ttlRp = 0;
                                     foreach ($gudang as $g) {
-                                        $ttlRp += $g->rupiah;
+                                        $ttlRp += $g->rupiah * $g->gr;
                                     }
                                 @endphp
                                 <tr>
                                     <th class="dhead">#</th>
-                                    <th class="dhead">Tanggal</th>
-                                    <th class="dhead">No Lot</th>
+                                    <th class="dhead">Buku</th>
+                                    <th class="dhead">Suplier Awal</th>
+                                    <th class="dhead">Date</th>
                                     <th class="dhead">Grade</th>
-                                    <th class="text-end dhead">Pcs</th>
-                                    <th class="text-end dhead">Gram</th>
-                                    <th class="text-end dhead">Rp/gr</th>
-                                    <th class="text-end dhead">Rupiah <br>(Rp {{ number_format($ttlRp, 0) }})</th>
-                                    <th class="dhead">Ket</th>
-                                    <th class="dhead">Lok/Tgl</th>
-                                    <th class="dhead">No Produksi</th>
-                                    @if ($nm_gudang == 'produksi')
-                                        <th class="text-end dhead">Pcs diambil</th>
-                                        <th class="text-end dhead">Gr diambil</th>
-                                        <th class="text-end dhead">Pcs sisa</th>
-                                        <th class="text-end dhead">Gr sisa</th>
-                                    @endif
+                                    <th class="dhead">Pcs</th>
+                                    <th class="dhead">Gram</th>
+                                    <th class="dhead">Rp/Gr</th>
+                                    <th class="dhead">Lot</th>
+                                    <th class="dhead">Keterangan</th>
+                                    <th class="dhead text-end">Ttl Rp <br> {{ number_format($ttlRp, 0) }}</th>
+                                    <th class="dhead">Lok</th>
                                     <th class="dhead text-center">
                                         <button type="submit" name="submit" value="export" class="badge bg-success"><i
                                                 class="fas fa-file-excel"></i></button>
@@ -69,26 +64,23 @@
                                 @foreach ($gudang as $no => $g)
                                     <tr>
                                         <td>{{ $no + 1 }}</td>
+                                        <td>{{ $g->buku }}</td>
+                                        <td>{{ $g->suplier_awal }} </td>
                                         <td>{{ tanggal($g->tgl) }}</td>
-                                        <td>{{ $g->no_lot }}</td>
                                         <td>{{ $g->nm_grade }}</td>
                                         <td class="text-end">{{ $g->pcs }}</td>
                                         <td class="text-end">{{ $g->gr }}</td>
-                                        <td class="text-end">{{ number_format($g->rupiah / $g->gr, 0) }}</td>
-                                        <td class="text-end">Rp {{ number_format($g->rupiah, 0) }}</td>
+                                        <td class="text-end">{{ number_format($g->rupiah, 0) }}</td>
+                                        <td>{{ $g->no_lot }}</td>
                                         <td>{{ $g->ket }}</td>
+                                        <td class="text-end">{{ number_format($g->rupiah * $g->gr, 0) }}</td>
                                         <td>{{ $g->lok_tgl }}</td>
-                                        <td>{{ $g->no_produksi }}</td>
-                                        @if ($nm_gudang == 'produksi')
-                                            <td class="text-end">{{ $g->pcs_diambil }}</td>
-                                            <td class="text-end">{{ $g->gr_diambil }}</td>
-                                            <td class="text-end">{{ $g->pcs - $g->pcs_diambil }}</td>
-                                            <td class="text-end">{{ $g->gr - $g->gr_diambil }}</td>
-                                        @endif
+
 
                                         <td class="text-center"><input type="checkbox" class="checkbox-item"
                                                 name="id_buku_campur[]" value="{{ $g->id_buku_campur }}"
-                                                id=""></td>
+                                                id="">
+                                        </td>
 
 
                                     </tr>
