@@ -121,6 +121,7 @@ class GudangBkController extends Controller
         $sheet1->setCellValue('O1', 'Gudang Reject');
         $sheet1->setCellValue('P1', 'Hapus');
 
+        $sheet1->setCellValue('R2', 'kl mau import barang baru id kosongkan');
         $kolom = 2;
 
 
