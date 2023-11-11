@@ -480,11 +480,12 @@ class PembelianBahanBakuController extends Controller
             $spreadsheet->setActiveSheetIndex(0);
             $sheet1 = $spreadsheet->getActiveSheet();
             $sheet1->setTitle('Invoice BK');
-            $sheet1->getStyle('A1:T1')->applyFromArray($style_atas);
+            $sheet1->getStyle('A1:U1')->applyFromArray($style_atas);
 
             $akun_kas = DB::table('akun')->where('id_akun', '4')->first();
             $akun_bca = DB::table('akun')->where('id_akun', '30')->first();
             $akun_mandiri = DB::table('akun')->where('id_akun', '10')->first();
+            $akun_bca22 = DB::table('akun')->where('id_akun', '6')->first();
 
             $sheet1->setCellValue('A1', '#');
             $sheet1->setCellValue('B1', 'Tanggal');
@@ -505,7 +506,8 @@ class PembelianBahanBakuController extends Controller
             $sheet1->setCellValue('Q1', $akun_kas->nm_akun);
             $sheet1->setCellValue('R1', $akun_bca->nm_akun);
             $sheet1->setCellValue('S1', $akun_mandiri->nm_akun);
-            $sheet1->setCellValue('T1', 'Sisa Hutang');
+            $sheet1->setCellValue('T1', $$akun_bca22->nm_akun);
+            $sheet1->setCellValue('U1', 'Sisa Hutang');
 
             $kolom = 2;
 
@@ -541,6 +543,11 @@ class PembelianBahanBakuController extends Controller
                 where a.no_nota = '$nota' and a.id_akun = '10'
                 group by a.no_nota;");
 
+                $bca22 = DB::selectOne("SELECT a.no_nota, a.id_akun, sum(a.kredit) as bayar
+                FROM bayar_bk as a
+                where a.no_nota = '$nota' and a.id_akun = '6'
+                group by a.no_nota;");
+
                 $sheet1->setCellValue('A' . $kolom, $pembelian->id_invoice_bk);
                 $sheet1->setCellValue('B' . $kolom, $pembelian->tgl);
                 $sheet1->setCellValue('C' . $kolom, $pembelian->nm_suplier);
@@ -558,17 +565,19 @@ class PembelianBahanBakuController extends Controller
                 $sheet1->setCellValue('O' . $kolom, $pembelian->tgl_grading);
                 $kas2 = empty($kas->bayar) ? '0' : $kas->bayar;
                 $bca2 = empty($bca->bayar) ? '0' : $bca->bayar;
+                $bca222 = empty($bca22->bayar) ? '0' : $bca22->bayar;
                 $mandiri2 = empty($mandiri->bayar) ? '0' : $mandiri->bayar;
                 $sheet1->setCellValue('P' . $kolom, $pembelian->lunas == 'D' ? 'Draft' : ($pembelian->total_harga - $kas2 - $bca2 - $mandiri2 <= 0 ? 'Paid' : 'Unpaid'));
                 $sheet1->setCellValue('Q' . $kolom,  empty($kas->bayar) ? '0' : $kas->bayar);
                 $sheet1->setCellValue('R' . $kolom,  empty($bca->bayar) ? '0' : $bca->bayar);
                 $sheet1->setCellValue('S' . $kolom,  empty($mandiri->bayar) ? '0' : $mandiri->bayar);
-                $sheet1->setCellValue('T' . $kolom,  $pembelian->total_harga - $kas2 - $bca2 - $mandiri2);
+                $sheet1->setCellValue('T' . $kolom,  $bca222);
+                $sheet1->setCellValue('U' . $kolom,  $pembelian->total_harga - $kas2 - $bca2 - $mandiri2 - $bca222);
 
                 $kolom++;
             }
 
-            $sheet1->getStyle('A2:T' . $kolom - 1)->applyFromArray($style);
+            $sheet1->getStyle('A2:U' . $kolom - 1)->applyFromArray($style);
 
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(1);
