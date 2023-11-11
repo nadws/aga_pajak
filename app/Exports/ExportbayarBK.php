@@ -32,7 +32,7 @@ class ExportbayarBK implements FromView, WithEvents
         group by c.no_nota
         ) as c on c.no_nota = a.no_nota
         where  a.tgl between '$this->tgl1' and '$this->tgl2'
-        order by a.id_invoice_bk ASC;");
+        order by a.no_nota ASC;");
 
 
         return view('exports.bayarBK', [
