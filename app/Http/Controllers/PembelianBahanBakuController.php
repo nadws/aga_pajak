@@ -583,39 +583,46 @@ class PembelianBahanBakuController extends Controller
             $spreadsheet->setActiveSheetIndex(1);
             $sheet2 = $spreadsheet->getActiveSheet(1);
             $sheet2->setTitle('Buku Campur');
-            $sheet2->getStyle('A1:G1')->applyFromArray($style_atas);
+            $sheet2->getStyle('A1:K1')->applyFromArray($style_atas);
 
             $sheet2->setCellValue('A1', 'ID BK Campur');
-            $sheet2->setCellValue('B1', 'No Nota');
-            $sheet2->setCellValue('C1', 'No Lot');
-            $sheet2->setCellValue('D1', 'Nama Grade');
-            $sheet2->setCellValue('E1', 'Pcs');
-            $sheet2->setCellValue('F1', 'Gr');
-            $sheet2->setCellValue('G1', 'Harga');
+            $sheet2->setCellValue('B1', 'no buku');
+            $sheet2->setCellValue('C1', 'Suplier Awal');
+            $sheet2->setCellValue('D1', 'DATE');
+            $sheet2->setCellValue('E1', 'GRD');
+            $sheet2->setCellValue('F1', 'pcs-gdg');
+            $sheet2->setCellValue('G1', 'gr-gdg');
+            $sheet2->setCellValue('H1', 'rp/gr-gdg');
+            $sheet2->setCellValue('I1', 'lot no');
+            $sheet2->setCellValue('J1', 'Keterangan');
+            $sheet2->setCellValue('K1', 'ttlrp-gdg');
 
             $kolom = 2;
             foreach ($tes as $nota) {
-                $buku_campur = DB::select("SELECT a.id_buku_campur, a.no_nota, a.no_lot, b.nm_grade, a.pcs, a.gr, a.rupiah
-                    FROM buku_campur as a
-                    left join grade as b on b.id_grade = a.id_grade
-                    where a.no_nota = ?
-                    group by a.id_buku_campur
-                    order by a.no_nota ASC, b.urutan ASC
-                    ", [$nota]);
-
-
+                // $buku_campur = DB::select("SELECT a.id_buku_campur, a.no_nota, a.no_lot, b.nm_grade, a.pcs, a.gr, a.rupiah
+                //     FROM buku_campur as a
+                //     left join grade as b on b.id_grade = a.id_grade
+                //     where a.no_nota = ?
+                //     group by a.id_buku_campur
+                //     order by a.no_nota ASC, b.urutan ASC
+                //     ", [$nota]);
+                $buku_campur = GudangBkModel::getPembelianBkExportnota($nota);
                 foreach ($buku_campur as $b) {
-                    $sheet2->setCellValue('A' . $kolom, $b->id_buku_campur);
-                    $sheet2->setCellValue('B' . $kolom, $b->no_nota);
-                    $sheet2->setCellValue('C' . $kolom, $b->no_lot);
-                    $sheet2->setCellValue('D' . $kolom, $b->nm_grade);
-                    $sheet2->setCellValue('E' . $kolom, $b->pcs);
-                    $sheet2->setCellValue('F' . $kolom, $b->gr);
-                    $sheet2->setCellValue('G' . $kolom, $b->rupiah);
+                    $sheet1->setCellValue('A' . $kolom, $pembelian->id_buku_campur);
+                    $sheet1->setCellValue('B' . $kolom, $pembelian->buku);
+                    $sheet1->setCellValue('C' . $kolom, $pembelian->suplier_awal);
+                    $sheet1->setCellValue('D' . $kolom, $pembelian->tgl);
+                    $sheet1->setCellValue('E' . $kolom, $pembelian->nm_grade);
+                    $sheet1->setCellValue('F' . $kolom, $pembelian->pcs);
+                    $sheet1->setCellValue('G' . $kolom, $pembelian->gr);
+                    $sheet1->setCellValue('H' . $kolom, $pembelian->rupiah);
+                    $sheet1->setCellValue('I' . $kolom, $pembelian->no_lot);
+                    $sheet1->setCellValue('J' . $kolom, $pembelian->ket);
+                    $sheet1->setCellValue('K' . $kolom, $pembelian->rupiah * $pembelian->gr);
                     $kolom++;
                 }
             }
-            $sheet2->getStyle('A2:G' . $kolom - 1)->applyFromArray($style);
+            $sheet2->getStyle('A2:K' . $kolom - 1)->applyFromArray($style);
 
 
 
