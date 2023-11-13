@@ -598,7 +598,7 @@ class PembelianBahanBakuController extends Controller
             $sheet2->setCellValue('J1', 'Keterangan');
             $sheet2->setCellValue('K1', 'ttlrp-gdg');
 
-            $kolom = 2;
+            $kolom2 = 2;
             foreach ($tes as $nota) {
                 $buku_campur = DB::select("SELECT 
                 a.id_buku_campur, a.approve,
@@ -625,21 +625,21 @@ class PembelianBahanBakuController extends Controller
 
                
                 foreach ($buku_campur as $b) {
-                    $sheet1->setCellValue('A' . $kolom, $b->id_buku_campur);
-                    $sheet1->setCellValue('B' . $kolom, $b->buku);
-                    $sheet1->setCellValue('C' . $kolom, $b->suplier_awal);
-                    $sheet1->setCellValue('D' . $kolom, $b->tgl);
-                    $sheet1->setCellValue('E' . $kolom, $b->nm_grade);
-                    $sheet1->setCellValue('F' . $kolom, $b->pcs);
-                    $sheet1->setCellValue('G' . $kolom, $b->gr);
-                    $sheet1->setCellValue('H' . $kolom, $b->rupiah);
-                    $sheet1->setCellValue('I' . $kolom, $b->no_lot);
-                    $sheet1->setCellValue('J' . $kolom, $b->ket);
-                    $sheet1->setCellValue('K' . $kolom, $b->rupiah * $b->gr);
-                    $kolom++;
+                    $sheet1->setCellValue('A' . $kolom2, $b->id_buku_campur);
+                    $sheet1->setCellValue('B' . $kolom2, $b->buku);
+                    $sheet1->setCellValue('C' . $kolom2, $b->suplier_awal);
+                    $sheet1->setCellValue('D' . $kolom2, $b->tgl);
+                    $sheet1->setCellValue('E' . $kolom2, $b->nm_grade);
+                    $sheet1->setCellValue('F' . $kolom2, $b->pcs);
+                    $sheet1->setCellValue('G' . $kolom2, $b->gr);
+                    $sheet1->setCellValue('H' . $kolom2, $b->rupiah);
+                    $sheet1->setCellValue('I' . $kolom2, $b->no_lot);
+                    $sheet1->setCellValue('J' . $kolom2, $b->ket);
+                    $sheet1->setCellValue('K' . $kolom2, $b->rupiah * $b->gr);
+                    $kolom2++;
                 }
             }
-            $sheet2->getStyle('A2:K' . $kolom - 1)->applyFromArray($style);
+            $sheet2->getStyle('A2:K' . $kolom2 - 1)->applyFromArray($style);
 
 
 
