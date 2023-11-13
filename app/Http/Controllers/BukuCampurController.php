@@ -282,11 +282,11 @@ class BukuCampurController extends Controller
                 if ($invoice->approve_bk_campur == 'Y') {
                 } else {
                     DB::table('buku_campur')->where('id_buku_campur', $rowData[0])->update([
-                        'no_nota' => $rowData[1],
-                        'no_lot' => $rowData[2],
-                        'pcs' => $rowData[4],
-                        'gr' => $rowData[5],
-                        'rupiah' => $rowData[6],
+                        'no_lot' => $rowData[8],
+                        'pcs' => $rowData[5],
+                        'gr' => $rowData[6],
+                        'rupiah' => $rowData[7],
+                        'ket' => $rowData[9],
                     ]);
                 }
             }
