@@ -625,17 +625,17 @@ class PembelianBahanBakuController extends Controller
 
                
                 foreach ($buku_campur as $b) {
-                    $sheet1->setCellValue('A' . $kolom2, $b->id_buku_campur);
-                    $sheet1->setCellValue('B' . $kolom2, $b->buku);
-                    $sheet1->setCellValue('C' . $kolom2, $b->suplier_awal);
-                    $sheet1->setCellValue('D' . $kolom2, $b->tgl);
-                    $sheet1->setCellValue('E' . $kolom2, $b->nm_grade);
-                    $sheet1->setCellValue('F' . $kolom2, $b->pcs);
-                    $sheet1->setCellValue('G' . $kolom2, $b->gr);
-                    $sheet1->setCellValue('H' . $kolom2, $b->rupiah);
-                    $sheet1->setCellValue('I' . $kolom2, $b->no_lot);
-                    $sheet1->setCellValue('J' . $kolom2, $b->ket);
-                    $sheet1->setCellValue('K' . $kolom2, $b->rupiah * $b->gr);
+                    $sheet2->setCellValue('A' . $kolom2, $b->id_buku_campur);
+                    $sheet2->setCellValue('B' . $kolom2, $b->buku);
+                    $sheet2->setCellValue('C' . $kolom2, $b->suplier_awal);
+                    $sheet2->setCellValue('D' . $kolom2, $b->tgl);
+                    $sheet2->setCellValue('E' . $kolom2, $b->nm_grade);
+                    $sheet2->setCellValue('F' . $kolom2, $b->pcs);
+                    $sheet2->setCellValue('G' . $kolom2, $b->gr);
+                    $sheet2->setCellValue('H' . $kolom2, $b->rupiah);
+                    $sheet2->setCellValue('I' . $kolom2, $b->no_lot);
+                    $sheet2->setCellValue('J' . $kolom2, $b->ket);
+                    $sheet2->setCellValue('K' . $kolom2, $b->rupiah * $b->gr);
                     $kolom2++;
                 }
             }
