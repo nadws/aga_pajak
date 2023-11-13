@@ -567,7 +567,7 @@ class PembelianBahanBakuController extends Controller
                 $bca2 = empty($bca->bayar) ? '0' : $bca->bayar;
                 $bca222 = empty($bca22->bayar) ? '0' : $bca22->bayar;
                 $mandiri2 = empty($mandiri->bayar) ? '0' : $mandiri->bayar;
-                $sheet1->setCellValue('P' . $kolom, $pembelian->lunas == 'D' ? 'Draft' : ($pembelian->total_harga - $kas2 - $bca2 - $mandiri2 <= 0 ? 'Paid' : 'Unpaid'));
+                $sheet1->setCellValue('P' . $kolom, $pembelian->lunas == 'D' ? 'Draft' : ($pembelian->total_harga - $kas2 - $bca2 - $mandiri2 - $bca222 <= 0 ? 'Paid' : 'Unpaid'));
                 $sheet1->setCellValue('Q' . $kolom,  empty($kas->bayar) ? '0' : $kas->bayar);
                 $sheet1->setCellValue('R' . $kolom,  empty($bca->bayar) ? '0' : $bca->bayar);
                 $sheet1->setCellValue('S' . $kolom,  empty($mandiri->bayar) ? '0' : $mandiri->bayar);
