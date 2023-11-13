@@ -15,6 +15,7 @@ use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
+use App\Models\GudangBkModel;
 
 class PembelianBahanBakuController extends Controller
 {
