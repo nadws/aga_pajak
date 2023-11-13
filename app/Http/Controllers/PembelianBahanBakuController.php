@@ -506,7 +506,7 @@ class PembelianBahanBakuController extends Controller
             $sheet1->setCellValue('Q1', $akun_kas->nm_akun);
             $sheet1->setCellValue('R1', $akun_bca->nm_akun);
             $sheet1->setCellValue('S1', $akun_mandiri->nm_akun);
-            $sheet1->setCellValue('T1', $$akun_bca22->nm_akun);
+            $sheet1->setCellValue('T1', $akun_bca22->nm_akun);
             $sheet1->setCellValue('U1', 'Sisa Hutang');
 
             $kolom = 2;
