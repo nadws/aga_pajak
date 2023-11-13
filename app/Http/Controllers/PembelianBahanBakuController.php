@@ -619,9 +619,8 @@ class PembelianBahanBakuController extends Controller
                 left join buku_campur_approve as d on d.id_buku_campur = a.id_buku_campur
                 left join invoice_bk as e on e.no_nota = a.no_nota
                 left join tb_suplier as f on f.id_suplier = e.id_suplier
-                where a.no_nota = ?
-                order by a.no_nota ASC, b.urutan ASC;
-                    ", [$nota]);
+                where a.no_nota = '$nota'
+                order by a.no_nota ASC, b.urutan ASC;");
                 // $buku_campur = GudangBkModel::getPembelianBkExportnota($nota);
 
                
