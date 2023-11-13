@@ -609,17 +609,17 @@ class PembelianBahanBakuController extends Controller
                 //     ", [$nota]);
                 $buku_campur = GudangBkModel::getPembelianBkExportnota($nota);
                 foreach ($buku_campur as $b) {
-                    $sheet1->setCellValue('A' . $kolom, $pembelian->id_buku_campur);
-                    $sheet1->setCellValue('B' . $kolom, $pembelian->buku);
-                    $sheet1->setCellValue('C' . $kolom, $pembelian->suplier_awal);
-                    $sheet1->setCellValue('D' . $kolom, $pembelian->tgl);
-                    $sheet1->setCellValue('E' . $kolom, $pembelian->nm_grade);
-                    $sheet1->setCellValue('F' . $kolom, $pembelian->pcs);
-                    $sheet1->setCellValue('G' . $kolom, $pembelian->gr);
-                    $sheet1->setCellValue('H' . $kolom, $pembelian->rupiah);
-                    $sheet1->setCellValue('I' . $kolom, $pembelian->no_lot);
-                    $sheet1->setCellValue('J' . $kolom, $pembelian->ket);
-                    $sheet1->setCellValue('K' . $kolom, $pembelian->rupiah * $pembelian->gr);
+                    $sheet1->setCellValue('A' . $kolom, $b->id_buku_campur);
+                    $sheet1->setCellValue('B' . $kolom, $b->buku);
+                    $sheet1->setCellValue('C' . $kolom, $b->suplier_awal);
+                    $sheet1->setCellValue('D' . $kolom, $b->tgl);
+                    $sheet1->setCellValue('E' . $kolom, $b->nm_grade);
+                    $sheet1->setCellValue('F' . $kolom, $b->pcs);
+                    $sheet1->setCellValue('G' . $kolom, $b->gr);
+                    $sheet1->setCellValue('H' . $kolom, $b->rupiah);
+                    $sheet1->setCellValue('I' . $kolom, $b->no_lot);
+                    $sheet1->setCellValue('J' . $kolom, $b->ket);
+                    $sheet1->setCellValue('K' . $kolom, $b->rupiah * $b->gr);
                     $kolom++;
                 }
             }
