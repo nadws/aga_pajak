@@ -66,7 +66,7 @@ class GudangBkModel extends Model
     }
     public static function getPembelianBkExportnota($no_nota)
     {
-        $result = DB::selectOne("SELECT 
+        $result = DB::select("SELECT 
         a.id_buku_campur, a.approve,
         if(a.approve = 'T',c.tgl,d.tgl) as tgl, 
         a.no_lot,  a.gudang, a.gabung,
