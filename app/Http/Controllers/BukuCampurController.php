@@ -277,8 +277,10 @@ class BukuCampurController extends Controller
 
             // Simpan data ke tabel di database
             foreach ($data as $rowData) {
-                $invoice =  DB::table('invoice_bk')->where('no_nota', $rowData[1])->first();
 
+                $bk = DB::table('buku_campur')->where('id_buku_campur', $rowData[0])->first();
+
+                $invoice =  DB::table('invoice_bk')->where('no_nota', $bk->no_nota)->first();
                 if ($invoice->approve_bk_campur == 'Y') {
                 } else {
                     DB::table('buku_campur')->where('id_buku_campur', $rowData[0])->update([
