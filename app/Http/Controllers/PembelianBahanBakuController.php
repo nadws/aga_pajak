@@ -561,7 +561,12 @@ class PembelianBahanBakuController extends Controller
                 $sheet1->setCellValue('J' . $kolom, $pembelian->approve_bk_campur == 'Y' ? $pembelian->gr_basah_apr : $pembelian->gr_basah);
                 $sheet1->setCellValue('K' . $kolom, $pembelian->approve_bk_campur == 'Y' ? $pembelian->pcs_awal_apr : $pembelian->pcs_awal);
                 $sheet1->setCellValue('L' . $kolom, $pembelian->approve_bk_campur == 'Y' ? $pembelian->gr_kering_apr :  $pembelian->gr_kering);
-                $sheet1->setCellValue('M' . $kolom, $pembelian->approve_bk_campur == 'Y' ? round((1 - $pembelian->gr_beli / $pembelian->gr_kering_apr) * 100) : round((1 - $pembelian->gr_beli /  $pembelian->gr_kering) * -100) . '%');
+                if ($pembelian->gr_beli == 0) {
+                    $sheet1->setCellValue('M' . $kolom,  '0%');
+                } else {
+                    $sheet1->setCellValue('M' . $kolom, $pembelian->approve_bk_campur == 'Y' ? round((1 - $pembelian->gr_beli / $pembelian->gr_kering_apr) * 100) : round((1 - $pembelian->gr_beli /  $pembelian->gr_kering) * -100) . '%');
+                }
+
                 $sheet1->setCellValue('N' . $kolom, $pembelian->no_campur);
                 $sheet1->setCellValue('O' . $kolom, $pembelian->tgl_grading);
                 $kas2 = empty($kas->bayar) ? '0' : $kas->bayar;
@@ -623,7 +628,7 @@ class PembelianBahanBakuController extends Controller
                 order by a.no_nota ASC, b.urutan ASC;");
                 // $buku_campur = GudangBkModel::getPembelianBkExportnota($nota);
 
-               
+
                 foreach ($buku_campur as $b) {
                     $sheet2->setCellValue('A' . $kolom2, $b->id_buku_campur);
                     $sheet2->setCellValue('B' . $kolom2, $b->buku);
