@@ -374,6 +374,6 @@ Route::controller(GudangBkController::class)
     ->name('gudangBk.')
     ->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::get('/export_gudang_bk', 'export_gudang_bk')->name('export_gudang_bk');
-        Route::post('/import_gudang_bk', 'import_gudang_bk')->name('import_gudang_bk');
+        Route::get('/export_buku_campur_bk', 'export_buku_campur_bk')->name('export_buku_campur_bk');
+        Route::post('/import_buku_campur_bk', 'import_buku_campur_bk')->name('import_buku_campur_bk');
     });

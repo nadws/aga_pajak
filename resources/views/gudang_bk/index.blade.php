@@ -12,7 +12,7 @@
         </div>
     </x-slot>
     <x-slot name="cardBody">
-        <form action="{{ route('gudangBk.export_gudang_bk') }}" method="get">
+        <form action="{{ route('gudangBk.export_buku_campur_bk') }}" method="get">
             <section class="row">
 
                 <div class="col-lg-6">
@@ -50,8 +50,13 @@
                                     <th class="dhead text-end">Ttl Rp <br> {{ number_format($ttlRp, 0) }}</th>
                                     <th class="dhead">Lok</th>
                                     <th class="dhead text-center">
-                                        <button type="submit" name="submit" value="export" class="badge bg-success"><i
-                                                class="fas fa-file-excel"></i></button>
+                                        @if ($nm_gudang == 'produksi' || $nm_gudang == 'wip')
+                                            <button type="submit" name="submit" value="export_produksi"
+                                                class="badge bg-success"><i class="fas fa-file-excel"></i></button>
+                                        @else
+                                            <button type="submit" name="submit" value="export"
+                                                class="badge bg-success"><i class="fas fa-file-excel"></i></button>
+                                        @endif
                                         <br>
                                         <input type="checkbox" id="checkAll" name="" id="">
                                         <input type="hidden" name="gudang" value="{{ $nm_gudang }}" id="">
@@ -92,7 +97,7 @@
 
             </section>
         </form>
-        <form action="{{ route('gudangBk.import_gudang_bk') }}" method="post" enctype="multipart/form-data">
+        <form action="{{ route('gudangBk.import_buku_campur_bk') }}" method="post" enctype="multipart/form-data">
             @csrf
             <x-theme.modal title="Gudang Bk" idModal="import" btnSave="Y">
                 <div class="row">

@@ -10,14 +10,14 @@
             aria-controls="pills-home" aria-selected="true">Gudang Produksi</a>
     </li>
     <li class="nav-item" role="presentation">
-        <a class="nav-link {{ $nm_gudang == 'wip' ? 'active' : '' }}"
-            href="{{ route('gudangBk.index', ['nm_gudang' => 'wip']) }}" type="button" role="tab"
-            aria-controls="pills-home" aria-selected="true">Gudang Wip</a>
-    </li>
-    <li class="nav-item" role="presentation">
         <a class="nav-link {{ $nm_gudang == 'reject' ? 'active' : '' }}"
             href="{{ route('gudangBk.index', ['nm_gudang' => 'reject']) }}" type="button" role="tab"
             aria-controls="pills-home" aria-selected="true">Gudang Reject</a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link {{ $nm_gudang == 'wip' ? 'active' : '' }}"
+            href="{{ route('gudangBk.index', ['nm_gudang' => 'wip']) }}" type="button" role="tab"
+            aria-controls="pills-home" aria-selected="true">Gudang Wip</a>
     </li>
 
 </ul>
