@@ -102,7 +102,7 @@ class GudangBkController extends Controller
         $sheet1->setTitle('Gudang BK');
 
 
-        $sheet1->getStyle("A1:P1")->applyFromArray($style_atas);
+        $sheet1->getStyle("A1:Q1")->applyFromArray($style_atas);
 
         $sheet1->setCellValue('A1', 'ID');
         $sheet1->setCellValue('B1', 'Buku');
@@ -118,10 +118,11 @@ class GudangBkController extends Controller
         $sheet1->setCellValue('L1', 'Lok');
         $sheet1->setCellValue('M1', 'Gudang BK');
         $sheet1->setCellValue('N1', 'Gudang Produksi');
-        $sheet1->setCellValue('O1', 'Gudang Reject');
-        $sheet1->setCellValue('P1', 'Hapus');
+        $sheet1->setCellValue('O1', 'Gudang Wip');
+        $sheet1->setCellValue('P1', 'Gudang Reject');
+        $sheet1->setCellValue('Q1', 'Hapus');
 
-        $sheet1->setCellValue('R2', 'kl mau import barang baru id kosongkan');
+        $sheet1->setCellValue('S2', 'kl mau import barang baru id kosongkan');
         $kolom = 2;
 
 
@@ -143,8 +144,9 @@ class GudangBkController extends Controller
                 $sheet1->setCellValue('L' . $kolom, $d->lok_tgl);
                 $sheet1->setCellValue('M' . $kolom, $d->gudang == 'bk' ? 'Y' : 'T');
                 $sheet1->setCellValue('N' . $kolom, $d->gudang == 'produksi' ? 'Y' : 'T');
-                $sheet1->setCellValue('O' . $kolom, $d->gudang == 'reject' ? 'Y' : 'T');
-                $sheet1->setCellValue('P' . $kolom, $d->gabung);
+                $sheet1->setCellValue('O' . $kolom, $d->gudang == 'wip' ? 'Y' : 'T');
+                $sheet1->setCellValue('P' . $kolom, $d->gudang == 'reject' ? 'Y' : 'T');
+                $sheet1->setCellValue('Q' . $kolom, $d->gabung);
 
                 $kolom++;
             }
@@ -168,13 +170,14 @@ class GudangBkController extends Controller
                 $sheet1->setCellValue('L' . $kolom, $pembelian->lok_tgl);
                 $sheet1->setCellValue('M' . $kolom, $pembelian->gudang == 'bk' ? 'Y' : 'T');
                 $sheet1->setCellValue('N' . $kolom, $pembelian->gudang == 'produksi' ? 'Y' : 'T');
-                $sheet1->setCellValue('O' . $kolom, $pembelian->gudang == 'reject' ? 'Y' : 'T');
-                $sheet1->setCellValue('P' . $kolom, $pembelian->gabung);
+                $sheet1->setCellValue('O' . $kolom, $pembelian->gudang == 'wip' ? 'Y' : 'T');
+                $sheet1->setCellValue('P' . $kolom, $pembelian->gudang == 'reject' ? 'Y' : 'T');
+                $sheet1->setCellValue('Q' . $kolom, $pembelian->gabung);
 
                 $kolom++;
             }
         }
-        $sheet1->getStyle('A2:P' . $kolom - 1)->applyFromArray($style);
+        $sheet1->getStyle('A2:Q' . $kolom - 1)->applyFromArray($style);
         $namafile = "Gudang Bk.xlsx";
 
         $writer = new Xlsx($spreadsheet);
@@ -222,7 +225,10 @@ class GudangBkController extends Controller
                     if (($rowData[$rowBk] == 'Y' && $rowData[$rowBk + 1] == 'Y') ||
                         ($rowData[$rowBk] == 'Y' && $rowData[$rowBk + 2] == 'Y') ||
                         ($rowData[$rowBk + 2] == 'Y' && $rowData[$rowBk + 1] == 'Y') ||
-                        ($rowData[$rowBk] == 'Y' && $rowData[$rowBk + 1] == 'Y' && $rowData[$rowBk + 2] == 'Y')
+                        ($rowData[$rowBk] == 'Y' && $rowData[$rowBk + 3] == 'Y') ||
+                        ($rowData[$rowBk + 3] == 'Y' && $rowData[$rowBk + 2] == 'Y') ||
+                        ($rowData[$rowBk + 3] == 'Y' && $rowData[$rowBk + 1] == 'Y') ||
+                        ($rowData[$rowBk] == 'Y' && $rowData[$rowBk + 1] == 'Y' && $rowData[$rowBk + 2] == 'Y' && $rowData[$rowBk + 3] == 'Y')
                     ) {
                         $importGagal = true;
                         break;
@@ -233,6 +239,8 @@ class GudangBkController extends Controller
                     } elseif ($rowData[$rowBk + 1] == 'Y') {
                         $gudang = 'produksi';
                     } elseif ($rowData[$rowBk + 2] == 'Y') {
+                        $gudang = 'wip';
+                    } elseif ($rowData[$rowBk + 3] == 'Y') {
                         $gudang = 'reject';
                     }
 
@@ -246,7 +254,7 @@ class GudangBkController extends Controller
                             'ket' => empty($rowData[9]) ? ' ' : $rowData[9],
                             'lok_tgl' => empty($rowData[11]) ? ' ' : $rowData[11],
                             'approve' => 'Y',
-                            'gabung' => $rowData[15],
+                            'gabung' => $rowData[16],
                             'gudang' => $gudang,
 
                         ]);
@@ -269,7 +277,7 @@ class GudangBkController extends Controller
                     } else {
                         DB::table('buku_campur')->where('id_buku_campur', $rowData[0])->update([
                             'approve' => 'Y',
-                            'gabung' => $rowData[15],
+                            'gabung' => $rowData[16],
                             'gudang' => $gudang,
                         ]);
 
@@ -311,7 +319,7 @@ class GudangBkController extends Controller
 
                 if ($importGagal) {
                     DB::rollback(); // Batalkan transaksi jika ada kesalahan
-                    return redirect()->route('gudangBk.index')->with('error', 'Data tidak valid: Kolom I, J, dan K tidak boleh memiliki nilai Y yang sama');
+                    return redirect()->route('gudangBk.index')->with('error', 'Data tidak valid: Kolom M, N,O, dan P tidak boleh memiliki nilai Y yang sama');
                 }
 
                 DB::commit(); // Konfirmasi transaksi jika berhasil
