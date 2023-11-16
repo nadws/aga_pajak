@@ -91,4 +91,15 @@ class GudangBkModel extends Model
 
         return $result;
     }
+
+    public static function getSummaryWip()
+    {
+        $result = DB::select("SELECT a.no_lot, a.ket, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.rupiah * a.gr) as total_rp 
+        FROM buku_campur_approve as a 
+        WHERE a.gudang = 'wip'
+        GROUP by a.no_lot, a.ket;
+        ");
+
+        return $result;
+    }
 }

@@ -15,10 +15,9 @@
         <form action="{{ route('gudangBk.export_buku_campur_bk') }}" method="get">
             <section class="row">
 
-                <div class="col-lg-6">
+                <div class="col-lg-8">
                     @include('gudang_bk.nav')
                 </div>
-                <div class="col-lg-2"></div>
                 <div class="col-lg-4">
                     <table class="float-end">
                         <td>Search :</td>
