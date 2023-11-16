@@ -70,7 +70,7 @@
                                         <td>{{ $no + 1 }}</td>
                                         <td>{{ $g->buku }}</td>
                                         <td>{{ $g->suplier_awal }} </td>
-                                        <td>{{ tanggal($g->tgl) }}</td>
+                                        <td>{{ $g->tgl }}</td>
                                         <td>{{ $g->nm_grade }}</td>
                                         <td class="text-end">{{ $g->pcs }}</td>
                                         <td class="text-end">{{ $g->gr }}</td>

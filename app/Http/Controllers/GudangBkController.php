@@ -392,9 +392,9 @@ class GudangBkController extends Controller
 
                         DB::table('buku_campur_approve')->insert([
                             'id_buku_campur' => $idBukuCampur,
-                            'buku' => $rowData[1],
-                            'suplier_awal' => $rowData[2],
-                            'tgl' => $rowData[3],
+                            'buku' => empty($rowData[1]) ? ' ' : $rowData[1],
+                            'suplier_awal' => empty($rowData[2]) ? ' ' : $rowData[2],
+                            'tgl' => empty($rowData[3]) ? '0000-00-00' : $rowData[3],
                             'nm_grade' => $rowData[4],
                             'pcs' => $rowData[5],
                             'gr' => $rowData[6],
