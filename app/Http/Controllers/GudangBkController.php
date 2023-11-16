@@ -390,11 +390,24 @@ class GudangBkController extends Controller
                         ]);
                         $idBukuCampur = DB::getPdo()->lastInsertId();
 
+                        $tgl = $rowData[3];
+                        if (is_numeric($tgl)) {
+                            // Jika nilai berupa angka, konversi ke format tanggal
+                            $tanggalExcel = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($tgl);
+                            $tanggalFormatted = $tanggalExcel->format('Y-m-d');
+                        } else {
+                            // Jika nilai sudah dalam format tanggal, pastikan formatnya adalah 'Y-m-d'
+                            $tanggalFormatted = date('Y-m-d', strtotime($tgl));
+                        }
+
+
+
+
                         DB::table('buku_campur_approve')->insert([
                             'id_buku_campur' => $idBukuCampur,
                             'buku' => empty($rowData[1]) ? ' ' : $rowData[1],
                             'suplier_awal' => empty($rowData[2]) ? ' ' : $rowData[2],
-                            'tgl' => empty($rowData[3]) ? '0000-00-00' : $rowData[3],
+                            'tgl' => empty($tanggalFormatted) ? '0000-00-00' : $tanggalFormatted,
                             'nm_grade' => $rowData[4],
                             'pcs' => $rowData[5],
                             'gr' => $rowData[6],
@@ -413,12 +426,22 @@ class GudangBkController extends Controller
 
                         $bk_approve = DB::table('buku_campur_approve')->where('id_buku_campur', $rowData[0])->first();
 
+                        $tgl = $rowData[3];
+                        if (is_numeric($tgl)) {
+                            // Jika nilai berupa angka, konversi ke format tanggal
+                            $tanggalExcel = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($tgl);
+                            $tanggalFormatted = $tanggalExcel->format('Y-m-d');
+                        } else {
+                            // Jika nilai sudah dalam format tanggal, pastikan formatnya adalah 'Y-m-d'
+                            $tanggalFormatted = date('Y-m-d', strtotime($tgl));
+                        }
+
                         if (empty($bk_approve)) {
                             DB::table('buku_campur_approve')->insert([
                                 'id_buku_campur' => $rowData[0],
                                 'buku' => $rowData[1],
                                 'suplier_awal' => $rowData[2],
-                                'tgl' => $rowData[3],
+                                'tgl' => empty($tanggalFormatted) ? '0000-00-00' : $tanggalFormatted,
                                 'nm_grade' => $rowData[4],
                                 'pcs' => $rowData[5],
                                 'gr' => $rowData[6],
@@ -433,7 +456,7 @@ class GudangBkController extends Controller
                                 'id_buku_campur' => $rowData[0],
                                 'buku' => $rowData[1],
                                 'suplier_awal' => $rowData[2],
-                                'tgl' => $rowData[3],
+                                'tgl' => empty($tanggalFormatted) ? '0000-00-00' : $tanggalFormatted,
                                 'nm_grade' => $rowData[4],
                                 'pcs' => $rowData[5],
                                 'gr' => $rowData[6],
@@ -520,11 +543,23 @@ class GudangBkController extends Controller
                         ]);
                         $idBukuCampur = DB::getPdo()->lastInsertId();
 
+                        $tanggal_excel = $rowData[3];
+                        if (\DateTime::createFromFormat('Y-m-d', $tanggal_excel) !== false) {
+                            $tanggal_mysql = $tanggal_excel;
+                        } else {
+                            $tanggal_mysql = \DateTime::createFromFormat('d/m/Y', $tanggal_excel);
+                            if ($tanggal_mysql !== false) {
+                                $tanggal_mysql = $tanggal_mysql->format('Y-m-d');
+                            } else {
+                                $tanggal_mysql = '0000-00-00';
+                            }
+                        }
+
                         DB::table('buku_campur_approve')->insert([
                             'id_buku_campur' => $idBukuCampur,
                             'buku' => $rowData[1],
                             'suplier_awal' => $rowData[2],
-                            'tgl' => $rowData[3],
+                            'tgl' => $tanggal_excel,
                             'nm_grade' => $rowData[4],
                             'pcs' => $rowData[5],
                             'gr' => $rowData[6],

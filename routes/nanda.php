@@ -373,7 +373,7 @@ Route::middleware('auth')->group(function () {
         ->name('gudangBk.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
-            Route::get('/export_buku_campur_bk', 'export_buku_campur_bk')->name('export_buku_campur_bk');
+            Route::post('/export_buku_campur_bk', 'export_buku_campur_bk')->name('export_buku_campur_bk');
             Route::post('/import_buku_campur_bk', 'import_buku_campur_bk')->name('import_buku_campur_bk');
         });
     Route::controller(SummaryController::class)

@@ -12,7 +12,8 @@
         </div>
     </x-slot>
     <x-slot name="cardBody">
-        <form action="{{ route('gudangBk.export_buku_campur_bk') }}" method="get">
+        <form action="{{ route('gudangBk.export_buku_campur_bk') }}" method="post">
+            @csrf
             <section class="row">
 
                 <div class="col-lg-8">
