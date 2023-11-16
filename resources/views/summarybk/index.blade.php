@@ -66,21 +66,38 @@
                                         <td>{{ $no + 1 }}</td>
                                         <td>{{ $g->no_lot }}</td>
                                         <td>{{ $g->ket }}</td>
-                                        <td class="text-end">{{ $g->pcs }}</td>
-                                        <td class="text-end">{{ $g->gr }}</td>
-                                        <td class="text-end">{{ number_format($g->total_rp, 0) }}</td>
+                                        <td class="text-end">{{ number_format($g->pcs, 0) }}</td>
+                                        <td class="text-end">{{ number_format($g->gr, 0) }}</td>
+                                        <td class="text-end">Rp {{ number_format($g->total_rp, 0) }}</td>
+                                        @php
+                                            $no_lot = $g->no_lot . '-' . $g->ket;
+                                            $response = Http::get("http://127.0.0.1:8000/api/apibk/sarang?no_lot=$no_lot");
+                                            $cabut = json_decode($response->body(), true);
+                                        @endphp
+                                        <td class="text-end">
+                                            {{ number_format($cabut['data']['cabut']['pcs_awal'] ?? 0, 0) }}</td>
+                                        <td class="text-end">
+                                            {{ number_format($cabut['data']['cabut']['gr_awal'] ?? 0, 0) }}</td>
+                                        <td class="text-end">Rp
+                                            {{ number_format($cabut['data']['cabut']['rupiah'] ?? 0, 0) }}</td>
+
+                                        <td class="text-end">
+                                            {{ number_format($cabut['data']['cetak']['pcs_awal'] ?? 0, 0) }}</td>
+                                        <td class="text-end">
+                                            {{ number_format($cabut['data']['cetak']['gr_awal'] ?? 0, 0) }}</td>
+                                        <td class="text-end">Rp
+                                            {{ number_format($cabut['data']['cetak']['rupiah'] ?? 0, 0) }}</td>
+
+                                        <td class="text-end">
+                                            {{ number_format($cabut['data']['sortir']['pcs_awal'] ?? 0, 0) }}</td>
+                                        <td class="text-end">
+                                            {{ number_format($cabut['data']['sortir']['gr_awal'] ?? 0, 0) }}</td>
+                                        <td class="text-end">Rp
+                                            {{ number_format($cabut['data']['sortir']['rupiah'] ?? 0, 0) }}</td>
+
                                         <td class="text-end">0</td>
                                         <td class="text-end">0</td>
-                                        <td class="text-end">0</td>
-                                        <td class="text-end">0</td>
-                                        <td class="text-end">0</td>
-                                        <td class="text-end">0</td>
-                                        <td class="text-end">0</td>
-                                        <td class="text-end">0</td>
-                                        <td class="text-end">0</td>
-                                        <td class="text-end">0</td>
-                                        <td class="text-end">0</td>
-                                        <td class="text-end">0</td>
+                                        <td class="text-end">Rp 0</td>
                                     </tr>
                                 @endforeach
 

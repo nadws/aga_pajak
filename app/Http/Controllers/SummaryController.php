@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\GudangBkModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class SummaryController extends Controller
 {
@@ -17,8 +18,8 @@ class SummaryController extends Controller
         } else {
             $nmgudang = $r->nm_gudang;
         }
-        $gudang = GudangBkModel::getSummaryWip();
 
+        $gudang = GudangBkModel::getSummaryWip();
         $listBulan = DB::table('bulan')->get();
         $id_user = auth()->user()->id;
         $data =  [
