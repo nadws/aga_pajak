@@ -20,6 +20,7 @@ class SummaryController extends Controller
         }
 
         $gudang = GudangBkModel::getSummaryWip();
+
         $listBulan = DB::table('bulan')->get();
         $id_user = auth()->user()->id;
         $data =  [

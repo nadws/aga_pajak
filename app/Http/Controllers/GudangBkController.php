@@ -122,7 +122,7 @@ class GudangBkController extends Controller
         $sheet1->setCellValue('G1', 'Gram');
         $sheet1->setCellValue('H1', 'Rp/Gr');
         $sheet1->setCellValue('I1', 'Lot');
-        $sheet1->setCellValue('J1', 'Keterangan');
+        $sheet1->setCellValue('J1', 'Keterangan/Nama Partai');
         $sheet1->setCellValue('K1', 'Ttl Rp');
         $sheet1->setCellValue('L1', 'Lok');
         $sheet1->setCellValue('M1', 'Gudang BK');
@@ -323,7 +323,7 @@ class GudangBkController extends Controller
         } else {
             $this->import_gudang_bk($r);
         }
-        return redirect()->route('gudangBk.index', ['nm_gudang' => $r->gudang])->with('sukses', 'Data berhasil import');
+        return redirect()->route('gudangBk.index', ['nm_gudang' => $r->gudang]);
     }
 
     private function import_gudang_bk(Request $r)
@@ -418,8 +418,10 @@ class GudangBkController extends Controller
                             'gudang' => $gudang,
                         ]);
                     } else {
+                        $buku_campur = DB::table('buku_campur')->where('id_buku_campur', $rowData[0])->first();
                         DB::table('buku_campur')->where('id_buku_campur', $rowData[0])->update([
                             'approve' => 'Y',
+                            'no_lot' => empty($buku_campur->no_nota) ? $rowData[8] : $buku_campur->no_lot,
                             'gabung' => $rowData[15],
                             'gudang' => $gudang,
                         ]);
@@ -445,7 +447,7 @@ class GudangBkController extends Controller
                                 'nm_grade' => $rowData[4],
                                 'pcs' => $rowData[5],
                                 'gr' => $rowData[6],
-                                'no_lot' => $rowData[8],
+                                'no_lot' => empty($buku_campur->no_nota) ? $rowData[8] : $buku_campur->no_lot,
                                 'ket' => empty($rowData[9]) ? ' ' : $rowData[9],
                                 'rupiah' => $rowData[7],
                                 'lok_tgl' => empty($rowData[11]) ? ' ' : $rowData[11],
@@ -460,7 +462,7 @@ class GudangBkController extends Controller
                                 'nm_grade' => $rowData[4],
                                 'pcs' => $rowData[5],
                                 'gr' => $rowData[6],
-                                'no_lot' => $rowData[8],
+                                'no_lot' => empty($buku_campur->no_nota) ? $rowData[8] : $buku_campur->no_lot,
                                 'ket' => empty($rowData[9]) ? ' ' : $rowData[9],
                                 'rupiah' => $rowData[7],
                                 'lok_tgl' => empty($rowData[11]) ? ' ' : $rowData[11],
@@ -525,6 +527,9 @@ class GudangBkController extends Controller
                         $gudang = 'produksi';
                     } elseif ($rowData[$rowBk + 1] == 'Y') {
                         $gudang = 'wip';
+                    } else {
+                        $importGagal = true;
+                        break;
                     }
 
                     if (empty($rowData[0])) {
@@ -570,7 +575,9 @@ class GudangBkController extends Controller
                             'gudang' => $gudang,
                         ]);
                     } else {
+                        $buku_campur = DB::table('buku_campur')->where('id_buku_campur', $rowData[0])->first();
                         DB::table('buku_campur')->where('id_buku_campur', $rowData[0])->update([
+                            'no_lot' => empty($buku_campur->no_nota) ? $rowData[8] : $buku_campur->no_lot,
                             'approve' => 'Y',
                             'gabung' => $rowData[14],
                             'gudang' => $gudang,
@@ -587,7 +594,7 @@ class GudangBkController extends Controller
                                 'nm_grade' => $rowData[4],
                                 'pcs' => $rowData[5],
                                 'gr' => $rowData[6],
-                                'no_lot' => $rowData[8],
+                                'no_lot' => empty($buku_campur->no_nota) ? $rowData[8] : $buku_campur->no_lot,
                                 'ket' => empty($rowData[9]) ? ' ' : $rowData[9],
                                 'rupiah' => $rowData[7],
                                 'lok_tgl' => empty($rowData[11]) ? ' ' : $rowData[11],
@@ -602,7 +609,7 @@ class GudangBkController extends Controller
                                 'nm_grade' => $rowData[4],
                                 'pcs' => $rowData[5],
                                 'gr' => $rowData[6],
-                                'no_lot' => $rowData[8],
+                                'no_lot' => empty($buku_campur->no_nota) ? $rowData[8] : $buku_campur->no_lot,
                                 'ket' => empty($rowData[9]) ? ' ' : $rowData[9],
                                 'rupiah' => $rowData[7],
                                 'lok_tgl' => empty($rowData[11]) ? ' ' : $rowData[11],
@@ -615,10 +622,10 @@ class GudangBkController extends Controller
                 if ($importGagal) {
                     DB::rollback(); // Batalkan transaksi jika ada kesalahan
                     return redirect()->route('gudangBk.index')->with('error', 'Data tidak valid: Kolom M,  dan N tidak boleh memiliki nilai Y yang sama');
+                } else {
+                    DB::commit(); // Konfirmasi transaksi jika berhasil
+                    return redirect()->route('gudangBk.index')->with('sukses', 'Data berhasil import');
                 }
-
-                DB::commit(); // Konfirmasi transaksi jika berhasil
-                return redirect()->route('gudangBk.index')->with('sukses', 'Data berhasil import');
             } catch (\Exception $e) {
                 DB::rollback(); // Batalkan transaksi jika terjadi kesalahan lain
                 return redirect()->route('gudangBk.index')->with('error', 'Terjadi kesalahan saat mengimpor data: ' . $e->getMessage());

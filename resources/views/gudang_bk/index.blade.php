@@ -46,7 +46,7 @@
                                     <th class="dhead">Gram</th>
                                     <th class="dhead">Rp/Gr</th>
                                     <th class="dhead">Lot</th>
-                                    <th class="dhead">Keterangan</th>
+                                    <th class="dhead">Keterangan / Nama Partai</th>
                                     <th class="dhead text-end">Ttl Rp <br> {{ number_format($ttlRp, 0) }}</th>
                                     <th class="dhead">Lok</th>
                                     <th class="dhead text-center">

@@ -31,7 +31,7 @@
                                 <tr>
                                     <th class="dhead" rowspan="2">#</th>
                                     <th class="dhead" rowspan="2">No Loot</th>
-                                    <th class="dhead" rowspan="2">Keterangan</th>
+                                    <th class="dhead" rowspan="2">Keterangan / nama partai</th>
                                     <th class="dhead text-center" colspan="3">Gudang</th>
                                     <th class="dhead text-center" colspan="3">Cabut</th>
                                     <th class="dhead text-center" colspan="3">Cetak</th>
