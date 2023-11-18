@@ -399,10 +399,6 @@ class GudangBkController extends Controller
                             // Jika nilai sudah dalam format tanggal, pastikan formatnya adalah 'Y-m-d'
                             $tanggalFormatted = date('Y-m-d', strtotime($tgl));
                         }
-
-
-
-
                         DB::table('buku_campur_approve')->insert([
                             'id_buku_campur' => $idBukuCampur,
                             'buku' => empty($rowData[1]) ? ' ' : $rowData[1],

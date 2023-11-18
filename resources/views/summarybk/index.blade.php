@@ -6,8 +6,8 @@
                 <h6 class="float-start mt-1">{{ $title }} </h6>
             </div>
             <div class="col-lg-6">
-                {{-- <x-theme.button modal="Y" idModal="import" icon="fas fa-upload" addClass="float-end"
-                    teks="Import" /> --}}
+                <x-theme.button modal="Y" idModal="import" icon="fas fa-upload" addClass="float-end"
+                    teks="Import" />
             </div>
         </div>
     </x-slot>
@@ -31,29 +31,34 @@
                                 <tr>
                                     <th class="dhead" rowspan="2">#</th>
                                     <th class="dhead" rowspan="2">No Loot</th>
-                                    <th class="dhead" rowspan="2">Keterangan / nama partai</th>
-                                    <th class="dhead text-center" colspan="3">Gudang</th>
-                                    <th class="dhead text-center" colspan="3">Cabut</th>
-                                    <th class="dhead text-center" colspan="3">Cetak</th>
-                                    <th class="dhead text-center" colspan="3">Sortir</th>
+                                    <th class="dhead" rowspan="2">Ket / nama partai</th>
+                                    <th class="dhead text-center" colspan="2">Gudang</th>
+                                    <th class="dhead text-center" colspan="5">Cabut</th>
+                                    <th class="dhead text-center" colspan="5">Cetak</th>
+                                    <th class="dhead text-center" colspan="5">Sortir</th>
                                     <th class="dhead text-center" colspan="3">Pengiriman</th>
                                 </tr>
                                 <tr>
                                     <th class="dhead text-end">Pcs</th>
                                     <th class="dhead text-end">Gr</th>
-                                    <th class="dhead text-end">Rp</th>
 
                                     <th class="dhead text-end">Pcs</th>
                                     <th class="dhead text-end">Gr</th>
-                                    <th class="dhead text-end">Rp</th>
+                                    <th class="dhead text-end">Rp C</th>
+                                    <th class="dhead text-end">Rp/gr</th>
+                                    <th class="dhead text-end">susut</th>
 
                                     <th class="dhead text-end">Pcs</th>
                                     <th class="dhead text-end">Gr</th>
-                                    <th class="dhead text-end">Rp</th>
+                                    <th class="dhead text-end">Rp C</th>
+                                    <th class="dhead text-end">Rp/gr</th>
+                                    <th class="dhead text-end">susut</th>
 
                                     <th class="dhead text-end">Pcs</th>
                                     <th class="dhead text-end">Gr</th>
-                                    <th class="dhead text-end">Rp</th>
+                                    <th class="dhead text-end">Rp C</th>
+                                    <th class="dhead text-end">Rp/gr</th>
+                                    <th class="dhead text-end">susut</th>
 
                                     <th class="dhead text-end">Pcs</th>
                                     <th class="dhead text-end">Gr</th>
@@ -68,8 +73,7 @@
                                         <td>{{ $g->ket }}</td>
                                         <td class="text-end">{{ number_format($g->pcs, 0) }}</td>
                                         <td class="text-end">{{ number_format($g->gr, 0) }}</td>
-                                        <td class="text-end">Rp {{ number_format($g->total_rp, 0) }}</td>
-                                        @php
+                                        {{-- @php
                                             $no_lot = $g->no_lot . '-' . $g->ket;
                                             $response = Http::get("http://127.0.0.1:8000/api/apibk/sarang?no_lot=$no_lot");
                                             $cabut = json_decode($response->body(), true);
@@ -97,7 +101,7 @@
 
                                         <td class="text-end">0</td>
                                         <td class="text-end">0</td>
-                                        <td class="text-end">Rp 0</td>
+                                        <td class="text-end">Rp 0</td> --}}
                                     </tr>
                                 @endforeach
 
@@ -108,7 +112,7 @@
 
             </section>
         </form>
-        <form action="{{ route('gudangBk.import_buku_campur_bk') }}" method="post" enctype="multipart/form-data">
+        <form action="{{ route('gudangBk.import_summary_wip') }}" method="post" enctype="multipart/form-data">
             @csrf
             <x-theme.modal title="Gudang Bk" idModal="import" btnSave="Y">
                 <div class="row">
