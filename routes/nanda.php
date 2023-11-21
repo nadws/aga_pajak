@@ -382,5 +382,7 @@ Route::middleware('auth')->group(function () {
         ->name('summarybk.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
+            Route::get('/export_summary', 'export_summary')->name('export_summary');
+            Route::get('/import_summary_bk', 'import_summary_bk')->name('import_summary_bk');
         });
 });
