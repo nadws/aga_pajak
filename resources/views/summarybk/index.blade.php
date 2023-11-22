@@ -3,7 +3,9 @@
     <x-slot name="cardHeader">
         <div class="row justify-content-end">
             <div class="col-lg-6">
-                <h6 class="float-start mt-1">{{ $title }} </h6>
+                <h6 class="float-start mt-1">{{ $title }} </h6> <br> <br>
+                <h6>Total Rp Gudang BK : {{ number_format($total_bk, 0) }}</h6>
+                <h6>Total Rp Invoice : {{ number_format($total_invoice->ttl_hrga, 0) }}</h6>
             </div>
             <div class="col-lg-6">
                 <x-theme.button modal="Y" idModal="import" icon="fas fa-upload" addClass="float-end"
@@ -34,61 +36,47 @@
                                     <th class="dhead" rowspan="2">#</th>
                                     <th class="dhead" rowspan="2">No Lot</th>
                                     <th class="dhead" rowspan="2">Ket / nama partai</th>
-                                    <th class="dhead text-center" colspan="2">Gudang</th>
-                                    <th class="dhead text-center" colspan="2">Bk Cabut</th>
-                                    <th class="dhead text-center" colspan="5">Cabut</th>
-                                    <th class="dhead text-center" colspan="2">Gdg <br> cbt selesai</th>
-                                    <th class="dhead text-center" colspan="5">Cetak</th>
+                                    <th class="dhead text-center" colspan="3"
+                                        style="border-left: 3px solid #787878;border-right: 3px solid #787878">
+                                        Gudang Wip</th>
+                                    <th class="dhead text-center" colspan="2"
+                                        style="border-right: 3px solid #787878;">Bk Cabut</th>
+                                    <th class="dhead text-center" colspan="5"
+                                        style="border-right: 3px solid #787878;">Cabut</th>
+                                    <th class="dhead text-center" colspan="3"
+                                        style="border-right: 3px solid #787878;">Gdg <br> cbt selesai</th>
+                                    <th class="dhead text-center" colspan="5"
+                                        style="border-right: 3px solid #787878;">Cetak</th>
                                     <th class="dhead text-center" colspan="2">Gdg <br> ctk selesai</th>
-                                    <th class="dhead text-center" colspan="5">Sortir</th>
-                                    <th class="dhead text-center" colspan="2">Gdg <br> str selesai</th>
-                                    <th class="dhead text-center" colspan="4">Siap Kirim</th>
-                                    <th class="dhead text-center" colspan="4">Sudah Kirim</th>
-
                                 </tr>
                                 <tr>
-                                    <th class="dhead text-end">Pcs</th>
+                                    <th class="dhead text-end" style="border-left: 3px solid #787878;">Pcs</th>
                                     <th class="dhead text-end">Gr</th>
+                                    <th class="dhead text-center" style="border-right: 3px solid #787878;">Aksi</th>
 
                                     <th class="dhead text-end">Pcs</th>
-                                    <th class="dhead text-end">Gr</th>
-
-                                    <th class="dhead text-end">Pcs</th>
-                                    <th class="dhead text-end">Gr</th>
-                                    <th class="dhead text-end">Rp C</th>
-                                    <th class="dhead text-end">Rp/gr</th>
-                                    <th class="dhead text-end">susut</th>
-
-                                    <th class="dhead text-end">Pcs</th>
-                                    <th class="dhead text-end">Gr</th>
+                                    <th class="dhead text-end" style="border-right: 3px solid #787878;">Gr</th>
 
                                     <th class="dhead text-end">Pcs</th>
                                     <th class="dhead text-end">Gr</th>
                                     <th class="dhead text-end">Rp C</th>
                                     <th class="dhead text-end">Rp/gr</th>
-                                    <th class="dhead text-end">susut</th>
+                                    <th class="dhead text-end" style="border-right: 3px solid #787878;">susut</th>
 
                                     <th class="dhead text-end">Pcs</th>
                                     <th class="dhead text-end">Gr</th>
-
-                                    <th class="dhead text-end">Pcs</th>
-                                    <th class="dhead text-end">Gr</th>
-                                    <th class="dhead text-end">Rp C</th>
-                                    <th class="dhead text-end">Rp/gr</th>
-                                    <th class="dhead text-end">susut</th>
-
-                                    <th class="dhead text-end">Pcs</th>
-                                    <th class="dhead text-end">Gr</th>
+                                    <th class="dhead text-center" style="border-right: 3px solid #787878;">Aksi</th>
 
                                     <th class="dhead text-end">Pcs</th>
                                     <th class="dhead text-end">Gr</th>
                                     <th class="dhead text-end">Rp C</th>
                                     <th class="dhead text-end">Rp/gr</th>
+                                    <th class="dhead text-end" style="border-right: 3px solid #787878;">susut</th>
 
                                     <th class="dhead text-end">Pcs</th>
                                     <th class="dhead text-end">Gr</th>
-                                    <th class="dhead text-end">Rp C</th>
-                                    <th class="dhead text-end">Rp/gr</th>
+
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -124,13 +112,26 @@
                                         <td>{{ $g->no_lot }}</td>
                                         <td>{{ $g->ket }}</td>
 
-                                        <td class="text-end">{{ number_format($g->pcs - $pcs_awal_bk, 0) }}</td>
-                                        <td class="text-end">{{ number_format($g->gr - $gr_awal_bk, 0) }}</td>
+                                        <td class="text-end" style="border-left: 3px solid #787878">
+                                            {{ $g->selesai_1 == 'Y' ? '0' : number_format($g->pcs - $pcs_awal_bk, 0) }}
+                                        </td>
+                                        <td class="text-end">
+                                            {{ $g->selesai_1 == 'Y' ? '0' : number_format($g->gr - $gr_awal_bk, 0) }}
+                                        </td>
+                                        <td class="text-center" style="border-right: 3px solid #787878">
+                                            @if ($g->selesai_1 == 'Y')
+                                                <i class="fas fa-check text-success"></i>
+                                            @else
+                                                <a href="{{ route('summarybk.selesai1', ['no_lot' => $g->no_lot, 'ket' => $g->ket]) }}"
+                                                    class="btn btn-primary btn-sm ">Selesai</a>
+                                            @endif
+
+                                        </td>
 
                                         <td class="text-end">
                                             {{ number_format($pcs_awal_bk - $pcs_awal_cbt, 0) }}
                                         </td>
-                                        <td class="text-end">
+                                        <td class="text-end" style="border-right: 3px solid #787878">
                                             {{ number_format($gr_awal_bk - $gr_awal_cbt, 0) }}
                                         </td>
 
@@ -138,7 +139,7 @@
                                             {{ number_format($pcs_awal_cbt - $pcs_akhir_cbt, 0) }}
                                         </td>
                                         <td class="text-end">
-                                            {{ number_format($gr_awal_cbt - $gr_akhir_cbt, 0) }}
+                                            {{ number_format($c->gr_awal_cbt_hilang ?? 0, 0) }}
                                         </td>
                                         <td class="text-end">
                                             {{ number_format($c->ttl_rp ?? 0, 0) }}
@@ -146,63 +147,51 @@
                                         <td class="text-end">
                                             {{ number_format($c->rp_gram ?? 0, 0) }}
                                         </td>
-                                        <td class="text-end">
+                                        <td class="text-end" style="border-right: 3px solid #787878">
                                             {{ number_format($c->susut ?? 0, 0) }} %
                                         </td>
 
                                         <td class="text-end">
-                                            {{ number_format($pcs_akhir_cbt - $ck->pcs_awal ?? 0, 0) }}
+                                            {{ $g->selesai_2 == 'Y' ? '0' : number_format($pcs_akhir_cbt - $ck->pcs_awal ?? 0, 0) }}
                                         </td>
                                         <td class="text-end">
-                                            {{ number_format($gr_akhir_cbt - $ck->gr_awal ?? 0, 0) }}
+                                            {{ $g->selesai_2 == 'Y' ? '0' : number_format($gr_akhir_cbt - $ck->gr_awal ?? 0, 0) }}
                                         </td>
-
+                                        <td class="text-center" style="border-right: 3px solid #787878">
+                                            @if ($g->selesai_2 == 'Y')
+                                                <i class="fas fa-check text-success"></i>
+                                            @else
+                                                <a href="{{ route('summarybk.selesai2', ['no_lot' => $g->no_lot, 'ket' => $g->ket]) }}"
+                                                    class="btn btn-primary btn-sm ">Selesai</a>
+                                            @endif
+                                        </td>
+                                        @php
+                                            $ttl_pcs_ctk = $ck->pcs_awal - $ck->pcs_akhir ?? 0;
+                                        @endphp
                                         <td class="text-end">
-                                            {{ number_format($ck->pcs_awal - $ck->pcs_akhir ?? 0, 0) }}
+                                            {{ number_format($ck->pcs_awal_ctk_dibawa ?? 0, 0) }}
                                         </td>
                                         <td class="text-end">
-                                            {{ number_format($ck->gr_awal - $ck->gr_akhir ?? 0, 0) }}
+                                            {{ number_format($ck->gr_awal_ctk_dibawa ?? 0, 0) }}
                                         </td>
                                         <td class="text-end">
-                                            {{ number_format($rp_cetak, 0) }}
+                                            {{ $ttl_pcs_ctk == 0 ? 0 : number_format($rp_cetak + $ttl_rp_cbt_dibawa, 0) }}
                                         </td>
                                         <td class="text-end">
-                                            {{ number_format($ck->rp_gram ?? 0, 0) }}
+                                            {{ $ttl_pcs_ctk == 0 ? 0 : number_format(($rp_cetak + $ttl_rp_cbt_dibawa) / $ck->gr_awal, 0) }}
                                         </td>
-                                        <td class="text-end">
+                                        <td class="text-end" style="border-right: 3px solid #787878">
                                             {{ number_format($ck->susut ?? 0, 0) }} %
                                         </td>
 
                                         <td class="text-end">
-                                            {{ number_format($ck->pcs_akhir - $st->pcs_awal ?? 0, 0) }}
+                                            {{ number_format($ck->pcs_akhir ?? 0, 0) }}
                                         </td>
                                         <td class="text-end">
-                                            {{ number_format($ck->gr_akhir - $st->gr_awal ?? 0, 0) }}
+                                            {{ number_format($ck->gr_akhir ?? 0, 0) }}
                                         </td>
 
-                                        <td class="text-end">
-                                            {{ number_format($st->pcs_awal - $st->pcs_akhir ?? 0, 0) }}
-                                        </td>
-                                        <td class="text-end">
-                                            {{ number_format($st->gr_awal - $st->pcs_akhir ?? 0, 0) }}
-                                        </td>
-                                        <td class="text-end">
-                                            {{ number_format($st->rp_c + $ttl_rp_cbt_dibawa + $rp_cetak_dibawa ?? 0, 0) }}
-                                        </td>
-                                        <td class="text-end">
-                                            {{ number_format($st->rp_gram ?? 0, 0) }}
-                                        </td>
-                                        <td class="text-end">
-                                            {{ number_format($st->susut ?? 0, 0) }} %
-                                        </td>
-                                        <td class="text-end">0</td>
-                                        <td class="text-end">0</td>
-                                        <td class="text-end">0</td>
-                                        <td class="text-end">0</td>
-                                        <td class="text-end">0</td>
-                                        <td class="text-end">0</td>
-                                        <td class="text-end">0</td>
-                                        <td class="text-end">0</td>
+
                                         {{-- @php
                                             $rp_cabut = $c->ttl_rp ?? 0;
                                             $rp_cetak = $ck->rp_c ?? 0;

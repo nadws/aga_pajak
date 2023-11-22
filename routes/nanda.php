@@ -384,5 +384,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/export_summary', 'export_summary')->name('export_summary');
             Route::get('/import_summary_bk', 'import_summary_bk')->name('import_summary_bk');
+            Route::get('/selesai1', 'selesai1')->name('selesai1');
+            Route::get('/selesai2', 'selesai2')->name('selesai2');
         });
 });

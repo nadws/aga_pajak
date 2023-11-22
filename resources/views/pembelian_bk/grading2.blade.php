@@ -124,7 +124,7 @@
             <input type="text" class="form-control" name="no_campur" value="{{ $grading->no_campur }}"
                 {{ empty($grading->no_campur) ? '' : '' }}>
             <input type="hidden" class="form-control nota_grading" name="no_nota" value="{{ $grading->no_nota }}">
-            <input type="text" class="form-control" name="no_lot" required value="{{ $invoice->no_lot }}">
+            <input type="hidden" class="form-control" name="no_lot" required value="{{ $invoice->no_lot }}">
         </div>
         <div class="col-lg-2">
             <label for="">Gram Basah</label>

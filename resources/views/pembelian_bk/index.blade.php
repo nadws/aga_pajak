@@ -122,8 +122,8 @@
                                     @if (empty($p->nota_grading) || empty($p->nota_bk_campur))
                                         <i class="fas fa-times text-danger"></i>
                                     @else
-                                        <span class="badge {{ $p->rupiah == '0' ? 'bg-danger' : 'bg-success' }}">
-                                            {!! $p->rupiah == '0' ? 'Harga ?' : 'Harga <i class="fas fa-check"></i>' !!}
+                                        <span class="badge {{ empty($p->rupiah) ? 'bg-danger' : 'bg-success' }}">
+                                            {!! empty($p->rupiah) ? 'Harga ?' : 'Harga <i class="fas fa-check"></i>' !!}
                                         </span>
                                     @endif
                                 </td>
