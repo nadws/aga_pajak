@@ -49,10 +49,17 @@
                     <th class="dhead">Grade</th>
                     <th class="text-end dhead">Pcs</th>
                     <th class="text-end dhead">Gr</th>
-                    <th class="text-end dhead">Rupiah</th>
+                    <th class="text-end dhead">Rupiah/gram</th>
+                    <th class="text-end dhead">Total Rupiah</th>
                 </tr>
             </thead>
             <tbody style="background-color: #F2F7FF">
+                @php
+                    $pcs = 0;
+                    $gr = 0;
+                    $rupiah = 0;
+                    $rupiah_gr = 0;
+                @endphp
                 @foreach ($buku_campur as $g)
                     <tr>
                         <td>
@@ -61,9 +68,26 @@
                         <td class="text-end">{{ $g->pcs }}</td>
                         <td class="text-end">{{ $g->gr }}</td>
                         <td class="text-end">{{ number_format($g->rupiah, 0) }}</td>
+                        <td class="text-end">{{ number_format($g->rupiah * $g->gr, 0) }}</td>
                     </tr>
+                    @php
+                        $pcs += $g->pcs;
+                        $gr += $g->gr;
+                        $rupiah += $g->rupiah;
+                        $rupiah_gr += $g->rupiah * $g->gr;
+                    @endphp
                 @endforeach
             </tbody>
+            <tfoot>
+                <tr>
+                    <th>Total</th>
+                    <th class="text-end">{{ number_format($pcs, 0) }}</th>
+                    <th class="text-end">{{ number_format($gr, 0) }}</th>
+                    <th class="text-end">{{ number_format($rupiah_gr / $gr, 2) }}</th>
+                    <th class="text-end">{{ number_format($rupiah_gr, 0) }}</th>
+                </tr>
+            </tfoot>
         </table>
     </div>
+
 </div>

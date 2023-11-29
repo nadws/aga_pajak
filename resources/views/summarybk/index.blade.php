@@ -8,8 +8,8 @@
                 <h6>Total Rp Invoice : {{ number_format($total_invoice->ttl_hrga, 0) }}</h6>
             </div>
             <div class="col-lg-6">
-                <x-theme.button modal="Y" idModal="import" icon="fas fa-upload" addClass="float-end"
-                    teks="Import" />
+                {{-- <x-theme.button modal="Y" idModal="import" icon="fas fa-upload" addClass="float-end"
+                    teks="Import" /> --}}
                 <x-theme.button href="{{ route('summarybk.export_summary') }}" icon="fas fa-file-excel"
                     addClass="float-end" teks="Export" />
             </div>
