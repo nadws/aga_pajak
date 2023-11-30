@@ -46,8 +46,8 @@
                                     <th class="dhead">Suplier Awal</th>
                                     <th class="dhead">Date</th>
                                     <th class="dhead">Grade</th>
-                                    <th class="dhead">Pcs <br> {{ number_format($pcs, 0) }}</th>
-                                    <th class="dhead">Gram <br> {{ number_format($gr, 0) }}</th>
+                                    <th class="dhead text-end">Pcs <br> {{ number_format($pcs, 0) }}</th>
+                                    <th class="dhead text-end">Gram <br> {{ number_format($gr, 0) }}</th>
                                     <th class="dhead">Rp/Gr</th>
                                     <th class="dhead">Lot</th>
                                     <th class="dhead">Keterangan / Nama Partai</th>
