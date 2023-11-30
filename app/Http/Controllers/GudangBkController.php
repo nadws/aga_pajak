@@ -136,7 +136,7 @@ class GudangBkController extends Controller
 
 
         if (empty($r->id_buku_campur)) {
-            $pembelian = GudangBkModel::getPembelianBk($r->gudang);
+            $pembelian = GudangBkModel::export_getPembelianBk();
 
             foreach ($pembelian as $d) {
                 $sheet1->setCellValue('A' . $kolom, $d->id_buku_campur);
