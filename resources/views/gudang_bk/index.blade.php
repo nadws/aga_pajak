@@ -32,7 +32,11 @@
                             <thead>
                                 @php
                                     $ttlRp = 0;
+                                    $pcs = 0;
+                                    $gr = 0;
                                     foreach ($gudang as $g) {
+                                        $pcs += $g->pcs;
+                                        $gr += $g->gr;
                                         $ttlRp += $g->rupiah * $g->gr;
                                     }
                                 @endphp
@@ -42,8 +46,8 @@
                                     <th class="dhead">Suplier Awal</th>
                                     <th class="dhead">Date</th>
                                     <th class="dhead">Grade</th>
-                                    <th class="dhead">Pcs</th>
-                                    <th class="dhead">Gram</th>
+                                    <th class="dhead">Pcs <br> {{ number_format($pcs, 0) }}</th>
+                                    <th class="dhead">Gram <br> {{ number_format($gr, 0) }}</th>
                                     <th class="dhead">Rp/Gr</th>
                                     <th class="dhead">Lot</th>
                                     <th class="dhead">Keterangan / Nama Partai</th>
