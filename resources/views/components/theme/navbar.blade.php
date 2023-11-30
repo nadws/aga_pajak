@@ -1,4 +1,4 @@
-<header class="mb-5">
+<header class="mb-2">
     @include('components.theme.header2')
     <nav class="main-navbar ">
         <div class="container font-bold">
@@ -15,7 +15,7 @@
                     $navbar = DB::table('navbar')
                         ->orderBy('urutan', 'ASC')
                         ->get();
-                    
+
                 @endphp
                 @foreach ($navbar as $d)
                     @php

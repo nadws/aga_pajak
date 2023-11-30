@@ -1,8 +1,32 @@
 <div class="header-top">
     <div class="container">
+        <style>
+            .layout-horizontal .header-top {
+                background-color: #fff;
+                padding: 0rem;
+            }
+
+            .layout-horizontal .main-navbar {
+                background-color: #435ebe;
+                padding: 4px;
+            }
+
+
+
+            .layout-horizontal .header-top .logo img {
+                height: 30px;
+            }
+
+            .avatar.avatar-md2 .avatar-content,
+            .avatar.avatar-md2 img {
+                font-size: .8rem;
+                height: 25px;
+                width: 25px;
+            }
+        </style>
         <div class="logo">
-            <a href="dashboard"><img src="/assets/login/img/empat.svg" alt="Logo"></a>
-            <h5>KAS AGA</h5>
+            <a href="dashboard"><img src="/assets/login/img/empat.svg" alt="Logo" width="90px"></a>
+            <p class="fw-bold text-center">KAS AGA</->
         </div>
         <div class="header-top-right">
 
@@ -12,16 +36,16 @@
                     aria-expanded="false">
                     <div class="avatar avatar-md2">
                         @php
-                        $idPosisi = auth()->user()->posisi->id_posisi;
-                        $gambar = $idPosisi == 1 ? 'kitchen' : 'server';
+                            $idPosisi = auth()->user()->posisi->id_posisi;
+                            $gambar = $idPosisi == 1 ? 'kitchen' : 'server';
                         @endphp
                         <img src='{{ asset("img/$gambar.png") }}' alt="Avatar">
                     </div>
                     <div class="text">
-                        <h6 class="user-dropdown-name">{{ ucwords(auth()->user()->name) }}</h6>
-                        <p class="user-dropdown-status text-sm text-muted">
+                        <p class="user-dropdown-name">{{ ucwords(auth()->user()->name) }}</p>
+                        {{-- <p class="user-dropdown-status text-sm text-muted">
                             {{ ucwords(auth()->user()->posisi->nm_posisi) }}
-                        </p>
+                        </p> --}}
                     </div>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end shadow-lg" aria-labelledby="topbarUserDropdown">
