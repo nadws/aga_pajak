@@ -82,7 +82,7 @@
                             <tbody>
                                 @foreach ($gudang as $no => $g)
                                     @php
-                                        $response = Http::get("http://127.0.0.1:4000/api/apibk/sarang?no_lot=$g->no_lot&nm_partai=$g->ket");
+                                        $response = Http::get("sarang.ptagafood.com/api/apibk/sarang?no_lot=$g->no_lot&nm_partai=$g->ket");
                                         $cbt = $response['data']['cabut'] ?? null;
                                         $c = json_decode(json_encode($cbt));
 

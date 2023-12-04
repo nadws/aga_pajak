@@ -130,13 +130,13 @@ class SummaryController extends Controller
         $kolom = 3;
         $gudang = GudangBkModel::getSummaryWip();
         foreach ($gudang as $g) {
-            $response = Http::get("http://127.0.0.1:4000/api/apibk/export_sarang?no_lot=$g->no_lot&nm_partai=$g->ket");
+            $response = Http::get("sarang.ptagafood.com/api/apibk/export_sarang?no_lot=$g->no_lot&nm_partai=$g->ket");
             $cbt = $response['data']['bk_cabut'] ?? null;
             $c = json_decode(json_encode($cbt));
 
 
             foreach ($c as $s) {
-                $response = Http::get("http://127.0.0.1:4000/api/apibk/cabut_export?no_box=$s->no_box");
+                $response = Http::get("sarang.ptagafood.com/api/apibk/cabut_export?no_box=$s->no_box");
                 $cbt_2 = $response['data']['cabut'] ?? null;
                 $ct = json_decode(json_encode($cbt_2));
                 $ctk_2 = $response['data']['cetak'] ?? null;
