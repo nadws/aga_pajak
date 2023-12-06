@@ -150,12 +150,15 @@
                                         <td class="text-end" style="border-right: 3px solid #787878">
                                             {{ number_format($c->susut ?? 0, 0) }} %
                                         </td>
-
+                                        @php
+                                            $pcs_awal_ctk = $ck->pcs_awal ?? 0;
+                                            $gr_awal_ctk = $ck->gr_awal ?? 0;
+                                        @endphp
                                         <td class="text-end">
-                                            {{ $g->selesai_2 == 'Y' ? '0' : number_format($pcs_akhir_cbt - $ck->pcs_awal ?? 0, 0) }}
+                                            {{ $g->selesai_2 == 'Y' ? '0' : number_format($pcs_akhir_cbt - $pcs_awal_ctk, 0) }}
                                         </td>
                                         <td class="text-end">
-                                            {{ $g->selesai_2 == 'Y' ? '0' : number_format($gr_akhir_cbt - $ck->gr_awal ?? 0, 0) }}
+                                            {{ $g->selesai_2 == 'Y' ? '0' : number_format($gr_akhir_cbt - $gr_awal_ctk, 0) }}
                                         </td>
                                         <td class="text-center" style="border-right: 3px solid #787878">
                                             @if ($g->selesai_2 == 'Y')
