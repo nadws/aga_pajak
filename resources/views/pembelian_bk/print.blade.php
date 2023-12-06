@@ -173,12 +173,23 @@
                             <td>{{ $p->nm_satuan }}</td>
                             <td align="right">{{ number_format($p->h_satuan, 0) }}</td>
                             <td align="right">
-                                {{ $p->id_produk == '7' ? $p->h_satuan : number_format($p->qty == '0' ? '0' : $p->qty * $p->h_satuan, 0) }}
+                                {{ $p->id_produk == '7' ? number_format($p->h_satuan, 0) : number_format($p->qty == '0' ? '0' : $p->qty * $p->h_satuan, 0) }}
                             </td>
                         </tr>
+                        @php
+                            $no++;
+                        @endphp
                     @endforeach
+                    @php
+                        $row = 5 - $no;
+                        if ($row < 0) {
+                            $rows = 100;
+                        } else {
+                            $rows = $row * 25;
+                        }
+                    @endphp
                     <tr>
-                        <td colspan="5" rowspan="4" style="height: 100px;">&nbsp;</td>
+                        <td colspan="5" style="height: {{ $rows }}px;"></td>
                     </tr>
 
                 </tbody>
@@ -278,12 +289,23 @@
                             <td>{{ $p->nm_satuan }}</td>
                             <td align="right">{{ number_format($p->h_satuan, 0) }}</td>
                             <td align="right">
-                                {{ $p->id_produk == '7' ? $p->h_satuan : number_format($p->qty == '0' ? '0' : $p->qty * $p->h_satuan, 0) }}
+                                {{ $p->id_produk == '7' ? number_format($p->h_satuan, 0) : number_format($p->qty == '0' ? '0' : $p->qty * $p->h_satuan, 0) }}
                             </td>
                         </tr>
+                        @php
+                            $no++;
+                        @endphp
                     @endforeach
+                    @php
+                        $row = 5 - $no;
+                        if ($row < 0) {
+                            $rows = 100;
+                        } else {
+                            $rows = $row * 25;
+                        }
+                    @endphp
                     <tr>
-                        <td colspan="5" rowspan="4" style="height: 100px;">&nbsp;</td>
+                        <td colspan="5" style="height: {{ $rows }}px;">&nbsp;</td>
                     </tr>
 
                 </tbody>

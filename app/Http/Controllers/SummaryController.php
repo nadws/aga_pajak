@@ -133,8 +133,6 @@ class SummaryController extends Controller
             $response = Http::get("sarang.ptagafood.com/api/apibk/export_sarang?no_lot=$g->no_lot&nm_partai=$g->ket");
             $cbt = $response['data']['bk_cabut'] ?? null;
             $c = json_decode(json_encode($cbt));
-
-
             foreach ($c as $s) {
                 $response = Http::get("sarang.ptagafood.com/api/apibk/cabut_export?no_box=$s->no_box");
                 $cbt_2 = $response['data']['cabut'] ?? null;
