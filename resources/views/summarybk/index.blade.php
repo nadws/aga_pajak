@@ -152,7 +152,9 @@
                                         </td>
                                         @php
                                             $pcs_awal_ctk = $ck->pcs_awal ?? 0;
+                                            $pcs_akhir_ctk = $ck->pcs_akhir ?? 0;
                                             $gr_awal_ctk = $ck->gr_awal ?? 0;
+                                            $gr_akhir_ctk = $ck->gr_akhir ?? 0;
                                         @endphp
                                         <td class="text-end">
                                             {{ $g->selesai_2 == 'Y' ? '0' : number_format($pcs_akhir_cbt - $pcs_awal_ctk, 0) }}
@@ -169,7 +171,7 @@
                                             @endif
                                         </td>
                                         @php
-                                            $ttl_pcs_ctk = $ck->pcs_awal - $ck->pcs_akhir ?? 0;
+                                            $ttl_pcs_ctk = $pcs_awal_ctk - $pcs_akhir_ctk;
                                         @endphp
                                         <td class="text-end">
                                             {{ number_format($ck->pcs_awal_ctk_dibawa ?? 0, 0) }}
