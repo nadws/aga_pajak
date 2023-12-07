@@ -42,6 +42,7 @@
                                 @endphp
                                 <tr>
                                     <th class="dhead">#</th>
+                                    <th class="dhead">ID</th>
                                     <th class="dhead">Buku</th>
                                     <th class="dhead">Suplier Awal</th>
                                     <th class="dhead">Date</th>
@@ -73,6 +74,7 @@
                                 @foreach ($gudang as $no => $g)
                                     <tr>
                                         <td>{{ $no + 1 }}</td>
+                                        <td>{{ $g->id_buku_campur }}</td>
                                         <td>{{ $g->buku }}</td>
                                         <td>{{ $g->suplier_awal }} </td>
                                         <td>{{ $g->tgl }}</td>
