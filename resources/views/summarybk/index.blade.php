@@ -123,7 +123,7 @@
                                                 <i class="fas fa-check text-success"></i>
                                             @else
                                                 <a href="{{ route('summarybk.selesai1', ['no_lot' => $g->no_lot, 'ket' => $g->ket]) }}"
-                                                    class="btn btn-primary btn-sm ">Selesai</a>
+                                                    class="btn btn-primary btn-sm {{ empty($pcs_awal_bk) ? 'disabled' : '' }} ">Selesai</a>
                                             @endif
 
                                         </td>
@@ -162,17 +162,19 @@
                                         <td class="text-end">
                                             {{ $g->selesai_2 == 'Y' ? '0' : number_format($gr_akhir_cbt - $gr_awal_ctk, 0) }}
                                         </td>
+                                        @php
+                                            $ttl_pcs_ctk = $pcs_awal_ctk - $pcs_akhir_ctk;
+                                            $pcs_awal_ctk = $ck->pcs_awal_ctk_dibawa ?? 0;
+                                        @endphp
                                         <td class="text-center" style="border-right: 3px solid #787878">
                                             @if ($g->selesai_2 == 'Y')
                                                 <i class="fas fa-check text-success"></i>
                                             @else
                                                 <a href="{{ route('summarybk.selesai2', ['no_lot' => $g->no_lot, 'ket' => $g->ket]) }}"
-                                                    class="btn btn-primary btn-sm ">Selesai</a>
+                                                    class="btn btn-primary btn-sm {{ empty($pcs_awal_ctk) ? 'disabled' : '' }}">Selesai</a>
                                             @endif
                                         </td>
-                                        @php
-                                            $ttl_pcs_ctk = $pcs_awal_ctk - $pcs_akhir_ctk;
-                                        @endphp
+
                                         <td class="text-end">
                                             {{ number_format($ck->pcs_awal_ctk_dibawa ?? 0, 0) }}
                                         </td>
