@@ -13,7 +13,6 @@ class GudangBkModel extends Model
 
     public static function getPembelianBk($nmgudang)
     {
-
         $result = DB::select("SELECT 
         a.id_buku_campur, a.approve,
         if(a.approve = 'T',c.tgl,d.tgl) as tgl, 

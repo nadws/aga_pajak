@@ -63,7 +63,7 @@
                                                 class="badge bg-success"><i class="fas fa-file-excel"></i></button>
                                         @endif
                                         <br>
-                                        <input type="checkbox" id="checkAll" name="" id="">
+                                        {{-- <input type="checkbox" id="checkAll" name="" id=""> --}}
                                         <input type="hidden" name="gudang" value="{{ $nm_gudang }}" id="">
                                     </th>
 
