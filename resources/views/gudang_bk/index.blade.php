@@ -88,9 +88,10 @@
                                         <td>{{ $g->lok_tgl }}</td>
 
 
-                                        <td class="text-center"><input type="checkbox" class="checkbox-item"
+                                        <td class="text-center">
+                                            {{-- <input type="checkbox" class="checkbox-item"
                                                 name="id_buku_campur[]" value="{{ $g->id_buku_campur }}"
-                                                id="">
+                                                id=""> --}}
                                         </td>
 
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\GudangBkModel;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
@@ -143,6 +144,9 @@ class GudangBkController extends Controller
                 $sheet1->setCellValue('B' . $kolom, $d->buku);
                 $sheet1->setCellValue('C' . $kolom, $d->suplier_awal);
                 $sheet1->setCellValue('D' . $kolom, $d->tgl);
+
+                // Anda tidak perlu mengonversi nilai tanggal jika formatnya valid
+
                 $sheet1->setCellValue('E' . $kolom, $d->nm_grade);
                 $sheet1->setCellValue('F' . $kolom, $d->pcs);
                 $sheet1->setCellValue('G' . $kolom, $d->gr);
@@ -153,7 +157,6 @@ class GudangBkController extends Controller
                 $sheet1->setCellValue('L' . $kolom, $d->lok_tgl);
                 $sheet1->setCellValue('M' . $kolom, $d->gudang == 'bk' ? 'Y' : 'T');
                 $sheet1->setCellValue('N' . $kolom, $d->gudang == 'produksi' ? 'Y' : 'T');
-                // $sheet1->setCellValue('O' . $kolom, $d->gudang == 'wip' ? 'Y' : 'T');
                 $sheet1->setCellValue('O' . $kolom, $d->gudang == 'reject' ? 'Y' : 'T');
                 $sheet1->setCellValue('P' . $kolom, $d->gabung);
 
@@ -187,6 +190,8 @@ class GudangBkController extends Controller
             }
         }
         $sheet1->getStyle('A2:P' . $kolom - 1)->applyFromArray($style);
+
+
         $namafile = "Gudang Bk.xlsx";
 
         $writer = new Xlsx($spreadsheet);
