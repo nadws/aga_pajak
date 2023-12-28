@@ -380,11 +380,6 @@ class GudangBkController extends Controller
                             $gudang = 'reject';
                         }
                     }
-
-
-
-
-
                     if (empty($rowData[0])) {
                         DB::table('buku_campur')->insert([
                             'no_lot' => $rowData[8],
