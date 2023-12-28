@@ -361,23 +361,29 @@ class GudangBkController extends Controller
             try {
                 foreach ($data as $rowData) {
                     $rowBk = 12;
-
-                    if (($rowData[$rowBk] == 'Y' && $rowData[$rowBk + 1] == 'Y') ||
-                        ($rowData[$rowBk] == 'Y' && $rowData[$rowBk + 2] == 'Y') ||
-                        ($rowData[$rowBk + 2] == 'Y' && $rowData[$rowBk + 1] == 'Y') ||
-                        ($rowData[$rowBk] == 'Y' && $rowData[$rowBk + 1] == 'Y' && $rowData[$rowBk + 2] == 'Y')
-                    ) {
-                        $importGagal = true;
-                        break;
-                    }
-
-                    if ($rowData[$rowBk] == 'Y') {
+                    if ($rowData[15] == 'Y') {
                         $gudang = 'bk';
-                    } elseif ($rowData[$rowBk + 1] == 'Y') {
-                        $gudang = 'produksi';
-                    } elseif ($rowData[$rowBk + 2] == 'Y') {
-                        $gudang = 'reject';
+                    } else {
+                        if (($rowData[$rowBk] == 'Y' && $rowData[$rowBk + 1] == 'Y') ||
+                            ($rowData[$rowBk] == 'Y' && $rowData[$rowBk + 2] == 'Y') ||
+                            ($rowData[$rowBk + 2] == 'Y' && $rowData[$rowBk + 1] == 'Y') ||
+                            ($rowData[$rowBk] == 'Y' && $rowData[$rowBk + 1] == 'Y' && $rowData[$rowBk + 2] == 'Y')
+                        ) {
+                            $importGagal = true;
+                            break;
+                        }
+                        if ($rowData[$rowBk] == 'Y') {
+                            $gudang = 'bk';
+                        } elseif ($rowData[$rowBk + 1] == 'Y') {
+                            $gudang = 'produksi';
+                        } elseif ($rowData[$rowBk + 2] == 'Y') {
+                            $gudang = 'reject';
+                        }
                     }
+
+
+
+
 
                     if (empty($rowData[0])) {
                         DB::table('buku_campur')->insert([
