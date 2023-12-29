@@ -13,7 +13,7 @@
         position: relative;
         display: inline-block;
         width: 210mm;
-        min-height: 148.5mm;
+        min-height: 140.5mm;
         margin: 16px;
         border-bottom: 1px solid #aaa;
         background: white;
@@ -153,6 +153,7 @@
                 <thead>
                     <tr>
                         <th style="text-align: center">Produk</th>
+                        <th style="text-align: center">Keterangan</th>
                         <th style="text-align: right">Qty</th>
                         <th>Satuan</th>
                         <th style="text-align: right"> Harga</th>
@@ -169,6 +170,7 @@
                         @endphp
                         <tr>
                             <td>{{ $p->nm_produk }}</td>
+                            <td>{{ $p->ket }}</td>
                             <td align="right">{{ number_format($p->qty, 0) }}</td>
                             <td>{{ $p->nm_satuan }}</td>
                             <td align="right">{{ number_format($p->h_satuan, 0) }}</td>
@@ -185,17 +187,18 @@
                         if ($row < 0) {
                             $rows = 100;
                         } else {
-                            $rows = $row * 25;
+                            $rows = $row * 15;
                         }
                     @endphp
                     <tr>
-                        <td colspan="5" style="height: {{ $rows }}px;"></td>
+                        <td colspan="6" style="height: {{ $rows }}px;"></td>
                     </tr>
 
                 </tbody>
                 <tfoot>
                     <tr>
                         <th style="text-align: center;">Total</th>
+                        <th></th>
                         <th style="text-align: right;">
                             <?= number_format($qty_total, 0) ?>
                         </th>
@@ -223,9 +226,6 @@
 
         </div>
         <div class="subpage">
-
-
-
             <table style="font-size: small; white-space: nowrap;  " width="100%">
                 <tr>
                     <td rowspan="3" align="left" width="80%"><img src="/assets/login/img/empat.svg"
@@ -269,6 +269,7 @@
                 <thead>
                     <tr>
                         <th style="text-align: center">Produk</th>
+                        <th style="text-align: center">Keterangan</th>
                         <th style="text-align: right">Qty</th>
                         <th>Satuan</th>
                         <th style="text-align: right"> Harga</th>
@@ -285,6 +286,7 @@
                         @endphp
                         <tr>
                             <td>{{ $p->nm_produk }}</td>
+                            <td>{{ $p->ket }}</td>
                             <td align="right">{{ number_format($p->qty, 0) }}</td>
                             <td>{{ $p->nm_satuan }}</td>
                             <td align="right">{{ number_format($p->h_satuan, 0) }}</td>
@@ -301,17 +303,18 @@
                         if ($row < 0) {
                             $rows = 100;
                         } else {
-                            $rows = $row * 25;
+                            $rows = $row * 15;
                         }
                     @endphp
                     <tr>
-                        <td colspan="5" style="height: {{ $rows }}px;">&nbsp;</td>
+                        <td colspan="6" style="height: {{ $rows }}px;">&nbsp;</td>
                     </tr>
 
                 </tbody>
                 <tfoot>
                     <tr>
                         <th style="text-align: center;">Total</th>
+                        <th></th>
                         <th style="text-align: right;">
                             <?= number_format($qty_total, 0) ?>
                         </th>

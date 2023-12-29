@@ -200,6 +200,7 @@ class PembelianBahanBakuController extends Controller
                 'h_satuan' => $h_satuan[$x],
                 'urutan_nota' => $nota_t,
                 'admin' => Auth::user()->name,
+                'ket' => $r->ket[$x]
             ];
 
             DB::table('pembelian')->insert($data);
@@ -563,10 +564,6 @@ class PembelianBahanBakuController extends Controller
                 } else {
                     $rp_gr = $pembelian->approve_bk_campur == 'Y' ? $pembelian->ttl_hrg / $pembelian->gr_beli : $pembelian->total_harga / $pembelian->gr_beli;
                 }
-
-
-
-
                 $sheet1->setCellValue('I' . $kolom, $rp_gr);
                 $sheet1->setCellValue('J' . $kolom, $pembelian->approve_bk_campur == 'Y' ? $pembelian->ttl_hrg : $pembelian->total_harga);
                 $sheet1->setCellValue('K' . $kolom, $pembelian->approve_bk_campur == 'Y' ? $pembelian->gr_basah_apr : $pembelian->gr_basah);

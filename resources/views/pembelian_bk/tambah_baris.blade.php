@@ -13,6 +13,9 @@
             @endforeach
         </select>
     </td>
+    <td>
+        <input type="text" class="form-control" name="ket[]">
+    </td>
 
     <td style="vertical-align: top;">
         <input type="text" class="form-control qty qty{{ $count }}" count='{{ $count }}'

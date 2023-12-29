@@ -53,6 +53,7 @@
                                 <tr>
                                     <th width="2%">#</th>
                                     <th width="15%">Produk</th>
+                                    <th width="15%">Keterangan</th>
                                     <th width="7%">Qty</th>
                                     <th width="10%">Satuan</th>
                                     <th width="12%" style="text-align: right;white-space: nowrap;">Harga Satuan</th>
@@ -76,6 +77,9 @@
                                             @endforeach
                                         </select>
                                     </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="ket[]">
+                                    </td>
 
                                     <td style="vertical-align: top;">
                                         <input type="text" class="form-control qty qty1 input-nanda input-nanda1"
@@ -98,8 +102,8 @@
                                             value="0" name="h_satuan[]">
                                     </td>
                                     <td style="vertical-align: top;" align="right">
-                                        <input type="text" class="form-control total_harga1 text-end " value=""
-                                            count="1" style="width: 150px" readonly>
+                                        <input type="text" class="form-control total_harga1 text-end "
+                                            value="" count="1" style="width: 150px" readonly>
                                         <input type="hidden"
                                             class="form-control total_harga_biasa total_harga_biasa1 text-end"
                                             value="" readonly>
