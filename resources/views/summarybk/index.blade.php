@@ -84,7 +84,7 @@
                                                 <i class="fas fa-sort-up fa-lg text-primary "></i>
                                             </a>
                                         </td>
-                                        <td class="text-center fw-bold"></td>
+                                        <td class="text-center fw-bold">Ttl Lot: {{ $g->no_lot1 }}</td>
                                         <td class="text-end fw-bold">{{ number_format($g->pcs, 0) }}</td>
                                         <td class="text-end fw-bold">{{ number_format($g->gr, 0) }}</td>
                                         <td class="text-end fw-bold">{{ number_format($b->pcs_awal ?? 0, 0) }}</td>
