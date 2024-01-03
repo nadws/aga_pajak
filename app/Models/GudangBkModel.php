@@ -119,11 +119,21 @@ class GudangBkModel extends Model
 
     public static function getSummaryWip()
     {
-        $result = DB::select("SELECT a.id_buku_campur, a.no_lot, a.ket, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.rupiah * a.gr) as total_rp , a.selesai_1, a.selesai_2
+        $result = DB::select("SELECT count(a.no_lot) as no_lot1, a.id_buku_campur, a.no_lot, a.ket, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.rupiah * a.gr) as total_rp , a.selesai_1, a.selesai_2
         FROM buku_campur_approve as a 
         WHERE a.gudang = 'wip'
-        GROUP by a.no_lot, a.ket;
+        GROUP by a.ket;
         ");
+
+        return $result;
+    }
+    public static function getSummaryWipLot($ket)
+    {
+        $result = DB::select("SELECT a.id_buku_campur, a.no_lot, a.ket, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.rupiah * a.gr) as total_rp , a.selesai_1, a.selesai_2
+        FROM buku_campur_approve as a 
+        WHERE a.gudang = 'wip' and a.ket = ?
+        GROUP by a.ket, a.no_lot;
+        ", [$ket]);
 
         return $result;
     }

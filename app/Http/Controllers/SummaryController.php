@@ -43,6 +43,15 @@ class SummaryController extends Controller
         ];
         return view('summarybk.index', $data);
     }
+    function get_no_lot(Request $r)
+    {
+
+        $gudang = GudangBkModel::getSummaryWipLot($r->nm_partai);
+        $data =  [
+            'lot' => $gudang
+        ];
+        return view('summarybk.get_lot', $data);
+    }
 
     function export_summary(Request $r)
     {
@@ -127,62 +136,62 @@ class SummaryController extends Controller
         $sheet1->mergeCells('P1:T1');
         $sheet1->mergeCells('U1:V1');
 
-        $kolom = 3;
-        $gudang = GudangBkModel::getSummaryWip();
-        foreach ($gudang as $g) {
-            $response = Http::get("sarang.ptagafood.com/api/apibk/export_sarang?no_lot=$g->no_lot&nm_partai=$g->ket");
-            $cbt = $response['data']['bk_cabut'] ?? null;
-            $c = json_decode(json_encode($cbt));
-            foreach ($c as $s) {
-                $response = Http::get("sarang.ptagafood.com/api/apibk/cabut_export?no_box=$s->no_box");
-                $cbt_2 = $response['data']['cabut'] ?? null;
-                $ct = json_decode(json_encode($cbt_2));
-                $ctk_2 = $response['data']['cetak'] ?? null;
-                $ck = json_decode(json_encode($ctk_2));
+        // $kolom = 3;
+        // $gudang = GudangBkModel::getSummaryWip();
+        // foreach ($gudang as $g) {
+        //     $response = Http::get("sarang.ptagafood.com/api/apibk/export_sarang?no_lot=$g->no_lot&nm_partai=$g->ket");
+        //     $cbt = $response['data']['bk_cabut'] ?? null;
+        //     $c = json_decode(json_encode($cbt));
+        //     foreach ($c as $s) {
+        //         $response = Http::get("sarang.ptagafood.com/api/apibk/cabut_export?no_box=$s->no_box");
+        //         $cbt_2 = $response['data']['cabut'] ?? null;
+        //         $ct = json_decode(json_encode($cbt_2));
+        //         $ctk_2 = $response['data']['cetak'] ?? null;
+        //         $ck = json_decode(json_encode($ctk_2));
 
-                $sheet1->setCellValue('A' . $kolom, $g->id_buku_campur);
-                $sheet1->setCellValue('B' . $kolom, $s->no_lot);
-                $sheet1->setCellValue('C' . $kolom, $s->nm_partai);
-                $sheet1->setCellValue('D' . $kolom, $s->tipe);
-                $sheet1->setCellValue('E' . $kolom, $s->ket);
-                $sheet1->setCellValue('F' . $kolom, $s->warna);
+        //         $sheet1->setCellValue('A' . $kolom, $g->id_buku_campur);
+        //         $sheet1->setCellValue('B' . $kolom, $s->no_lot);
+        //         $sheet1->setCellValue('C' . $kolom, $s->nm_partai);
+        //         $sheet1->setCellValue('D' . $kolom, $s->tipe);
+        //         $sheet1->setCellValue('E' . $kolom, $s->ket);
+        //         $sheet1->setCellValue('F' . $kolom, $s->warna);
 
-                $pcs_awal_cbt = $ct->pcs_awal ?? 0;
-                $gr_awal_cbt = $ct->gr_awal ?? 0;
-                $pcs_akhir_cbt = $ct->pcs_akhir ?? 0;
-                $gr_akhir_cbt = $ct->gr_akhir ?? 0;
+        //         $pcs_awal_cbt = $ct->pcs_awal ?? 0;
+        //         $gr_awal_cbt = $ct->gr_awal ?? 0;
+        //         $pcs_akhir_cbt = $ct->pcs_akhir ?? 0;
+        //         $gr_akhir_cbt = $ct->gr_akhir ?? 0;
 
-                $sheet1->setCellValue('G' . $kolom, $s->pcs_awal - $pcs_awal_cbt ?? 0);
-                $sheet1->setCellValue('H' . $kolom, $s->gr_awal - $gr_awal_cbt ?? 0);
+        //         $sheet1->setCellValue('G' . $kolom, $s->pcs_awal - $pcs_awal_cbt ?? 0);
+        //         $sheet1->setCellValue('H' . $kolom, $s->gr_awal - $gr_awal_cbt ?? 0);
 
-                $sheet1->setCellValue('I' . $kolom, $pcs_awal_cbt - $pcs_akhir_cbt);
-                $sheet1->setCellValue('J' . $kolom, $gr_awal_cbt - $gr_akhir_cbt);
-                $sheet1->setCellValue('K' . $kolom, $ct->rp_c ?? 0);
-                $sheet1->setCellValue('L' . $kolom, round($ct->rp_gram ?? 0, 0));
-                $sheet1->setCellValue('M' . $kolom, round($ct->susut ?? 0, 0) . '%');
+        //         $sheet1->setCellValue('I' . $kolom, $pcs_awal_cbt - $pcs_akhir_cbt);
+        //         $sheet1->setCellValue('J' . $kolom, $gr_awal_cbt - $gr_akhir_cbt);
+        //         $sheet1->setCellValue('K' . $kolom, $ct->rp_c ?? 0);
+        //         $sheet1->setCellValue('L' . $kolom, round($ct->rp_gram ?? 0, 0));
+        //         $sheet1->setCellValue('M' . $kolom, round($ct->susut ?? 0, 0) . '%');
 
-                $ckpcs_awal = $ck->pcs_awal ?? 0;
-                $ckgr_awal = $ck->gr_awal ?? 0;
-                $ckpcs_akhir = $ck->pcs_akhir ?? 0;
-                $ckgr_akhir = $ck->gr_akhir ?? 0;
-                $sheet1->setCellValue('N' . $kolom, $pcs_akhir_cbt - $ckpcs_awal);
-                $sheet1->setCellValue('O' . $kolom, $gr_akhir_cbt -  $ckgr_awal);
+        //         $ckpcs_awal = $ck->pcs_awal ?? 0;
+        //         $ckgr_awal = $ck->gr_awal ?? 0;
+        //         $ckpcs_akhir = $ck->pcs_akhir ?? 0;
+        //         $ckgr_akhir = $ck->gr_akhir ?? 0;
+        //         $sheet1->setCellValue('N' . $kolom, $pcs_akhir_cbt - $ckpcs_awal);
+        //         $sheet1->setCellValue('O' . $kolom, $gr_akhir_cbt -  $ckgr_awal);
 
-                $sheet1->setCellValue('P' . $kolom, $ckpcs_awal - $ckpcs_akhir);
-                $sheet1->setCellValue('Q' . $kolom, $ckgr_awal - $ckgr_akhir);
-                $sheet1->setCellValue('R' . $kolom, $ck->rp_c ?? 0);
-                $sheet1->setCellValue('S' . $kolom, $ck->rp_gram ?? 0);
-                $sheet1->setCellValue('T' . $kolom, $ck->susut ?? 0);
+        //         $sheet1->setCellValue('P' . $kolom, $ckpcs_awal - $ckpcs_akhir);
+        //         $sheet1->setCellValue('Q' . $kolom, $ckgr_awal - $ckgr_akhir);
+        //         $sheet1->setCellValue('R' . $kolom, $ck->rp_c ?? 0);
+        //         $sheet1->setCellValue('S' . $kolom, $ck->rp_gram ?? 0);
+        //         $sheet1->setCellValue('T' . $kolom, $ck->susut ?? 0);
 
-                $sheet1->setCellValue('U' . $kolom, $ck->pcs_akhir ?? 0);
-                $sheet1->setCellValue('V' . $kolom, $ck->gr_akhir ?? 0);
+        //         $sheet1->setCellValue('U' . $kolom, $ck->pcs_akhir ?? 0);
+        //         $sheet1->setCellValue('V' . $kolom, $ck->gr_akhir ?? 0);
 
 
-                $kolom++;
-            }
-        }
+        //         $kolom++;
+        //     }
+        // }
 
-        $sheet1->getStyle('A2:V' . $kolom - 1)->applyFromArray($style);
+        // $sheet1->getStyle('A2:V' . $kolom - 1)->applyFromArray($style);
         $namafile = "Summary Wip.xlsx";
 
         $writer = new Xlsx($spreadsheet);

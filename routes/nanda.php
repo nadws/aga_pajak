@@ -386,5 +386,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/import_summary_bk', 'import_summary_bk')->name('import_summary_bk');
             Route::get('/selesai1', 'selesai1')->name('selesai1');
             Route::get('/selesai2', 'selesai2')->name('selesai2');
+
+            Route::get('/get_no_lot', 'get_no_lot')->name('get_no_lot');
         });
 });
