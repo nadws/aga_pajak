@@ -13,7 +13,9 @@
                 <x-theme.button modal="Y" idModal="import" icon="fas fa-upload" addClass="float-end" teks="Import" />
                 --}}
                 <x-theme.button href="{{ route('summarybk.export_summary') }}" icon="fas fa-file-excel"
-                    addClass="float-end" teks="Export" />
+                    addClass="float-end" teks="Export Per Partai" />
+                <x-theme.button href="{{ route('summarybk.export_summary_lot') }}" icon="fas fa-file-excel"
+                    addClass="float-end" teks="Export Per Lot" />
             </div>
         </div>
     </x-slot>
@@ -84,7 +86,7 @@
                                                 <i class="fas fa-sort-up fa-lg text-primary "></i>
                                             </a>
                                         </td>
-                                        <td class="text-center fw-bold">Ttl Lot: {{ $g->no_lot1 }}</td>
+                                        <td class="text-center fw-bold"></td>
                                         <td class="text-end fw-bold">{{ number_format($g->pcs ?? 0, 0) }}</td>
                                         <td class="text-end fw-bold">{{ number_format($g->gr ?? 0, 0) }}</td>
                                         <td class="text-end fw-bold">{{ number_format($b->pcs_awal ?? 0, 0) }}</td>
@@ -188,6 +190,7 @@
                     var nm_partai = $(this).attr('nm_partai');
                     console.log(no_lot);
                     console.log(nm_partai);
+                    $('.load_box').html('');
                     $.ajax({
                         type: "get",
                         url: "{{ route('summarybk.get_no_box') }}",

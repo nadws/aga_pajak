@@ -80,6 +80,20 @@ class SummaryController extends Controller
                 ]
             ],
         );
+        $style_bawah = array(
+            'font' => [
+                'bold' => true, // Mengatur teks menjadi tebal
+            ],
+            'borders' => [
+                'alignment' => [
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                ],
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ],
+            ],
+        );
 
         $style = [
             'borders' => [
@@ -99,42 +113,26 @@ class SummaryController extends Controller
         $sheet1->setTitle('Summary Wip');
 
 
-        $sheet1->getStyle("A1:N2")->applyFromArray($style_atas);
+        $sheet1->getStyle("A1:N1")->applyFromArray($style_atas);
 
         $sheet1->setCellValue('A1', '#');
         $sheet1->setCellValue('B1', 'Ket / nama partai');
-        $sheet1->setCellValue('C1', 'Gudang Wip');
-        $sheet1->setCellValue('E1', 'BK');
-        $sheet1->setCellValue('G1', 'Cabut');
-        $sheet1->setCellValue('M1', 'Sisa');
+        $sheet1->setCellValue('C1', 'Pcs Wip');
+        $sheet1->setCellValue('D1', 'Gr Wip');
+        $sheet1->setCellValue('E1', 'Pcs BK');
+        $sheet1->setCellValue('F1', 'Gr BK');
 
+        $sheet1->setCellValue('G1', 'Pcs Awal cbt');
+        $sheet1->setCellValue('H1', 'Gr Awal cbt');
+        $sheet1->setCellValue('I1', 'Pcs Akhir cbt');
+        $sheet1->setCellValue('J1', 'Gr Akhir cbt');
+        $sheet1->setCellValue('K1', 'Susut');
+        $sheet1->setCellValue('L1', 'Rp Cabut');
 
+        $sheet1->setCellValue('M1', 'Pcs Sisa cbt');
+        $sheet1->setCellValue('N1', 'Gr Sisa cbt');
 
-        $sheet1->setCellValue('C2', 'Pcs');
-        $sheet1->setCellValue('D2', 'Gr');
-
-        $sheet1->setCellValue('E2', 'Pcs');
-        $sheet1->setCellValue('F2', 'Gr');
-
-        $sheet1->setCellValue('G2', 'Pcs Awal');
-        $sheet1->setCellValue('H2', 'Gr Awal');
-        $sheet1->setCellValue('I2', 'Pcs Akhir');
-        $sheet1->setCellValue('J2', 'Gr Akhir');
-        $sheet1->setCellValue('K2', 'Susut');
-        $sheet1->setCellValue('L2', 'Rp');
-
-        $sheet1->setCellValue('M2', 'Pcs');
-        $sheet1->setCellValue('N2', 'Gr');
-
-
-        $sheet1->mergeCells('A1:A2');
-        $sheet1->mergeCells('B1:B2');
-        $sheet1->mergeCells('C1:D1');
-        $sheet1->mergeCells('E1:F1');
-        $sheet1->mergeCells('G1:L1');
-        $sheet1->mergeCells('M1:N1');
-
-        $kolom = 3;
+        $kolom = 2;
         $gudang = GudangBkModel::getSummaryWip();
 
         $pcs_wip = 0;
@@ -214,8 +212,173 @@ class SummaryController extends Controller
         $sheet1->setCellValue('M' . $kolom, $pcs_bk - $pcs_awal_cbt_ttl);
         $sheet1->setCellValue('N' . $kolom, $gr_bk - $gr_awal_cbt_ttl);
 
-        $sheet1->getStyle('A2:N' . $kolom)->applyFromArray($style);
+        $sheet1->getStyle('A2:N' . $kolom - 1)->applyFromArray($style);
+        $sheet1->getStyle('A' . $kolom . ':N' . $kolom)->applyFromArray($style_bawah);
         $namafile = "Summary Wip.xlsx";
+
+        $writer = new Xlsx($spreadsheet);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename=' . $namafile);
+        header('Cache-Control: max-age=0');
+
+
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
+        exit();
+    }
+    function export_summary_lot(Request $r)
+    {
+        $style_atas = array(
+            'font' => [
+                'bold' => true, // Mengatur teks menjadi tebal
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ]
+            ],
+        );
+        $style_bawah = array(
+            'font' => [
+                'bold' => true, // Mengatur teks menjadi tebal
+            ],
+            'borders' => [
+                'alignment' => [
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                ],
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ],
+            ],
+        );
+
+        $style = [
+            'borders' => [
+                'alignment' => [
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                ],
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ],
+            ],
+        ];
+        $spreadsheet = new Spreadsheet();
+
+        $spreadsheet->setActiveSheetIndex(0);
+        $sheet1 = $spreadsheet->getActiveSheet();
+        $sheet1->setTitle('Summary Wip');
+
+
+        $sheet1->getStyle("A1:O1")->applyFromArray($style_atas);
+
+        $sheet1->setCellValue('A1', '#');
+        $sheet1->setCellValue('B1', 'Ket / nama partai');
+        $sheet1->setCellValue('C1', 'No Lot');
+        $sheet1->setCellValue('D1', 'Pcs Wip');
+        $sheet1->setCellValue('E1', 'Gr Wip');
+        $sheet1->setCellValue('F1', 'Pcs BK');
+        $sheet1->setCellValue('G1', 'Gr BK');
+
+        $sheet1->setCellValue('H1', 'Pcs Awal cbt');
+        $sheet1->setCellValue('I1', 'Gr Awal cbt');
+        $sheet1->setCellValue('J1', 'Pcs Akhir cbt');
+        $sheet1->setCellValue('K1', 'Gr Akhir cbt');
+        $sheet1->setCellValue('L1', 'Susut');
+        $sheet1->setCellValue('M1', 'Rp Cabut');
+
+        $sheet1->setCellValue('N1', 'Pcs Sisa cbt');
+        $sheet1->setCellValue('O1', 'Gr Sisa cbt');
+
+        $kolom = 2;
+        $gudang = GudangBkModel::getSummaryWipLotexport();
+
+        $pcs_wip = 0;
+        $gr_wip = 0;
+        $pcs_bk = 0;
+        $gr_bk = 0;
+
+        $pcs_awal_cbt_ttl = 0;
+        $gr_awal_cbt_ttl = 0;
+        $pcs_akhir_cbt_ttl = 0;
+        $gr_akhir_cbt_ttl = 0;
+        $ttl_rp = 0;
+        foreach ($gudang as $no => $g) {
+            $response = Http::get("http://127.0.0.1:8000/api/apibk/sarang?nm_partai=$g->ket&no_lot=$g->no_lot");
+            $bk = $response['data']['bk_cabut'] ?? null;
+            $b = json_decode(json_encode($bk));
+
+            $cbt = $response['data']['cabut'] ?? null;
+            $c = json_decode(json_encode($cbt));
+
+
+            $sheet1->setCellValue('A' . $kolom, $no + 1);
+            $sheet1->setCellValue('B' . $kolom, $g->ket);
+            $sheet1->setCellValue('C' . $kolom, $g->no_lot);
+
+            $sheet1->setCellValue('D' . $kolom, $g->pcs ?? 0);
+            $sheet1->setCellValue('E' . $kolom, $g->gr ?? 0);
+
+            $sheet1->setCellValue('F' . $kolom, $b->pcs_awal ?? 0);
+            $sheet1->setCellValue('G' . $kolom, $b->gr_awal ?? 0);
+
+            $sheet1->setCellValue('H' . $kolom, $c->pcs_awal ?? 0);
+            $sheet1->setCellValue('I' . $kolom, $c->gr_awal ?? 0);
+            $sheet1->setCellValue('J' . $kolom, $c->pcs_akhir ?? 0);
+            $sheet1->setCellValue('K' . $kolom, $c->gr_akhir ?? 0);
+            $sheet1->setCellValue('L' . $kolom, number_format($c->susut ?? 0, 1));
+            $sheet1->setCellValue('M' . $kolom, $c->ttl_rp ?? 0);
+
+            $pcs_awal_bk = $b->pcs_awal ?? 0;
+            $gr_awal_bk = $b->gr_awal ?? 0;
+
+            $pcs_awal_cbt = $c->pcs_awal ?? 0;
+            $gr_awal_cbt = $c->gr_awal ?? 0;
+
+            $sheet1->setCellValue('N' . $kolom, $pcs_awal_bk - $pcs_awal_cbt);
+            $sheet1->setCellValue('O' . $kolom, $gr_awal_bk - $gr_awal_cbt);
+
+            $kolom++;
+
+            $pcs_wip += $g->pcs ?? 0;
+            $gr_wip += $g->gr ?? 0;
+            $pcs_bk += $b->pcs_awal ?? 0;
+            $gr_bk += $b->gr_awal ?? 0;
+
+
+            $pcs_awal_cbt_ttl += $c->pcs_awal ?? 0;
+            $gr_awal_cbt_ttl += $c->gr_awal ?? 0;
+            $pcs_akhir_cbt_ttl += $c->pcs_akhir ?? 0;
+            $gr_akhir_cbt_ttl += $c->gr_akhir ?? 0;
+            $ttl_rp += $c->ttl_rp ?? 0;
+        }
+        $sheet1->setCellValue('A' . $kolom, '');
+        $sheet1->setCellValue('B' . $kolom, '');
+        $sheet1->setCellValue('C' . $kolom, 'Total');
+
+        $sheet1->setCellValue('D' . $kolom, $pcs_wip);
+        $sheet1->setCellValue('E' . $kolom, $gr_wip);
+
+        $sheet1->setCellValue('F' . $kolom, $pcs_bk);
+        $sheet1->setCellValue('G' . $kolom, $gr_bk);
+
+        $sheet1->setCellValue('H' . $kolom, $pcs_awal_cbt_ttl);
+        $sheet1->setCellValue('I' . $kolom, $gr_awal_cbt_ttl);
+        $sheet1->setCellValue('J' . $kolom, $pcs_akhir_cbt_ttl);
+        $sheet1->setCellValue('K' . $kolom, $gr_akhir_cbt_ttl);
+        $sheet1->setCellValue('L' . $kolom, '');
+        $sheet1->setCellValue('M' . $kolom, $ttl_rp);
+        $sheet1->setCellValue('N' . $kolom, $pcs_bk - $pcs_awal_cbt_ttl);
+        $sheet1->setCellValue('O' . $kolom, $gr_bk - $gr_awal_cbt_ttl);
+
+        $sheet1->getStyle('A2:O' . $kolom - 1)->applyFromArray($style);
+        $sheet1->getStyle('A' . $kolom . ':O' . $kolom)->applyFromArray($style_bawah);
+        $namafile = "Summary Wip Lot.xlsx";
 
         $writer = new Xlsx($spreadsheet);
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
