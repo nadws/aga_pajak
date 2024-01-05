@@ -121,7 +121,7 @@ class GudangBkModel extends Model
     {
         $result = DB::select("SELECT count(a.no_lot) as no_lot1, a.id_buku_campur, a.no_lot, a.ket, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.rupiah * a.gr) as total_rp , a.selesai_1, a.selesai_2
         FROM buku_campur_approve as a 
-        WHERE a.gudang = 'wip'
+        WHERE a.gudang = 'wip' and a.hapus = 'T'
         GROUP by a.ket
         order by a.ket ASC
         ");
