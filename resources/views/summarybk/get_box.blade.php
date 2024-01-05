@@ -27,7 +27,7 @@
     <tbody>
         @foreach ($bk as $g)
             @php
-                $response = Http::get("http://127.0.0.1:8000/api/apibk/cabut_perbox?no_box=$g->no_box");
+                $response = Http::get("https://sarang.ptagafood.com/api/apibk/cabut_perbox?no_box=$g->no_box");
                 $cbt = $response['data']['cabut'] ?? null;
                 $c = json_decode(json_encode($cbt));
             @endphp
