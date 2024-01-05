@@ -7,12 +7,15 @@
         $cbt = $response['data']['cabut'] ?? null;
         $c = json_decode(json_encode($cbt));
     @endphp
+
     <tr>
+        <td>
+        </td>
         <td></td>
-        <td></td>
-        <td class="text-center">{{ $g->no_lot }}
+        <td class="text-center">
             <a href="#" data-bs-toggle="modal" no_lot="{{ $g->no_lot }}" nm_partai="{{ $g->ket }}"
-                data-bs-target="#load_bk_cabut" class="float-end show_box"><i class="fas fa-search text-primary "></i></a>
+                data-bs-target="#load_bk_cabut" class="float-end show_box">{{ $g->no_lot }} <i
+                    class="fas fa-search text-primary "></i></a>
         </td>
         <td class="text-end">{{ number_format($g->pcs, 0) }}</td>
         <td class="text-end">{{ number_format($g->gr, 0) }}</td>

@@ -54,10 +54,17 @@ class SummaryController extends Controller
     }
     function get_no_box(Request $r)
     {
-        $response = Http::get("https://sarang.ptagafood.com/api/apibk/show_box?nm_partai=$r->nm_partai&no_lot=$r->no_lot");
-        $bk = $response['data']['bk_cabut'] ?? null;
-        $b = json_decode(json_encode($bk));
+        $response = Http::get(
+            "https://sarang.ptagafood.com/api/apibk/show_box",
+            [
+                'nm_partai' => $r->nm_partai,
+                'no_lot' => $r->no_lot,
+                'limit' => $r->limit,
+            ]
+        );
 
+        $bk = $response['data']['bk_cabut'] ?? [];
+        $b = json_decode(json_encode($bk));
         $data =  [
             'bk' => $b,
         ];
@@ -126,11 +133,14 @@ class SummaryController extends Controller
         $sheet1->setCellValue('H1', 'Gr Awal cbt');
         $sheet1->setCellValue('I1', 'Pcs Akhir cbt');
         $sheet1->setCellValue('J1', 'Gr Akhir cbt');
-        $sheet1->setCellValue('K1', 'Susut');
-        $sheet1->setCellValue('L1', 'Rp Cabut');
 
+        $sheet1->setCellValue('K1', 'Pcs Sisa sinta');
+        $sheet1->setCellValue('L1', 'Gr Sisa sinta');
         $sheet1->setCellValue('M1', 'Pcs Sisa cbt');
         $sheet1->setCellValue('N1', 'Gr Sisa cbt');
+
+        $sheet1->setCellValue('O1', 'Susut');
+        $sheet1->setCellValue('P1', 'Rp Cabut');
 
         $kolom = 2;
         $gudang = GudangBkModel::getSummaryWip();
@@ -145,6 +155,8 @@ class SummaryController extends Controller
         $pcs_akhir_cbt_ttl = 0;
         $gr_akhir_cbt_ttl = 0;
         $ttl_rp = 0;
+        $ttlPcsSisaSinta = 0;
+        $ttGrSisaSinta = 0;
         foreach ($gudang as $no => $g) {
             $response = Http::get("https://sarang.ptagafood.com/api/apibk/bk_sum?nm_partai=$g->ket");
             $bk = $response['data']['bk_cabut'] ?? null;
@@ -168,8 +180,10 @@ class SummaryController extends Controller
             $sheet1->setCellValue('H' . $kolom, $c->gr_awal ?? 0);
             $sheet1->setCellValue('I' . $kolom, $c->pcs_akhir ?? 0);
             $sheet1->setCellValue('J' . $kolom, $c->gr_akhir ?? 0);
-            $sheet1->setCellValue('K' . $kolom, number_format($c->susut ?? 0, 1));
-            $sheet1->setCellValue('L' . $kolom, $c->ttl_rp ?? 0);
+
+
+            $pcs_awal_wip = $g->pcs ?? 0;
+            $gr_awal_wip = $g->gr ?? 0;
 
             $pcs_awal_bk = $b->pcs_awal ?? 0;
             $gr_awal_bk = $b->gr_awal ?? 0;
@@ -177,8 +191,13 @@ class SummaryController extends Controller
             $pcs_awal_cbt = $c->pcs_awal ?? 0;
             $gr_awal_cbt = $c->gr_awal ?? 0;
 
+            $sheet1->setCellValue('K' . $kolom, $pcs_awal_wip - $pcs_awal_bk);
+            $sheet1->setCellValue('L' . $kolom, $gr_awal_wip - $gr_awal_bk);
             $sheet1->setCellValue('M' . $kolom, $pcs_awal_bk - $pcs_awal_cbt);
             $sheet1->setCellValue('N' . $kolom, $gr_awal_bk - $gr_awal_cbt);
+
+            $sheet1->setCellValue('O' . $kolom, number_format($c->susut ?? 0, 1));
+            $sheet1->setCellValue('P' . $kolom, $c->ttl_rp ?? 0);
 
             $kolom++;
 
@@ -186,6 +205,9 @@ class SummaryController extends Controller
             $gr_wip += $g->gr ?? 0;
             $pcs_bk += $b->pcs_awal ?? 0;
             $gr_bk += $b->gr_awal ?? 0;
+
+            $ttlPcsSisaSinta += $pcs_awal_wip - $pcs_awal_bk;
+            $ttGrSisaSinta += $gr_awal_wip - $gr_awal_bk;
 
 
             $pcs_awal_cbt_ttl += $c->pcs_awal ?? 0;
@@ -207,13 +229,18 @@ class SummaryController extends Controller
         $sheet1->setCellValue('H' . $kolom, $gr_awal_cbt_ttl);
         $sheet1->setCellValue('I' . $kolom, $pcs_akhir_cbt_ttl);
         $sheet1->setCellValue('J' . $kolom, $gr_akhir_cbt_ttl);
-        $sheet1->setCellValue('K' . $kolom, '');
-        $sheet1->setCellValue('L' . $kolom, $ttl_rp);
+
+        $sheet1->setCellValue('K' . $kolom, $ttlPcsSisaSinta);
+        $sheet1->setCellValue('L' . $kolom, $ttGrSisaSinta);
+
         $sheet1->setCellValue('M' . $kolom, $pcs_bk - $pcs_awal_cbt_ttl);
         $sheet1->setCellValue('N' . $kolom, $gr_bk - $gr_awal_cbt_ttl);
 
-        $sheet1->getStyle('A2:N' . $kolom - 1)->applyFromArray($style);
-        $sheet1->getStyle('A' . $kolom . ':N' . $kolom)->applyFromArray($style_bawah);
+        $sheet1->setCellValue('O' . $kolom, '');
+        $sheet1->setCellValue('P' . $kolom, $ttl_rp);
+
+        $sheet1->getStyle('A2:P' . $kolom - 1)->applyFromArray($style);
+        $sheet1->getStyle('A' . $kolom . ':P' . $kolom)->applyFromArray($style_bawah);
         $namafile = "Summary Wip.xlsx";
 
         $writer = new Xlsx($spreadsheet);

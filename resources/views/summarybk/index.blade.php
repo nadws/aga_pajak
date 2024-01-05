@@ -136,9 +136,11 @@
             </x-theme.modal>
         </form>
         <x-theme.modal title="Data Bk Cabut" idModal="load_bk_cabut" btnSave="T" size="modal-lg-max">
-            <div class="row">
-                <div class="load_box"></div>
-            </div>
+            <button class="btn btn-primary btn-loading" type="button" disabled="">
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Loading...
+            </button>
+            <div class="load_box"></div>
         </x-theme.modal>
     </x-slot>
 
@@ -183,26 +185,50 @@
 
 
                 });
+                var currentNoLot = '';
+                var currentNmPartai = '';
 
                 $(document).on('click', '.show_box', function(e) {
                     e.preventDefault();
+                    $('.btn-loading').removeClass('d-none');
+
                     var no_lot = $(this).attr('no_lot');
                     var nm_partai = $(this).attr('nm_partai');
+                    currentNoLot = no_lot;
+                    currentNmPartai = nm_partai;
+                    $('.no_lot_input').val(no_lot);
+                    $('.nm_partai_input').val(nm_partai);
                     console.log(no_lot);
                     console.log(nm_partai);
                     $('.load_box').html('');
+                    loadBoxData(no_lot, nm_partai, 5); // Default limit 5
+                });
+
+                $(document).on('change', '.load-data', function() {
+                    $('.btn-loading').removeClass('d-none');
+                    var val = $(this).val();
+                    $('.load_box').html('');
+                    loadBoxData(currentNoLot, currentNmPartai,val); 
+                    $(this).val(val);
+                });
+
+                function loadBoxData(no_lot, nm_partai, limit) {
                     $.ajax({
                         type: "get",
                         url: "{{ route('summarybk.get_no_box') }}",
                         data: {
                             no_lot: no_lot,
-                            nm_partai: nm_partai
+                            nm_partai: nm_partai,
+                            limit: limit // Menambahkan parameter limit ke dalam data yang dikirimkan
                         },
                         success: function(response) {
+                            $('.btn-loading').addClass('d-none');
                             $('.load_box').html(response);
+                            pencarian('pencarianBox', 'tblAldi2')
                         }
                     });
-                });
+                }
+
 
 
 
