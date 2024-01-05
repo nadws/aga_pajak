@@ -110,7 +110,7 @@ class GudangBkModel extends Model
         left join buku_campur_approve as d on d.id_buku_campur = a.id_buku_campur
         left join invoice_bk as e on e.no_nota = a.no_nota
         left join tb_suplier as f on f.id_suplier = e.id_suplier
-        where a.no_nota = ?
+        where a.no_nota = ? 
         order by a.no_nota ASC, b.urutan ASC;
         ", [$no_nota]);
 
@@ -121,7 +121,8 @@ class GudangBkModel extends Model
     {
         $result = DB::select("SELECT count(a.no_lot) as no_lot1, a.id_buku_campur, a.no_lot, a.ket, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.rupiah * a.gr) as total_rp , a.selesai_1, a.selesai_2
         FROM buku_campur_approve as a 
-        WHERE a.gudang = 'wip'
+        left join buku_campur as b on b.id_buku_campur = a.id_buku_campur
+        WHERE a.gudang = 'wip' and b.gabung = 'T'
         GROUP by a.ket
         order by a.ket ASC
         ");
@@ -132,7 +133,8 @@ class GudangBkModel extends Model
     {
         $result = DB::select("SELECT a.id_buku_campur, a.no_lot, a.ket, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.rupiah * a.gr) as total_rp , a.selesai_1, a.selesai_2
         FROM buku_campur_approve as a 
-        WHERE a.gudang = 'wip' and a.ket = ?
+        left join buku_campur as b on b.id_buku_campur = a.id_buku_campur
+        WHERE a.gudang = 'wip' and a.ket = ? and b.gabung = 'T'
         GROUP by a.ket, a.no_lot;
         ", [$ket]);
 
@@ -141,8 +143,9 @@ class GudangBkModel extends Model
     public static function getSummaryWipLotexport()
     {
         $result = DB::select("SELECT a.id_buku_campur, a.no_lot, a.ket, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.rupiah * a.gr) as total_rp , a.selesai_1, a.selesai_2
-        FROM buku_campur_approve as a 
-        WHERE a.gudang = 'wip'
+        FROM buku_campur_approve as a
+        left join buku_campur as b on b.id_buku_campur = a.id_buku_campur
+        WHERE a.gudang = 'wip' and b.gabung = 'T'
         GROUP by a.ket, a.no_lot
         order by a.ket ASC
         ");
