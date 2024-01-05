@@ -1,6 +1,6 @@
-@foreach ($lot as $g)
+@foreach ($lot as $no2 => $g)
     @php
-        $response = Http::get("https://sarang.ptagafood.com/api/apibk/sarang?nm_partai=$g->ket&no_lot=$g->no_lot");
+        $response = Http::get("http://127.0.0.1:8000/api/apibk/sarang?nm_partai=$g->ket&no_lot=$g->no_lot");
         $bk = $response['data']['bk_cabut'] ?? null;
         $b = json_decode(json_encode($bk));
 
@@ -10,7 +10,10 @@
     <tr>
         <td></td>
         <td></td>
-        <td class="text-center">{{ $g->no_lot }}</td>
+        <td class="text-center">{{ $g->no_lot }}
+            <a href="#" data-bs-toggle="modal" no_lot="{{ $g->no_lot }}" nm_partai="{{ $g->ket }}"
+                data-bs-target="#load_bk_cabut" class="float-end show_box"><i class="fas fa-search text-primary "></i></a>
+        </td>
         <td class="text-end">{{ number_format($g->pcs, 0) }}</td>
         <td class="text-end">{{ number_format($g->gr, 0) }}</td>
         <td class="text-end">{{ number_format($b->pcs_awal ?? 0, 0) }}</td>

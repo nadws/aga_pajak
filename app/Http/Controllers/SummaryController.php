@@ -52,6 +52,17 @@ class SummaryController extends Controller
         ];
         return view('summarybk.get_lot', $data);
     }
+    function get_no_box(Request $r)
+    {
+        $response = Http::get("http://127.0.0.1:8000/api/apibk/show_box?nm_partai=$r->nm_partai&no_lot=$r->no_lot");
+        $bk = $response['data']['bk_cabut'] ?? null;
+        $b = json_decode(json_encode($bk));
+
+        $data =  [
+            'bk' => $b,
+        ];
+        return view('summarybk.get_box', $data);
+    }
 
     function export_summary(Request $r)
     {
@@ -88,110 +99,122 @@ class SummaryController extends Controller
         $sheet1->setTitle('Summary Wip');
 
 
-        $sheet1->getStyle("A1:V2")->applyFromArray($style_atas);
+        $sheet1->getStyle("A1:N2")->applyFromArray($style_atas);
 
-        $sheet1->setCellValue('A1', 'ID');
-        $sheet1->setCellValue('B1', 'No Lot');
-        $sheet1->setCellValue('C1', 'Ket / nama partai');
-        $sheet1->setCellValue('D1', 'Grade');
-        $sheet1->setCellValue('E1', 'Ket');
-        $sheet1->setCellValue('F1', 'Warna');
-        $sheet1->setCellValue('G1', 'Gudang Bk');
-        $sheet1->setCellValue('I1', 'Cabut');
-        $sheet1->setCellValue('N1', 'Gdg cbt selesai');
-        $sheet1->setCellValue('P1', 'Cetak');
-        $sheet1->setCellValue('U1', 'Gdg ctk selesai');
+        $sheet1->setCellValue('A1', '#');
+        $sheet1->setCellValue('B1', 'Ket / nama partai');
+        $sheet1->setCellValue('C1', 'Gudang Wip');
+        $sheet1->setCellValue('E1', 'BK');
+        $sheet1->setCellValue('G1', 'Cabut');
+        $sheet1->setCellValue('M1', 'Sisa');
 
 
-        $sheet1->setCellValue('G2', 'Pcs');
-        $sheet1->setCellValue('H2', 'Gr');
 
-        $sheet1->setCellValue('I2', 'Pcs');
-        $sheet1->setCellValue('J2', 'Gr');
-        $sheet1->setCellValue('K2', 'Rp C');
-        $sheet1->setCellValue('L2', 'Rp gram');
-        $sheet1->setCellValue('M2', 'Susut');
+        $sheet1->setCellValue('C2', 'Pcs');
+        $sheet1->setCellValue('D2', 'Gr');
 
-        $sheet1->setCellValue('N2', 'Pcs');
-        $sheet1->setCellValue('O2', 'Gr');
+        $sheet1->setCellValue('E2', 'Pcs');
+        $sheet1->setCellValue('F2', 'Gr');
 
-        $sheet1->setCellValue('P2', 'Pcs');
-        $sheet1->setCellValue('Q2', 'Gr');
-        $sheet1->setCellValue('R2', 'Rp C');
-        $sheet1->setCellValue('S2', 'Rp gram');
-        $sheet1->setCellValue('T2', 'Susut');
+        $sheet1->setCellValue('G2', 'Pcs Awal');
+        $sheet1->setCellValue('H2', 'Gr Awal');
+        $sheet1->setCellValue('I2', 'Pcs Akhir');
+        $sheet1->setCellValue('J2', 'Gr Akhir');
+        $sheet1->setCellValue('K2', 'Susut');
+        $sheet1->setCellValue('L2', 'Rp');
 
-        $sheet1->setCellValue('U2', 'Pcs');
-        $sheet1->setCellValue('V2', 'Gr');
+        $sheet1->setCellValue('M2', 'Pcs');
+        $sheet1->setCellValue('N2', 'Gr');
+
 
         $sheet1->mergeCells('A1:A2');
         $sheet1->mergeCells('B1:B2');
-        $sheet1->mergeCells('C1:C2');
-        $sheet1->mergeCells('D1:D2');
-        $sheet1->mergeCells('E1:E2');
-        $sheet1->mergeCells('F1:F2');
-        $sheet1->mergeCells('G1:H1');
-        $sheet1->mergeCells('I1:M1');
-        $sheet1->mergeCells('N1:O1');
-        $sheet1->mergeCells('P1:T1');
-        $sheet1->mergeCells('U1:V1');
+        $sheet1->mergeCells('C1:D1');
+        $sheet1->mergeCells('E1:F1');
+        $sheet1->mergeCells('G1:L1');
+        $sheet1->mergeCells('M1:N1');
 
-        // $kolom = 3;
-        // $gudang = GudangBkModel::getSummaryWip();
-        // foreach ($gudang as $g) {
-        //     $response = Http::get("sarang.ptagafood.com/api/apibk/export_sarang?no_lot=$g->no_lot&nm_partai=$g->ket");
-        //     $cbt = $response['data']['bk_cabut'] ?? null;
-        //     $c = json_decode(json_encode($cbt));
-        //     foreach ($c as $s) {
-        //         $response = Http::get("sarang.ptagafood.com/api/apibk/cabut_export?no_box=$s->no_box");
-        //         $cbt_2 = $response['data']['cabut'] ?? null;
-        //         $ct = json_decode(json_encode($cbt_2));
-        //         $ctk_2 = $response['data']['cetak'] ?? null;
-        //         $ck = json_decode(json_encode($ctk_2));
+        $kolom = 3;
+        $gudang = GudangBkModel::getSummaryWip();
 
-        //         $sheet1->setCellValue('A' . $kolom, $g->id_buku_campur);
-        //         $sheet1->setCellValue('B' . $kolom, $s->no_lot);
-        //         $sheet1->setCellValue('C' . $kolom, $s->nm_partai);
-        //         $sheet1->setCellValue('D' . $kolom, $s->tipe);
-        //         $sheet1->setCellValue('E' . $kolom, $s->ket);
-        //         $sheet1->setCellValue('F' . $kolom, $s->warna);
+        $pcs_wip = 0;
+        $gr_wip = 0;
+        $pcs_bk = 0;
+        $gr_bk = 0;
 
-        //         $pcs_awal_cbt = $ct->pcs_awal ?? 0;
-        //         $gr_awal_cbt = $ct->gr_awal ?? 0;
-        //         $pcs_akhir_cbt = $ct->pcs_akhir ?? 0;
-        //         $gr_akhir_cbt = $ct->gr_akhir ?? 0;
+        $pcs_awal_cbt_ttl = 0;
+        $gr_awal_cbt_ttl = 0;
+        $pcs_akhir_cbt_ttl = 0;
+        $gr_akhir_cbt_ttl = 0;
+        $ttl_rp = 0;
+        foreach ($gudang as $no => $g) {
+            $response = Http::get("http://127.0.0.1:8000/api/apibk/bk_sum?nm_partai=$g->ket");
+            $bk = $response['data']['bk_cabut'] ?? null;
+            $b = json_decode(json_encode($bk));
 
-        //         $sheet1->setCellValue('G' . $kolom, $s->pcs_awal - $pcs_awal_cbt ?? 0);
-        //         $sheet1->setCellValue('H' . $kolom, $s->gr_awal - $gr_awal_cbt ?? 0);
-
-        //         $sheet1->setCellValue('I' . $kolom, $pcs_awal_cbt - $pcs_akhir_cbt);
-        //         $sheet1->setCellValue('J' . $kolom, $gr_awal_cbt - $gr_akhir_cbt);
-        //         $sheet1->setCellValue('K' . $kolom, $ct->rp_c ?? 0);
-        //         $sheet1->setCellValue('L' . $kolom, round($ct->rp_gram ?? 0, 0));
-        //         $sheet1->setCellValue('M' . $kolom, round($ct->susut ?? 0, 0) . '%');
-
-        //         $ckpcs_awal = $ck->pcs_awal ?? 0;
-        //         $ckgr_awal = $ck->gr_awal ?? 0;
-        //         $ckpcs_akhir = $ck->pcs_akhir ?? 0;
-        //         $ckgr_akhir = $ck->gr_akhir ?? 0;
-        //         $sheet1->setCellValue('N' . $kolom, $pcs_akhir_cbt - $ckpcs_awal);
-        //         $sheet1->setCellValue('O' . $kolom, $gr_akhir_cbt -  $ckgr_awal);
-
-        //         $sheet1->setCellValue('P' . $kolom, $ckpcs_awal - $ckpcs_akhir);
-        //         $sheet1->setCellValue('Q' . $kolom, $ckgr_awal - $ckgr_akhir);
-        //         $sheet1->setCellValue('R' . $kolom, $ck->rp_c ?? 0);
-        //         $sheet1->setCellValue('S' . $kolom, $ck->rp_gram ?? 0);
-        //         $sheet1->setCellValue('T' . $kolom, $ck->susut ?? 0);
-
-        //         $sheet1->setCellValue('U' . $kolom, $ck->pcs_akhir ?? 0);
-        //         $sheet1->setCellValue('V' . $kolom, $ck->gr_akhir ?? 0);
+            $response = Http::get("http://127.0.0.1:8000/api/apibk/sarang_sum?nm_partai=$g->ket");
+            $cbt = $response['data']['cabut'] ?? null;
+            $c = json_decode(json_encode($cbt));
 
 
-        //         $kolom++;
-        //     }
-        // }
+            $sheet1->setCellValue('A' . $kolom, $no + 1);
+            $sheet1->setCellValue('B' . $kolom, $g->ket);
 
-        // $sheet1->getStyle('A2:V' . $kolom - 1)->applyFromArray($style);
+            $sheet1->setCellValue('C' . $kolom, $g->pcs ?? 0);
+            $sheet1->setCellValue('D' . $kolom, $g->gr ?? 0);
+
+            $sheet1->setCellValue('E' . $kolom, $b->pcs_awal ?? 0);
+            $sheet1->setCellValue('F' . $kolom, $b->gr_awal ?? 0);
+
+            $sheet1->setCellValue('G' . $kolom, $c->pcs_awal ?? 0);
+            $sheet1->setCellValue('H' . $kolom, $c->gr_awal ?? 0);
+            $sheet1->setCellValue('I' . $kolom, $c->pcs_akhir ?? 0);
+            $sheet1->setCellValue('J' . $kolom, $c->gr_akhir ?? 0);
+            $sheet1->setCellValue('K' . $kolom, number_format($c->susut ?? 0, 1));
+            $sheet1->setCellValue('L' . $kolom, $c->ttl_rp ?? 0);
+
+            $pcs_awal_bk = $b->pcs_awal ?? 0;
+            $gr_awal_bk = $b->gr_awal ?? 0;
+
+            $pcs_awal_cbt = $c->pcs_awal ?? 0;
+            $gr_awal_cbt = $c->gr_awal ?? 0;
+
+            $sheet1->setCellValue('M' . $kolom, $pcs_awal_bk - $pcs_awal_cbt);
+            $sheet1->setCellValue('N' . $kolom, $gr_awal_bk - $gr_awal_cbt);
+
+            $kolom++;
+
+            $pcs_wip += $g->pcs ?? 0;
+            $gr_wip += $g->gr ?? 0;
+            $pcs_bk += $b->pcs_awal ?? 0;
+            $gr_bk += $b->gr_awal ?? 0;
+
+
+            $pcs_awal_cbt_ttl += $c->pcs_awal ?? 0;
+            $gr_awal_cbt_ttl += $c->gr_awal ?? 0;
+            $pcs_akhir_cbt_ttl += $c->pcs_akhir ?? 0;
+            $gr_akhir_cbt_ttl += $c->gr_akhir ?? 0;
+            $ttl_rp += $c->ttl_rp ?? 0;
+        }
+        $sheet1->setCellValue('A' . $kolom, '');
+        $sheet1->setCellValue('B' . $kolom, 'Total');
+
+        $sheet1->setCellValue('C' . $kolom, $pcs_wip);
+        $sheet1->setCellValue('D' . $kolom, $gr_wip);
+
+        $sheet1->setCellValue('E' . $kolom, $pcs_bk);
+        $sheet1->setCellValue('F' . $kolom, $gr_bk);
+
+        $sheet1->setCellValue('G' . $kolom, $pcs_awal_cbt_ttl);
+        $sheet1->setCellValue('H' . $kolom, $gr_awal_cbt_ttl);
+        $sheet1->setCellValue('I' . $kolom, $pcs_akhir_cbt_ttl);
+        $sheet1->setCellValue('J' . $kolom, $gr_akhir_cbt_ttl);
+        $sheet1->setCellValue('K' . $kolom, '');
+        $sheet1->setCellValue('L' . $kolom, $ttl_rp);
+        $sheet1->setCellValue('M' . $kolom, $pcs_bk - $pcs_awal_cbt_ttl);
+        $sheet1->setCellValue('N' . $kolom, $gr_bk - $gr_awal_cbt_ttl);
+
+        $sheet1->getStyle('A2:N' . $kolom)->applyFromArray($style);
         $namafile = "Summary Wip.xlsx";
 
         $writer = new Xlsx($spreadsheet);

@@ -388,5 +388,6 @@ Route::middleware('auth')->group(function () {
             Route::get('/selesai2', 'selesai2')->name('selesai2');
 
             Route::get('/get_no_lot', 'get_no_lot')->name('get_no_lot');
+            Route::get('/get_no_box', 'get_no_box')->name('get_no_box');
         });
 });

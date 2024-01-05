@@ -63,11 +63,11 @@
                             <tbody>
                                 @foreach ($gudang as $no => $g)
                                     @php
-                                        $response = Http::get("https://sarang.ptagafood.com/api/apibk/bk_sum?nm_partai=$g->ket");
+                                        $response = Http::get("http://127.0.0.1:8000/api/apibk/bk_sum?nm_partai=$g->ket");
                                         $bk = $response['data']['bk_cabut'] ?? null;
                                         $b = json_decode(json_encode($bk));
 
-                                        $response = Http::get("https://sarang.ptagafood.com/api/apibk/sarang_sum?nm_partai=$g->ket");
+                                        $response = Http::get("http://127.0.0.1:8000/api/apibk/sarang_sum?nm_partai=$g->ket");
                                         $cbt = $response['data']['cabut'] ?? null;
                                         $c = json_decode(json_encode($cbt));
 
@@ -84,9 +84,9 @@
                                                 <i class="fas fa-sort-up fa-lg text-primary "></i>
                                             </a>
                                         </td>
-                                        <td class="text-center fw-bold"></td>
-                                        <td class="text-end fw-bold">{{ number_format($g->pcs, 0) }}</td>
-                                        <td class="text-end fw-bold">{{ number_format($g->gr, 0) }}</td>
+                                        <td class="text-center fw-bold">Ttl Lot: {{ $g->no_lot1 }}</td>
+                                        <td class="text-end fw-bold">{{ number_format($g->pcs ?? 0, 0) }}</td>
+                                        <td class="text-end fw-bold">{{ number_format($g->gr ?? 0, 0) }}</td>
                                         <td class="text-end fw-bold">{{ number_format($b->pcs_awal ?? 0, 0) }}</td>
                                         <td class="text-end fw-bold">{{ number_format($b->gr_awal ?? 0, 0) }}</td>
 
@@ -103,7 +103,6 @@
                                             $pcs_awal_cbt = $c->pcs_awal ?? 0;
                                             $gr_awal_cbt = $c->gr_awal ?? 0;
                                         @endphp
-
                                         <td class="text-end fw-bold">
                                             {{ number_format($pcs_awal_bk - $pcs_awal_cbt, 0) }}</td>
                                         <td class="text-end fw-bold">{{ number_format($gr_awal_bk - $gr_awal_cbt, 0) }}
@@ -134,7 +133,14 @@
 
             </x-theme.modal>
         </form>
+        <x-theme.modal title="Data Bk Cabut" idModal="load_bk_cabut" btnSave="T" size="modal-lg-max">
+            <div class="row">
+                <div class="load_box"></div>
+            </div>
+        </x-theme.modal>
     </x-slot>
+
+
 
     @section('scripts')
         <script>
@@ -157,12 +163,10 @@
                             nm_partai: nm_partai
                         },
                         success: function(response) {
-
                             $('.load_lot' + no).html(response);
                             $(".show" + no).hide();
                             $(".hide" + no).show();
                             $(".hide" + no).removeAttr("hidden");
-
                         }
                     });
 
@@ -177,6 +181,29 @@
 
 
                 });
+
+                $(document).on('click', '.show_box', function(e) {
+                    e.preventDefault();
+                    var no_lot = $(this).attr('no_lot');
+                    var nm_partai = $(this).attr('nm_partai');
+                    console.log(no_lot);
+                    console.log(nm_partai);
+                    $.ajax({
+                        type: "get",
+                        url: "{{ route('summarybk.get_no_box') }}",
+                        data: {
+                            no_lot: no_lot,
+                            nm_partai: nm_partai
+                        },
+                        success: function(response) {
+                            $('.load_box').html(response);
+                        }
+                    });
+                });
+
+
+
+
             });
         </script>
     @endsection
