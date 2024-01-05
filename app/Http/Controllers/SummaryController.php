@@ -54,7 +54,7 @@ class SummaryController extends Controller
     }
     function get_no_box(Request $r)
     {
-        $response = Http::get("http://127.0.0.1:8000/api/apibk/show_box?nm_partai=$r->nm_partai&no_lot=$r->no_lot");
+        $response = Http::get("https://sarang.ptagafood.com/api/apibk/show_box?nm_partai=$r->nm_partai&no_lot=$r->no_lot");
         $bk = $response['data']['bk_cabut'] ?? null;
         $b = json_decode(json_encode($bk));
 
@@ -146,11 +146,11 @@ class SummaryController extends Controller
         $gr_akhir_cbt_ttl = 0;
         $ttl_rp = 0;
         foreach ($gudang as $no => $g) {
-            $response = Http::get("http://127.0.0.1:8000/api/apibk/bk_sum?nm_partai=$g->ket");
+            $response = Http::get("https://sarang.ptagafood.com/api/apibk/bk_sum?nm_partai=$g->ket");
             $bk = $response['data']['bk_cabut'] ?? null;
             $b = json_decode(json_encode($bk));
 
-            $response = Http::get("http://127.0.0.1:8000/api/apibk/sarang_sum?nm_partai=$g->ket");
+            $response = Http::get("https://sarang.ptagafood.com/api/apibk/sarang_sum?nm_partai=$g->ket");
             $cbt = $response['data']['cabut'] ?? null;
             $c = json_decode(json_encode($cbt));
 
@@ -309,7 +309,7 @@ class SummaryController extends Controller
         $gr_akhir_cbt_ttl = 0;
         $ttl_rp = 0;
         foreach ($gudang as $no => $g) {
-            $response = Http::get("http://127.0.0.1:8000/api/apibk/sarang?nm_partai=$g->ket&no_lot=$g->no_lot");
+            $response = Http::get("https://sarang.ptagafood.com/api/apibk/sarang?nm_partai=$g->ket&no_lot=$g->no_lot");
             $bk = $response['data']['bk_cabut'] ?? null;
             $b = json_decode(json_encode($bk));
 

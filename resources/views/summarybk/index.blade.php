@@ -65,11 +65,11 @@
                             <tbody>
                                 @foreach ($gudang as $no => $g)
                                     @php
-                                        $response = Http::get("http://127.0.0.1:8000/api/apibk/bk_sum?nm_partai=$g->ket");
+                                        $response = Http::get("https://sarang.ptagafood.com/api/apibk/bk_sum?nm_partai=$g->ket");
                                         $bk = $response['data']['bk_cabut'] ?? null;
                                         $b = json_decode(json_encode($bk));
 
-                                        $response = Http::get("http://127.0.0.1:8000/api/apibk/sarang_sum?nm_partai=$g->ket");
+                                        $response = Http::get("https://sarang.ptagafood.com/api/apibk/sarang_sum?nm_partai=$g->ket");
                                         $cbt = $response['data']['cabut'] ?? null;
                                         $c = json_decode(json_encode($cbt));
 
