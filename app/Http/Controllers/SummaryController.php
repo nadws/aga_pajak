@@ -124,20 +124,21 @@ class SummaryController extends Controller
 
         $sheet1->setCellValue('A1', '#');
         $sheet1->setCellValue('B1', 'Ket / nama partai');
-        $sheet1->setCellValue('C1', 'Pcs Wip');
-        $sheet1->setCellValue('D1', 'Gr Wip');
-        $sheet1->setCellValue('E1', 'Pcs BK');
-        $sheet1->setCellValue('F1', 'Gr BK');
+        $sheet1->setCellValue('C1', 'Wip Pcs');
+        $sheet1->setCellValue('D1', 'Wip Gr');
+        $sheet1->setCellValue('E1', 'Bk Pcs Sinta');
+        $sheet1->setCellValue('F1', 'Bk Gr Sinta');
 
-        $sheet1->setCellValue('G1', 'Pcs Awal cbt');
-        $sheet1->setCellValue('H1', 'Gr Awal cbt');
-        $sheet1->setCellValue('I1', 'Pcs Akhir cbt');
-        $sheet1->setCellValue('J1', 'Gr Akhir cbt');
+        $sheet1->setCellValue('G1', 'Cbt Pcs Awal');
+        $sheet1->setCellValue('H1', 'Cbt Gr Awal');
+        $sheet1->setCellValue('I1', 'Cbt Pcs Akhir');
+        $sheet1->setCellValue('J1', 'Cbt Gr Akhir');
 
-        $sheet1->setCellValue('K1', 'Pcs Sisa sinta');
-        $sheet1->setCellValue('L1', 'Gr Sisa sinta');
-        $sheet1->setCellValue('M1', 'Pcs Sisa cbt');
-        $sheet1->setCellValue('N1', 'Gr Sisa cbt');
+        $sheet1->setCellValue('K1', 'Wip Pcs Sisa');
+        $sheet1->setCellValue('L1', 'Wip Gr Sisa');
+
+        $sheet1->setCellValue('M1', 'Bk Pcs Sisa');
+        $sheet1->setCellValue('N1', 'Bk Gr Sisa');
 
         $sheet1->setCellValue('O1', 'Susut');
         $sheet1->setCellValue('P1', 'Rp Cabut');
