@@ -566,7 +566,7 @@ class GudangBkController extends Controller
                             'id_buku_campur' => $idBukuCampur,
                             'buku' => $rowData[1],
                             'suplier_awal' => $rowData[2],
-                            'tgl' => $tanggal_excel,
+                            'tgl' => $tanggal_mysql,
                             'nm_grade' => $rowData[4],
                             'pcs' => $rowData[5],
                             'gr' => $rowData[6],
