@@ -53,7 +53,7 @@
             <tbody>
                 @foreach ($bk as $no => $g)
                     @php
-                        $response = Http::get("https://sarang.ptagafood.com/api/apibk/cabut_perbox", [
+                        $response = Http::get("$linkApi/cabut_perbox", [
                             'no_box' => $g->no_box
                         ]);
                         $cbt = $response['data']['cabut'] ?? [];

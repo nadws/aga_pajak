@@ -1,6 +1,6 @@
 @foreach ($lot as $no2 => $g)
     @php
-        $response = Http::get("https://sarang.ptagafood.com/api/apibk/sarang?nm_partai=$g->ket&no_lot=$g->no_lot");
+        $response = Http::get("$linkApi/sarang?nm_partai=$g->ket&no_lot=$g->no_lot");
         $bk = $response['data']['bk_cabut'] ?? null;
         $b = json_decode(json_encode($bk));
 

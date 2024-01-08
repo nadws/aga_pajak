@@ -12,6 +12,11 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class SummaryController extends Controller
 {
+    protected $linkApi;
+    public function __construct()
+    {
+        $this->linkApi = "https://sarang.ptagafood.com/api/apibk";
+    }
     function index(Request $r)
     {
         if (empty($r->nm_gudang)) {
@@ -36,6 +41,7 @@ class SummaryController extends Controller
             'listbulan' => $listBulan,
             'nm_gudang' => $nmgudang,
             'total_bk' => $ttl_bk,
+            'linkApi' => $this->linkApi,
             'total_invoice' => DB::selectOne("SELECT a.no_nota, b.no_nota, sum(a.total_harga) as ttl_hrga
             FROM invoice_bk as a left 
             join grading as b on b.no_nota = a.no_nota 
@@ -48,25 +54,25 @@ class SummaryController extends Controller
 
         $gudang = GudangBkModel::getSummaryWipLot($r->nm_partai);
         $data =  [
-            'lot' => $gudang
+            'lot' => $gudang,
+            'linkApi' => $this->linkApi
         ];
         return view('summarybk.get_lot', $data);
     }
     function get_no_box(Request $r)
     {
         $response = Http::get(
-            "https://sarang.ptagafood.com/api/apibk/show_box",
+            "$this->linkApi/show_box",
             [
                 'nm_partai' => $r->nm_partai,
                 'no_lot' => $r->no_lot,
                 'limit' => $r->limit,
             ]
         );
-
-        $bk = $response['data']['bk_cabut'] ?? [];
-        $b = json_decode(json_encode($bk));
+        $b = $response->object();
         $data =  [
             'bk' => $b,
+            'linkApi' => $this->linkApi
         ];
         return view('summarybk.get_box', $data);
     }
@@ -120,28 +126,37 @@ class SummaryController extends Controller
         $sheet1->setTitle('Summary Wip');
 
 
-        $sheet1->getStyle("A1:N1")->applyFromArray($style_atas);
+        $sheet1->getStyle("A1:T1")->applyFromArray($style_atas);
+        
+        $koloms = [
+            'A' => '#',
+            'B' => 'Ket / nama partai',
+            'C' => 'Grade',
+            'D' => 'Wip Pcs',
+            'E' => "Wip Gr",
+            'F' => "Bk Pcs Sinta",
+            'G' => "Bk Gr Sinta",
 
-        $sheet1->setCellValue('A1', '#');
-        $sheet1->setCellValue('B1', 'Ket / nama partai');
-        $sheet1->setCellValue('C1', 'Wip Pcs');
-        $sheet1->setCellValue('D1', 'Wip Gr');
-        $sheet1->setCellValue('E1', 'Bk Pcs Sinta');
-        $sheet1->setCellValue('F1', 'Bk Gr Sinta');
+            'H' => "Bk Susut",
+            'I' => "Wip Pcs Sisa",
+            'J' => "Wip Gr Sisa",
 
-        $sheet1->setCellValue('G1', 'Cbt Pcs Awal');
-        $sheet1->setCellValue('H1', 'Cbt Gr Awal');
-        $sheet1->setCellValue('I1', 'Cbt Pcs Akhir');
-        $sheet1->setCellValue('J1', 'Cbt Gr Akhir');
+            'K' => "Cbt Pcs Awal",
+            'L' => "Cbt Gr Awal",
+            'M' => "Cbt Pcs Akhir",
+            'N' => "Cbt Gr Akhir",
+            'O' => "Cbt Susut",
+            'P' => "Eo",
+            'Q' => "Flx",
 
-        $sheet1->setCellValue('K1', 'Wip Pcs Sisa');
-        $sheet1->setCellValue('L1', 'Wip Gr Sisa');
+            'R' => "Bk Pcs Sisa Pgws",
+            'S' => "Bk Gr Sisa Pgws",
 
-        $sheet1->setCellValue('M1', 'Bk Pcs Sisa');
-        $sheet1->setCellValue('N1', 'Bk Gr Sisa');
-
-        $sheet1->setCellValue('O1', 'Susut');
-        $sheet1->setCellValue('P1', 'Rp Cabut');
+            'T' => "Ttl Rp"
+        ];
+        foreach($koloms as $kolom => $d) {
+            $sheet1->setCellValue($kolom.'1', $d);
+        }
 
         $kolom = 2;
         $gudang = GudangBkModel::getSummaryWip();
@@ -159,29 +174,24 @@ class SummaryController extends Controller
         $ttlPcsSisaSinta = 0;
         $ttGrSisaSinta = 0;
         foreach ($gudang as $no => $g) {
-            $response = Http::get("https://sarang.ptagafood.com/api/apibk/bk_sum?nm_partai=$g->ket");
-            $bk = $response['data']['bk_cabut'] ?? null;
-            $b = json_decode(json_encode($bk));
+            $response = Http::get("$this->linkApi/bk_sum?nm_partai=$g->ket");
+            $b = $response->object();
 
-            $response = Http::get("https://sarang.ptagafood.com/api/apibk/sarang_sum?nm_partai=$g->ket");
-            $cbt = $response['data']['cabut'] ?? null;
-            $c = json_decode(json_encode($cbt));
+            $resSum = Http::get("$this->linkApi/sarang_sum?nm_partai=$g->ket");
+            $c = $resSum->object();
 
 
             $sheet1->setCellValue('A' . $kolom, $no + 1);
             $sheet1->setCellValue('B' . $kolom, $g->ket);
+            $sheet1->setCellValue('C' . $kolom, $g->nm_grade);
 
-            $sheet1->setCellValue('C' . $kolom, $g->pcs ?? 0);
-            $sheet1->setCellValue('D' . $kolom, $g->gr ?? 0);
+            $sheet1->setCellValue('D' . $kolom, $g->pcs ?? 0);
+            $sheet1->setCellValue('E' . $kolom, $g->gr ?? 0);
 
-            $sheet1->setCellValue('E' . $kolom, $b->pcs_awal ?? 0);
-            $sheet1->setCellValue('F' . $kolom, $b->gr_awal ?? 0);
-
-            $sheet1->setCellValue('G' . $kolom, $c->pcs_awal ?? 0);
-            $sheet1->setCellValue('H' . $kolom, $c->gr_awal ?? 0);
-            $sheet1->setCellValue('I' . $kolom, $c->pcs_akhir ?? 0);
-            $sheet1->setCellValue('J' . $kolom, $c->gr_akhir ?? 0);
-
+            $sheet1->setCellValue('F' . $kolom, $b->pcs_awal ?? 0);
+            $sheet1->setCellValue('G' . $kolom, $b->gr_awal ?? 0);
+            $bkSusut = empty($b->gr_awal) ? 0 : (1 - ($b->gr_awal / $g->gr)) * 100;
+            $sheet1->setCellValue('H' . $kolom, $bkSusut);
 
             $pcs_awal_wip = $g->pcs ?? 0;
             $gr_awal_wip = $g->gr ?? 0;
@@ -189,16 +199,27 @@ class SummaryController extends Controller
             $pcs_awal_bk = $b->pcs_awal ?? 0;
             $gr_awal_bk = $b->gr_awal ?? 0;
 
+            $sheet1->setCellValue('I' . $kolom, $pcs_awal_wip - $pcs_awal_bk);
+            $sheet1->setCellValue('J' . $kolom, $gr_awal_wip - $gr_awal_bk);
+
+            $sheet1->setCellValue('K' . $kolom, $c->pcs_awal ?? 0);
+            $sheet1->setCellValue('L' . $kolom, $c->gr_awal ?? 0);
+            $sheet1->setCellValue('M' . $kolom, $c->pcs_akhir ?? 0);
+            $sheet1->setCellValue('N' . $kolom, $c->gr_akhir ?? 0);
+
             $pcs_awal_cbt = $c->pcs_awal ?? 0;
             $gr_awal_cbt = $c->gr_awal ?? 0;
+            
+            $cbtSusut = empty($c->gr_awal) ? 0 : 1 - ((($gr_awal_bk - $gr_awal_cbt)+$c->gr_akhir)/$c->gr_awal);
+            $sheet1->setCellValue('O' . $kolom, $cbtSusut);
+            $sheet1->setCellValue('P' . $kolom, 0);
+            $sheet1->setCellValue('Q' . $kolom, 0);
 
-            $sheet1->setCellValue('K' . $kolom, $pcs_awal_wip - $pcs_awal_bk);
-            $sheet1->setCellValue('L' . $kolom, $gr_awal_wip - $gr_awal_bk);
-            $sheet1->setCellValue('M' . $kolom, $pcs_awal_bk - $pcs_awal_cbt);
-            $sheet1->setCellValue('N' . $kolom, $gr_awal_bk - $gr_awal_cbt);
+            $sheet1->setCellValue('R' . $kolom, $pcs_awal_bk - $pcs_awal_cbt);
+            $sheet1->setCellValue('S' . $kolom, $gr_awal_bk - $gr_awal_cbt);
 
-            $sheet1->setCellValue('O' . $kolom, number_format($c->susut ?? 0, 1));
-            $sheet1->setCellValue('P' . $kolom, $c->ttl_rp ?? 0);
+            // $sheet1->setCellValue('O' . $kolom, number_format($c->susut ?? 0, 1));
+            $sheet1->setCellValue('T' . $kolom, $c->ttl_rp ?? 0);
 
             $kolom++;
 
@@ -220,28 +241,32 @@ class SummaryController extends Controller
         $sheet1->setCellValue('A' . $kolom, '');
         $sheet1->setCellValue('B' . $kolom, 'Total');
 
-        $sheet1->setCellValue('C' . $kolom, $pcs_wip);
-        $sheet1->setCellValue('D' . $kolom, $gr_wip);
+        $sheet1->setCellValue('D' . $kolom, $pcs_wip);
+        $sheet1->setCellValue('E' . $kolom, $gr_wip);
 
-        $sheet1->setCellValue('E' . $kolom, $pcs_bk);
-        $sheet1->setCellValue('F' . $kolom, $gr_bk);
+        $sheet1->setCellValue('F' . $kolom, $pcs_bk);
+        $sheet1->setCellValue('G' . $kolom, $gr_bk);
 
-        $sheet1->setCellValue('G' . $kolom, $pcs_awal_cbt_ttl);
-        $sheet1->setCellValue('H' . $kolom, $gr_awal_cbt_ttl);
-        $sheet1->setCellValue('I' . $kolom, $pcs_akhir_cbt_ttl);
-        $sheet1->setCellValue('J' . $kolom, $gr_akhir_cbt_ttl);
+        $sheet1->setCellValue('I' . $kolom, $ttlPcsSisaSinta);
+        $sheet1->setCellValue('J' . $kolom, $ttGrSisaSinta);
 
-        $sheet1->setCellValue('K' . $kolom, $ttlPcsSisaSinta);
-        $sheet1->setCellValue('L' . $kolom, $ttGrSisaSinta);
+        $sheet1->setCellValue('K' . $kolom, $pcs_awal_cbt_ttl);
+        $sheet1->setCellValue('L' . $kolom, $gr_awal_cbt_ttl);
+        $sheet1->setCellValue('M' . $kolom, $pcs_akhir_cbt_ttl);
+        $sheet1->setCellValue('N' . $kolom, $gr_akhir_cbt_ttl);
 
-        $sheet1->setCellValue('M' . $kolom, $pcs_bk - $pcs_awal_cbt_ttl);
-        $sheet1->setCellValue('N' . $kolom, $gr_bk - $gr_awal_cbt_ttl);
+        $sheet1->setCellValue('P' . $kolom, 0);
+        $sheet1->setCellValue('Q' . $kolom, 0);
 
-        $sheet1->setCellValue('O' . $kolom, '');
-        $sheet1->setCellValue('P' . $kolom, $ttl_rp);
 
-        $sheet1->getStyle('A2:P' . $kolom - 1)->applyFromArray($style);
-        $sheet1->getStyle('A' . $kolom . ':P' . $kolom)->applyFromArray($style_bawah);
+        $sheet1->setCellValue('R' . $kolom, $pcs_bk - $pcs_awal_cbt_ttl);
+        $sheet1->setCellValue('S' . $kolom, $gr_bk - $gr_awal_cbt_ttl);
+
+        // $sheet1->setCellValue('O' . $kolom, '');
+        $sheet1->setCellValue('T' . $kolom, $ttl_rp);
+
+        $sheet1->getStyle('A2:T' . $kolom - 1)->applyFromArray($style);
+        $sheet1->getStyle('A' . $kolom . ':T' . $kolom)->applyFromArray($style_bawah);
         $namafile = "Summary Wip.xlsx";
 
         $writer = new Xlsx($spreadsheet);
@@ -337,7 +362,7 @@ class SummaryController extends Controller
         $gr_akhir_cbt_ttl = 0;
         $ttl_rp = 0;
         foreach ($gudang as $no => $g) {
-            $response = Http::get("https://sarang.ptagafood.com/api/apibk/sarang?nm_partai=$g->ket&no_lot=$g->no_lot");
+            $response = Http::get("$this->linkApi/sarang?nm_partai=$g->ket&no_lot=$g->no_lot");
             $bk = $response['data']['bk_cabut'] ?? null;
             $b = json_decode(json_encode($bk));
 

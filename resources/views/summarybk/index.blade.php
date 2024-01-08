@@ -42,37 +42,44 @@
                                     <th class="dhead" rowspan="2">No Lot</th>
                                     <th class="dhead text-center" colspan="2">Gudang Wip</th>
                                     <th class="dhead text-center" colspan="2">BK</th>
-                                    <th class="dhead text-center" colspan="6">Cabut</th>
-                                    <th class="dhead text-center" colspan="2">Sisa</th>
+                                    <th class="text-white text-center bg-danger" colspan="2">Wip Sisa</th>
+                                    <th class="dhead text-center" colspan="7">Cabut</th>
+                                    <th class="bg-danger text-white text-center" colspan="2">Bk Sisa Pgws</th>
+                                    <th class="dhead" rowspan="2">Ttl Rp</th>
                                 </tr>
                                 <tr>
                                     <th class="dhead text-center">Pcs</th>
                                     <th class="dhead text-center">Gr</th>
                                     <th class="dhead text-center">Pcs</th>
                                     <th class="dhead text-center">Gr</th>
+                                    <th class="text-white text-center bg-danger">Pcs</th>
+                                    <th class="text-white text-center bg-danger">Gr</th>
 
                                     <th class="dhead text-center">Pcs Awal</th>
                                     <th class="dhead text-center">Gr Awal</th>
                                     <th class="dhead text-center">Pcs Akhir</th>
                                     <th class="dhead text-center">Gr Akhir</th>
                                     <th class="dhead text-center">Susut</th>
-                                    <th class="dhead text-center">Rp</th>
+                                    <th class="dhead text-center">Eo</th>
+                                    <th class="dhead text-center">Flx</th>
 
-                                    <th class="dhead text-center">Pcs</th>
-                                    <th class="dhead text-center">Gr</th>
+                                    <th class="text-white bg-danger text-center">Pcs</th>
+                                    <th class="text-white bg-danger text-center">Gr</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($gudang as $no => $g)
                                     @php
-                                        $response = Http::get("https://sarang.ptagafood.com/api/apibk/bk_sum?nm_partai=$g->ket");
-                                        $bk = $response['data']['bk_cabut'] ?? null;
-                                        $b = json_decode(json_encode($bk));
+                                        $response = Http::get("$linkApi/bk_sum", ['nm_partai' => $g->ket]);
+                                        $b = $response->object();
 
-                                        $response = Http::get("https://sarang.ptagafood.com/api/apibk/sarang_sum?nm_partai=$g->ket");
-                                        $cbt = $response['data']['cabut'] ?? null;
-                                        $c = json_decode(json_encode($cbt));
+                                        $resSum = Http::get("$linkApi/sarang_sum", ['nm_partai' => $g->ket]);
+                                        $c = $resSum->object();
 
+                                        $wipPcs = $g->pcs ?? 0;
+                                        $wipGr = $g->gr ?? 0;
+                                        $bkPcs = $b->pcs_awal ?? 0;
+                                        $bkGr = $b->gr_awal ?? 0;
                                     @endphp
                                     <tr>
                                         <td>{{ $no + 1 }}</td>
@@ -87,17 +94,26 @@
                                             </a>
                                         </td>
                                         <td class="text-center fw-bold"></td>
-                                        <td class="text-end fw-bold">{{ number_format($g->pcs ?? 0, 0) }}</td>
-                                        <td class="text-end fw-bold">{{ number_format($g->gr ?? 0, 0) }}</td>
-                                        <td class="text-end fw-bold">{{ number_format($b->pcs_awal ?? 0, 0) }}</td>
-                                        <td class="text-end fw-bold">{{ number_format($b->gr_awal ?? 0, 0) }}</td>
+                                        <td class="text-end fw-bold">{{ number_format($wipPcs, 0) }}</td>
+                                        <td class="text-end fw-bold">{{ number_format($wipGr, 0) }}</td>
+                                        <td class="text-end fw-bold">{{ number_format($bkPcs, 0) }}</td>
+                                        <td class="text-end fw-bold">{{ number_format($bkGr, 0) }}</td>
+                                        @php
+                                            $WipSisaPcs = $wipPcs - $bkPcs;
+                                            $WipSisaGr = $wipGr - $bkGr;
+                                        @endphp
+                                        <td class="text-end fw-bold text-danger">{{ number_format($WipSisaPcs, 0) }}
+                                        </td>
+                                        <td class="text-end fw-bold text-danger">{{ number_format($WipSisaGr, 0) }}
+                                        </td>
 
                                         <td class="text-end fw-bold">{{ number_format($c->pcs_awal ?? 0, 0) }}</td>
                                         <td class="text-end fw-bold">{{ number_format($c->gr_awal ?? 0, 0) }}</td>
                                         <td class="text-end fw-bold">{{ number_format($c->pcs_akhir ?? 0, 0) }}</td>
                                         <td class="text-end fw-bold">{{ number_format($c->gr_akhir ?? 0, 0) }}</td>
                                         <td class="text-end fw-bold">{{ number_format($c->susut ?? 0, 0) }}</td>
-                                        <td class="text-end fw-bold">{{ number_format($c->ttl_rp ?? 0, 0) }}</td>
+                                        <td class="text-end fw-bold">{{ number_format($c->susut ?? 0, 0) }}</td>
+                                        <td class="text-end fw-bold">{{ number_format($c->susut ?? 0, 0) }}</td>
                                         @php
                                             $pcs_awal_bk = $b->pcs_awal ?? 0;
                                             $gr_awal_bk = $b->gr_awal ?? 0;
@@ -105,10 +121,13 @@
                                             $pcs_awal_cbt = $c->pcs_awal ?? 0;
                                             $gr_awal_cbt = $c->gr_awal ?? 0;
                                         @endphp
-                                        <td class="text-end fw-bold">
+                                        <td class="text-end text-danger fw-bold">
                                             {{ number_format($pcs_awal_bk - $pcs_awal_cbt, 0) }}</td>
-                                        <td class="text-end fw-bold">{{ number_format($gr_awal_bk - $gr_awal_cbt, 0) }}
+                                        <td class="text-end text-danger fw-bold">
+                                            {{ number_format($gr_awal_bk - $gr_awal_cbt, 0) }}
                                         </td>
+                                        <td class="text-end fw-bold">{{ number_format($c->ttl_rp ?? 0, 0) }}</td>
+
                                     </tr>
                             <tbody class="load_lot{{ $no + 1 }}"></tbody>
                             @endforeach
@@ -208,7 +227,7 @@
                     $('.btn-loading').removeClass('d-none');
                     var val = $(this).val();
                     $('.load_box').html('');
-                    loadBoxData(currentNoLot, currentNmPartai,val); 
+                    loadBoxData(currentNoLot, currentNmPartai, val);
                     $(this).val(val);
                 });
 
@@ -225,6 +244,7 @@
                             $('.btn-loading').addClass('d-none');
                             $('.load_box').html(response);
                             pencarian('pencarianBox', 'tblAldi2')
+
                         }
                     });
                 }

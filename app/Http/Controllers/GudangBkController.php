@@ -43,6 +43,7 @@ class GudangBkController extends Controller
             $this->tgl2 = date('Y-m-t', strtotime($tgl_akhir));
         }
     }
+
     function index(Request $r)
     {
         $tgl1 =  $this->tgl1;
@@ -63,6 +64,7 @@ class GudangBkController extends Controller
             'listbulan' => $listBulan,
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
+            'presiden' => auth()->user()->posisi_id == 1 ? true : false,
             'nm_gudang' => $nmgudang
         ];
         return view('gudang_bk.index', $data);

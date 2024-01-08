@@ -49,15 +49,21 @@
                                     <th class="dhead">Grade</th>
                                     <th class="dhead text-end">Pcs <br> {{ number_format($pcs, 0) }}</th>
                                     <th class="dhead text-end">Gram <br> {{ number_format($gr, 0) }}</th>
-                                    <th class="dhead">Rp/Gr</th>
+                                    @if ($presiden)
+                                        <th class="dhead">Rp/Gr</th>
+                                    @endif
                                     <th class="dhead">Lot</th>
                                     <th class="dhead">Keterangan / Nama Partai</th>
-                                    <th class="dhead text-end">Ttl Rp <br> {{ number_format($ttlRp, 0) }}</th>
+                                    @if ($presiden)
+                                        <th class="dhead text-end">Ttl Rp <br> {{ number_format($ttlRp, 0) }}</th>
+                                    @endif
                                     <th class="dhead">Lok</th>
                                     <th class="dhead text-center">
                                         @if ($nm_gudang == 'produksi' || $nm_gudang == 'wip')
-                                            <button type="submit" name="submit" value="export_produksi"
-                                                class="badge bg-success"><i class="fas fa-file-excel"></i></button>
+                                            @if ($presiden)
+                                                <button type="submit" name="submit" value="export_produksi"
+                                                    class="badge bg-success"><i class="fas fa-file-excel"></i></button>
+                                            @endif
                                         @else
                                             <button type="submit" name="submit" value="export"
                                                 class="badge bg-success"><i class="fas fa-file-excel"></i></button>
@@ -79,12 +85,16 @@
                                         <td>{{ $g->suplier_awal }} </td>
                                         <td>{{ $g->tgl }}</td>
                                         <td>{{ $g->nm_grade }}</td>
-                                        <td class="text-end">{{ $g->pcs }}</td>
-                                        <td class="text-end">{{ $g->gr }}</td>
-                                        <td class="text-end">{{ number_format($g->rupiah, 0) }}</td>
+                                        <td class="text-end">{{ number_format($g->pcs, 0) }}</td>
+                                        <td class="text-end">{{ number_format($g->gr, 0) }}</td>
+                                        @if ($presiden)
+                                            <td class="text-end">{{ number_format($g->rupiah, 0) }}</td>
+                                        @endif
                                         <td>{{ $g->no_lot }}</td>
                                         <td>{{ $g->ket }}</td>
-                                        <td class="text-end">{{ number_format($g->rupiah * $g->gr, 0) }}</td>
+                                        @if ($presiden)
+                                            <td class="text-end">{{ number_format($g->rupiah * $g->gr, 0) }}</td>
+                                        @endif
                                         <td>{{ $g->lok_tgl }}</td>
 
 
