@@ -70,10 +70,11 @@
                             <tbody>
                                 @foreach ($gudang as $no => $g)
                                     @php
-                                        $response = Http::get("$linkApi/bk_sum", ['nm_partai' => $g->ket]);
+                                        $ket = $g->ket;
+                                        $response = Http::get("$linkApi/bk_sum", ['nm_partai' => $ket]);
                                         $b = $response->object();
 
-                                        $resSum = Http::get("$linkApi/sarang_sum", ['nm_partai' => $g->ket]);
+                                        $resSum = Http::get("$linkApi/sarang_sum", ['nm_partai' => $ket]);
                                         $c = $resSum->object();
 
                                         $wipPcs = $g->pcs ?? 0;
