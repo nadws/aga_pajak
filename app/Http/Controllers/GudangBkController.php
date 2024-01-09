@@ -172,10 +172,31 @@ class GudangBkController extends Controller
         $sheet2->setCellValue('I1', 'Lot');
         $sheet2->setCellValue('J1', 'Keterangan/Nama Partai Herry');
         $sheet2->setCellValue('K1', 'Keterangan/Nama Partai Sinta');
-        $sheet2->setCellValue('K1', 'Ttl Rp');
-        $sheet2->setCellValue('L1', 'Lok');
+        $sheet2->setCellValue('L1', 'Ttl Rp');
+        $sheet2->setCellValue('M1', 'Lok');
         $sheet2->setCellValue('O2', 'kl mau import barang baru id kosongkan');
         $kolom = 2;
+        $kolom = 2;
+        $pembelian = GudangBkModel::export_getPembelianBk('gabung');
+
+        foreach ($pembelian as $d) {
+            $sheet2->setCellValue('A' . $kolom, $d->id_buku_campur);
+            $sheet2->setCellValue('B' . $kolom, $d->buku);
+            $sheet2->setCellValue('C' . $kolom, $d->suplier_awal);
+            $sheet2->setCellValue('D' . $kolom, $d->tgl);
+            $sheet2->setCellValue('E' . $kolom, $d->nm_grade);
+            $sheet2->setCellValue('F' . $kolom, $d->pcs);
+            $sheet2->setCellValue('G' . $kolom, $d->gr);
+            $sheet2->setCellValue('H' . $kolom, $d->rupiah);
+            $sheet2->setCellValue('I' . $kolom, $d->no_lot);
+            $sheet2->setCellValue('J' . $kolom, $d->ket);
+            $sheet2->setCellValue('K' . $kolom, $d->ket2);
+            $sheet2->setCellValue('L' . $kolom, $d->rupiah * $d->gr);
+            $sheet2->setCellValue('M' . $kolom, $d->lok_tgl);
+            $kolom++;
+        }
+
+        $sheet2->getStyle('A2:M' . $kolom - 1)->applyFromArray($style);
 
 
 
@@ -310,7 +331,7 @@ class GudangBkController extends Controller
         $sheet5->getStyle('A2:M' . $kolom - 1)->applyFromArray($style);
 
 
-        $namafile = "Gudang Bk.xlsx";
+        $namafile = "Gudang Bahan baku.xlsx";
 
         $writer = new Xlsx($spreadsheet);
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -357,7 +378,7 @@ class GudangBkController extends Controller
         $sheet1->setTitle('⁠produksi ( ini nama herry)');
 
 
-        $sheet1->getStyle("A1:M1")->applyFromArray($style_atas);
+        $sheet1->getStyle("A1:K1")->applyFromArray($style_atas);
 
         $sheet1->setCellValue('A1', 'ID');
         $sheet1->setCellValue('B1', 'Buku');
@@ -366,12 +387,10 @@ class GudangBkController extends Controller
         $sheet1->setCellValue('E1', 'Grade');
         $sheet1->setCellValue('F1', 'Pcs');
         $sheet1->setCellValue('G1', 'Gram');
-        $sheet1->setCellValue('H1', 'Rp/Gr');
-        $sheet1->setCellValue('I1', 'Lot');
-        $sheet1->setCellValue('J1', 'Keterangan/Nama Partai Herry');
-        $sheet1->setCellValue('K1', 'Keterangan/Nama Partai Sinta');
-        $sheet1->setCellValue('L1', 'Ttl Rp');
-        $sheet1->setCellValue('M1', 'Lok');
+        $sheet1->setCellValue('H1', 'Lot');
+        $sheet1->setCellValue('I1', 'Keterangan/Nama Partai Herry');
+        $sheet1->setCellValue('J1', 'Keterangan/Nama Partai Sinta');
+        $sheet1->setCellValue('K1', 'Lok');
         $sheet1->setCellValue('O2', 'kl mau import barang baru id kosongkan');
         $kolom = 2;
         $pembelian = GudangBkModel::export_getPembelianBk('produksi');
@@ -383,16 +402,14 @@ class GudangBkController extends Controller
             $sheet1->setCellValue('E' . $kolom, $d->nm_grade);
             $sheet1->setCellValue('F' . $kolom, $d->pcs);
             $sheet1->setCellValue('G' . $kolom, $d->gr);
-            $sheet1->setCellValue('H' . $kolom, $d->rupiah);
-            $sheet1->setCellValue('I' . $kolom, $d->no_lot);
-            $sheet1->setCellValue('J' . $kolom, $d->ket);
-            $sheet1->setCellValue('K' . $kolom, $d->ket2);
-            $sheet1->setCellValue('L' . $kolom, $d->rupiah * $d->gr);
-            $sheet1->setCellValue('M' . $kolom, $d->lok_tgl);
+            $sheet1->setCellValue('H' . $kolom, $d->no_lot);
+            $sheet1->setCellValue('I' . $kolom, $d->ket);
+            $sheet1->setCellValue('J' . $kolom, $d->ket2);
+            $sheet1->setCellValue('K' . $kolom, $d->lok_tgl);
 
             $kolom++;
         }
-        $sheet1->getStyle('A2:M' . $kolom - 1)->applyFromArray($style);
+        $sheet1->getStyle('A2:K' . $kolom - 1)->applyFromArray($style);
 
 
         $spreadsheet->createSheet();
@@ -400,7 +417,7 @@ class GudangBkController extends Controller
         $sheet2 = $spreadsheet->getActiveSheet();
         $sheet2->setTitle('wip ( ini nama sinta)');
 
-        $sheet2->getStyle("A1:M1")->applyFromArray($style_atas);
+        $sheet2->getStyle("A1:K1")->applyFromArray($style_atas);
 
         $sheet2->setCellValue('A1', 'ID');
         $sheet2->setCellValue('B1', 'Buku');
@@ -409,13 +426,10 @@ class GudangBkController extends Controller
         $sheet2->setCellValue('E1', 'Grade');
         $sheet2->setCellValue('F1', 'Pcs');
         $sheet2->setCellValue('G1', 'Gram');
-        $sheet2->setCellValue('H1', 'Rp/Gr');
-        $sheet2->setCellValue('I1', 'Lot');
-        $sheet2->setCellValue('J1', 'Keterangan/Nama Partai Herry');
-        $sheet2->setCellValue('K1', 'Keterangan/Nama Partai Sinta');
-        $sheet2->setCellValue('K1', 'Ttl Rp');
-        $sheet2->setCellValue('L1', 'Lok');
-        $sheet2->setCellValue('M1', 'Hapus');
+        $sheet2->setCellValue('H1', 'Lot');
+        $sheet2->setCellValue('I1', 'Keterangan/Nama Partai Herry');
+        $sheet2->setCellValue('J1', 'Keterangan/Nama Partai Sinta');
+        $sheet2->setCellValue('K1', 'Lok');
         $sheet2->setCellValue('O2', 'kl mau import barang baru id kosongkan');
         $kolom = 2;
         $pembelian = GudangBkModel::export_getPembelianBk('wip');
@@ -427,19 +441,17 @@ class GudangBkController extends Controller
             $sheet2->setCellValue('E' . $kolom, $d->nm_grade);
             $sheet2->setCellValue('F' . $kolom, $d->pcs);
             $sheet2->setCellValue('G' . $kolom, $d->gr);
-            $sheet2->setCellValue('H' . $kolom, $d->rupiah);
-            $sheet2->setCellValue('I' . $kolom, $d->no_lot);
-            $sheet2->setCellValue('J' . $kolom, $d->ket);
-            $sheet2->setCellValue('K' . $kolom, $d->ket2);
-            $sheet2->setCellValue('L' . $kolom, $d->rupiah * $d->gr);
-            $sheet2->setCellValue('M' . $kolom, $d->lok_tgl);
+            $sheet2->setCellValue('H' . $kolom, $d->no_lot);
+            $sheet2->setCellValue('I' . $kolom, $d->ket);
+            $sheet2->setCellValue('J' . $kolom, $d->ket2);
+            $sheet2->setCellValue('K' . $kolom, $d->lok_tgl);
 
             $kolom++;
         }
-        $sheet2->getStyle('A2:M' . $kolom - 1)->applyFromArray($style);
+        $sheet2->getStyle('A2:K' . $kolom - 1)->applyFromArray($style);
 
 
-        $namafile = "Gudang Bk.xlsx";
+        $namafile = "Gudang Produksi.xlsx";
 
         $writer = new Xlsx($spreadsheet);
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -454,298 +466,164 @@ class GudangBkController extends Controller
 
     public function import_buku_campur_bk(Request $r)
     {
-        // if ($r->gudang == 'produksi' || $r->gudang == 'wip') {
-        //     $this->import_gudang_produksi($r);
-        // } else {
-        //     $this->import_gudang_bk($r);
-        // }
-        $this->import_buku_bk($r);
-        return redirect()->route('gudangBk.index');
-    }
-
-    private function import_gudang_bk(Request $r)
-    {
-        $uploadedFile = $r->file('file');
-        $allowedExtensions = ['xlsx'];
-        $extension = $uploadedFile->getClientOriginalExtension();
-
-        if (in_array($extension, $allowedExtensions)) {
-            $spreadsheet = IOFactory::load($uploadedFile->getPathname());
-            $sheet2 = $spreadsheet->getSheetByName('Gudang BK');
-            $data = [];
-
-            foreach ($sheet2->getRowIterator() as $index => $row) {
-                if ($index === 1) {
-                    continue;
-                }
-
-                $rowData = [];
-                foreach ($row->getCellIterator() as $cell) {
-                    $rowData[] = $cell->getValue();
-                }
-                $data[] = $rowData;
-            }
-
-            $importGagal = false;
-
-            DB::beginTransaction(); // Mulai transaksi database
-
-            try {
-                foreach ($data as $rowData) {
-                    $rowBk = 12;
-                    if (empty($rowData[0])) {
-                        DB::table('buku_campur')->insert([
-                            'no_lot' => $rowData[8],
-                            'id_grade' => '1',
-                            'pcs' => $rowData[5],
-                            'gr' => $rowData[6],
-                            'rupiah' => $rowData[7],
-                            'ket' => empty($rowData[9]) ? ' ' : $rowData[9],
-                            'lok_tgl' => empty($rowData[11]) ? ' ' : $rowData[11],
-                            'approve' => 'Y',
-                            'gudang' => 'bk',
-
-                        ]);
-                        $idBukuCampur = DB::getPdo()->lastInsertId();
-
-                        $tgl = $rowData[3];
-                        if (is_numeric($tgl)) {
-                            // Jika nilai berupa angka, konversi ke format tanggal
-                            $tanggalExcel = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($tgl);
-                            $tanggalFormatted = $tanggalExcel->format('Y-m-d');
-                        } else {
-                            // Jika nilai sudah dalam format tanggal, pastikan formatnya adalah 'Y-m-d'
-                            $tanggalFormatted = date('Y-m-d', strtotime($tgl));
-                        }
-                        DB::table('buku_campur_approve')->insert([
-                            'id_buku_campur' => $idBukuCampur,
-                            'buku' => empty($rowData[1]) ? ' ' : $rowData[1],
-                            'suplier_awal' => empty($rowData[2]) ? ' ' : $rowData[2],
-                            'tgl' => empty($tanggalFormatted) ? '0000-00-00' : $tanggalFormatted,
-                            'nm_grade' => $rowData[4],
-                            'pcs' => $rowData[5],
-                            'gr' => $rowData[6],
-                            'no_lot' => $rowData[8],
-                            'ket' => empty($rowData[9]) ? ' ' : $rowData[9],
-                            'rupiah' => $rowData[7],
-                            'lok_tgl' => empty($rowData[11]) ? ' ' : $rowData[11],
-                            'gudang' => 'bk',
-                        ]);
-                    } else {
-                        $buku_campur = DB::table('buku_campur')->where('id_buku_campur', $rowData[0])->first();
-                        DB::table('buku_campur')->where('id_buku_campur', $rowData[0])->update([
-                            'approve' => 'Y',
-                            'no_lot' => empty($buku_campur->no_nota) ? $rowData[8] : $buku_campur->no_lot,
-                            'gabung' => $rowData[15],
-                            'gudang' => 'bk',
-                        ]);
-
-                        $bk_approve = DB::table('buku_campur_approve')->where('id_buku_campur', $rowData[0])->first();
-
-                        $tgl = $rowData[3];
-                        if (is_numeric($tgl)) {
-                            // Jika nilai berupa angka, konversi ke format tanggal
-                            $tanggalExcel = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($tgl);
-                            $tanggalFormatted = $tanggalExcel->format('Y-m-d');
-                        } else {
-                            // Jika nilai sudah dalam format tanggal, pastikan formatnya adalah 'Y-m-d'
-                            $tanggalFormatted = date('Y-m-d', strtotime($tgl));
-                        }
-
-                        if (empty($bk_approve)) {
-                            DB::table('buku_campur_approve')->insert([
-                                'id_buku_campur' => $rowData[0],
-                                'buku' => $rowData[1],
-                                'suplier_awal' => $rowData[2],
-                                'tgl' => empty($tanggalFormatted) ? '0000-00-00' : $tanggalFormatted,
-                                'nm_grade' => $rowData[4],
-                                'pcs' => $rowData[5],
-                                'gr' => $rowData[6],
-                                'no_lot' => empty($buku_campur->no_nota) ? $rowData[8] : $buku_campur->no_lot,
-                                'ket' => empty($rowData[9]) ? ' ' : $rowData[9],
-                                'rupiah' => $rowData[7],
-                                'lok_tgl' => empty($rowData[11]) ? ' ' : $rowData[11],
-                                'gudang' => 'bk',
-                            ]);
-                        } else {
-                            DB::table('buku_campur_approve')->where('id_buku_campur', $rowData[0])->update([
-                                'id_buku_campur' => $rowData[0],
-                                'buku' => $rowData[1],
-                                'suplier_awal' => $rowData[2],
-                                'tgl' => empty($tanggalFormatted) ? '0000-00-00' : $tanggalFormatted,
-                                'nm_grade' => $rowData[4],
-                                'pcs' => $rowData[5],
-                                'gr' => $rowData[6],
-                                'no_lot' => empty($buku_campur->no_nota) ? $rowData[8] : $buku_campur->no_lot,
-                                'ket' => empty($rowData[9]) ? ' ' : $rowData[9],
-                                'rupiah' => $rowData[7],
-                                'lok_tgl' => empty($rowData[11]) ? ' ' : $rowData[11],
-                                'gudang' => 'bk',
-                            ]);
-                        }
-                    }
-                }
-
-                if ($importGagal) {
-                    DB::rollback(); // Batalkan transaksi jika ada kesalahan
-                    return redirect()->route('gudangBk.index')->with('error', 'Data tidak valid: Kolom M, N, dan O tidak boleh memiliki nilai Y yang sama');
-                }
-
-                DB::commit(); // Konfirmasi transaksi jika berhasil
-                return redirect()->route('gudangBk.index')->with('sukses', 'Data berhasil import');
-            } catch (\Exception $e) {
-                DB::rollback(); // Batalkan transaksi jika terjadi kesalahan lain
-                return redirect()->route('gudangBk.index')->with('error', 'Terjadi kesalahan saat mengimpor data: ' . $e->getMessage());
-            }
+        if (auth()->user()->posisi_id == 1) {
+            $this->import_buku_bk($r);
         } else {
-            return redirect()->route('gudangBk.index')->with('error', 'File yang diunggah bukan file Excel yang valid');
+            $this->import_gudang_produksi($r);
         }
+
+        // $this->import_gudang_produksi($r);
+
+        return redirect()->route('gudangBk.index')->with('sukses', 'Data berhasil import');;
     }
+
+
     private function import_gudang_produksi(Request $r)
     {
-        $uploadedFile = $r->file('file');
-        $allowedExtensions = ['xlsx'];
-        $extension = $uploadedFile->getClientOriginalExtension();
+        $hasError = false; // Variabel flag untuk melacak apakah ada kesalahan
 
-        if (in_array($extension, $allowedExtensions)) {
-            $spreadsheet = IOFactory::load($uploadedFile->getPathname());
-            $sheet2 = $spreadsheet->getSheetByName('Gudang BK');
-            $data = [];
-
-            foreach ($sheet2->getRowIterator() as $index => $row) {
-                if ($index === 1) {
-                    continue;
-                }
-
-                $rowData = [];
-                foreach ($row->getCellIterator() as $cell) {
-                    $rowData[] = $cell->getValue();
-                }
-                $data[] = $rowData;
-            }
-
-            $importGagal = false;
-
-            DB::beginTransaction(); // Mulai transaksi database
+        if ($r->hasFile('file')) {
+            $file = $r->file('file');
+            $filePath = $file->storeAs('temp', 'imported_file.xlsx');
 
             try {
-                foreach ($data as $rowData) {
-                    $rowBk = 12;
+                $spreadsheet = IOFactory::load(storage_path("app/{$filePath}"));
+                $sheetNames = $spreadsheet->getSheetNames();
 
-                    if (($rowData[$rowBk] == 'Y' && $rowData[$rowBk + 1] == 'Y')) {
-                        $importGagal = true;
-                        break;
-                    }
+                foreach ($sheetNames as $sheetName) {
+                    $currentSheet = $spreadsheet->getSheetByName($sheetName);
+                    $title = $currentSheet->getTitle();
 
-                    if ($rowData[$rowBk] == 'Y') {
+                    if ($title === 'Produksi (ini nama herry)') {
                         $gudang = 'produksi';
-                    } elseif ($rowData[$rowBk + 1] == 'Y') {
+                    } elseif ($title === 'wip ( ini nama sinta)') {
                         $gudang = 'wip';
                     } else {
-                        $importGagal = true;
-                        break;
+                        $hasError = true;
                     }
 
-                    if (empty($rowData[0])) {
-                        DB::table('buku_campur')->insert([
-                            'no_lot' => $rowData[8],
-                            'id_grade' => '1',
-                            'pcs' => $rowData[5],
-                            'gr' => $rowData[6],
-                            'rupiah' => $rowData[7],
-                            'ket' => empty($rowData[9]) ? ' ' : $rowData[9],
-                            'lok_tgl' => empty($rowData[11]) ? ' ' : $rowData[11],
-                            'approve' => 'Y',
-                            'gabung' => $rowData[14],
-                            'gudang' => $gudang,
+                    foreach ($currentSheet->getRowIterator() as $rowIndex => $row) {
+                        if ($rowIndex === 1) {
+                            continue;
+                        }
+                        $rowData = [];
+                        $cellIterator = $row->getCellIterator();
 
-                        ]);
-                        $idBukuCampur = DB::getPdo()->lastInsertId();
+                        foreach ($cellIterator as $cell) {
+                            $rowData[] = $cell->getValue();
+                        }
 
-                        $tanggal_excel = $rowData[3];
-                        if (\DateTime::createFromFormat('Y-m-d', $tanggal_excel) !== false) {
-                            $tanggal_mysql = $tanggal_excel;
-                        } else {
-                            $tanggal_mysql = \DateTime::createFromFormat('d/m/Y', $tanggal_excel);
-                            if ($tanggal_mysql !== false) {
-                                $tanggal_mysql = $tanggal_mysql->format('Y-m-d');
+                        if (empty(array_filter(array_slice($rowData, 0, 13), 'strlen'))) {
+                            continue;
+                        }
+
+                        try {
+                            if (empty($rowData[0])) {
+                                DB::table('buku_campur')->insert([
+                                    'id_grade' => '1',
+                                    'pcs' => $rowData[5],
+                                    'gr' => $rowData[6],
+                                    'no_lot' => $rowData[7],
+                                    'ket' => empty($rowData[8]) ? ' ' : $rowData[8],
+                                    'ket2' => empty($rowData[9]) ? ' ' : $rowData[9],
+                                    'lok_tgl' => empty($rowData[10]) ? ' ' : $rowData[10],
+                                    'approve' => 'Y',
+                                    'gudang' => $gudang,
+
+                                ]);
+                                $idBukuCampur = DB::getPdo()->lastInsertId();
+
+                                $tgl = $rowData[3];
+                                if (is_numeric($tgl)) {
+                                    $tanggalExcel = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($tgl);
+                                    $tanggalFormatted = $tanggalExcel->format('Y-m-d');
+                                } else {
+                                    // Jika nilai sudah dalam format tanggal, pastikan formatnya adalah 'Y-m-d'
+                                    $tanggalFormatted = date('Y-m-d', strtotime($tgl));
+                                }
+                                DB::table('buku_campur_approve')->insert([
+                                    'id_buku_campur' => $idBukuCampur,
+                                    'buku' => empty($rowData[1]) ? ' ' : $rowData[1],
+                                    'suplier_awal' => empty($rowData[2]) ? ' ' : $rowData[2],
+                                    'tgl' => empty($tanggalFormatted) ? '0000-00-00' : $tanggalFormatted,
+                                    'nm_grade' => $rowData[4],
+                                    'pcs' => $rowData[5],
+                                    'gr' => $rowData[6],
+                                    'no_lot' => $rowData[7],
+                                    'ket' => empty($rowData[8]) ? ' ' : $rowData[8],
+                                    'ket2' => empty($rowData[9]) ? ' ' : $rowData[9],
+                                    'lok_tgl' => empty($rowData[10]) ? ' ' : $rowData[10],
+                                    'gudang' => $gudang,
+                                ]);
                             } else {
-                                $tanggal_mysql = '0000-00-00';
+                                $buku_campur = DB::table('buku_campur')->where('id_buku_campur', $rowData[0])->first();
+                                DB::table('buku_campur')->where('id_buku_campur', $rowData[0])->update([
+                                    'approve' => 'Y',
+                                    'no_lot' => empty($buku_campur->no_nota) ? $rowData[7] : $buku_campur->no_lot,
+                                    'gudang' => $gudang,
+                                ]);
+
+                                $bk_approve = DB::table('buku_campur_approve')->where('id_buku_campur', $rowData[0])->first();
+
+                                $tgl = $rowData[3];
+                                if (is_numeric($tgl)) {
+                                    // Jika nilai berupa angka, konversi ke format tanggal
+                                    $tanggalExcel = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($tgl);
+                                    $tanggalFormatted = $tanggalExcel->format('Y-m-d');
+                                } else {
+                                    // Jika nilai sudah dalam format tanggal, pastikan formatnya adalah 'Y-m-d'
+                                    $tanggalFormatted = date('Y-m-d', strtotime($tgl));
+                                }
+
+                                if (empty($bk_approve)) {
+                                    DB::table('buku_campur_approve')->insert([
+                                        'id_buku_campur' => $rowData[0],
+                                        'buku' => $rowData[1],
+                                        'suplier_awal' => $rowData[2],
+                                        'tgl' => empty($tanggalFormatted) ? '0000-00-00' : $tanggalFormatted,
+                                        'nm_grade' => $rowData[4],
+                                        'pcs' => $rowData[5],
+                                        'gr' => $rowData[6],
+                                        'no_lot' => empty($buku_campur->no_nota) ? $rowData[7] : $buku_campur->no_lot,
+                                        'ket' => empty($rowData[8]) ? ' ' : $rowData[8],
+                                        'ket2' => empty($rowData[9]) ? ' ' : $rowData[9],
+                                        'lok_tgl' => empty($rowData[10]) ? ' ' : $rowData[10],
+                                        'gudang' => $gudang,
+                                    ]);
+                                } else {
+                                    DB::table('buku_campur_approve')->where('id_buku_campur', $rowData[0])->update([
+                                        'id_buku_campur' => $rowData[0],
+                                        'buku' => $rowData[1],
+                                        'suplier_awal' => $rowData[2],
+                                        'tgl' => empty($tanggalFormatted) ? '0000-00-00' : $tanggalFormatted,
+                                        'nm_grade' => $rowData[4],
+                                        'pcs' => $rowData[5],
+                                        'gr' => $rowData[6],
+                                        'no_lot' => empty($buku_campur->no_nota) ? $rowData[7] : $buku_campur->no_lot,
+                                        'ket' => empty($rowData[8]) ? ' ' : $rowData[8],
+                                        'ket2' => empty($rowData[9]) ? ' ' : $rowData[9],
+                                        'lok_tgl' => empty($rowData[10]) ? ' ' : $rowData[10],
+                                        'gudang' => $gudang,
+                                    ]);
+                                }
                             }
-                        }
-
-                        DB::table('buku_campur_approve')->insert([
-                            'id_buku_campur' => $idBukuCampur,
-                            'buku' => $rowData[1],
-                            'suplier_awal' => $rowData[2],
-                            'tgl' => $tanggal_mysql,
-                            'nm_grade' => $rowData[4],
-                            'pcs' => $rowData[5],
-                            'gr' => $rowData[6],
-                            'no_lot' => $rowData[8],
-                            'ket' => empty($rowData[9]) ? ' ' : $rowData[9],
-                            'rupiah' => $rowData[7],
-                            'lok_tgl' => empty($rowData[11]) ? ' ' : $rowData[11],
-                            'gudang' => $gudang,
-                        ]);
-                    } else {
-                        $buku_campur = DB::table('buku_campur')->where('id_buku_campur', $rowData[0])->first();
-                        DB::table('buku_campur')->where('id_buku_campur', $rowData[0])->update([
-                            'no_lot' => empty($buku_campur->no_nota) ? $rowData[8] : $buku_campur->no_lot,
-                            'approve' => 'Y',
-                            'gabung' => $rowData[14],
-                            'gudang' => $gudang,
-                        ]);
-
-                        $bk_approve = DB::table('buku_campur_approve')->where('id_buku_campur', $rowData[0])->first();
-
-                        if (empty($bk_approve)) {
-                            DB::table('buku_campur_approve')->insert([
-                                'id_buku_campur' => $rowData[0],
-                                'buku' => $rowData[1],
-                                'suplier_awal' => $rowData[2],
-                                'tgl' => $rowData[3],
-                                'nm_grade' => $rowData[4],
-                                'pcs' => $rowData[5],
-                                'gr' => $rowData[6],
-                                'no_lot' => empty($buku_campur->no_nota) ? $rowData[8] : $buku_campur->no_lot,
-                                'ket' => empty($rowData[9]) ? ' ' : $rowData[9],
-                                'rupiah' => $rowData[7],
-                                'lok_tgl' => empty($rowData[11]) ? ' ' : $rowData[11],
-                                'gudang' => $gudang,
-                            ]);
-                        } else {
-                            DB::table('buku_campur_approve')->where('id_buku_campur', $rowData[0])->update([
-                                'id_buku_campur' => $rowData[0],
-                                'buku' => $rowData[1],
-                                'suplier_awal' => $rowData[2],
-                                'tgl' => $rowData[3],
-                                'nm_grade' => $rowData[4],
-                                'pcs' => $rowData[5],
-                                'gr' => $rowData[6],
-                                'no_lot' => empty($buku_campur->no_nota) ? $rowData[8] : $buku_campur->no_lot,
-                                'ket' => empty($rowData[9]) ? ' ' : $rowData[9],
-                                'rupiah' => $rowData[7],
-                                'lok_tgl' => empty($rowData[11]) ? ' ' : $rowData[11],
-                                'gudang' => $gudang,
-                            ]);
+                        } catch (\Exception $e) {
+                            // Jika terjadi kesalahan, atur flag dan hentikan pembaruan
+                            $hasError = true;
+                            break 2; // Keluar dari kedua loop (sheet dan row)
                         }
                     }
-                }
-
-                if ($importGagal) {
-                    DB::rollback(); // Batalkan transaksi jika ada kesalahan
-                    return redirect()->route('gudangBk.index')->with('error', 'Data tidak valid: Kolom M,  dan N tidak boleh memiliki nilai Y yang sama');
-                } else {
-                    DB::commit(); // Konfirmasi transaksi jika berhasil
-                    return redirect()->route('gudangBk.index')->with('sukses', 'Data berhasil import');
                 }
             } catch (\Exception $e) {
-                DB::rollback(); // Batalkan transaksi jika terjadi kesalahan lain
-                return redirect()->route('gudangBk.index')->with('error', 'Terjadi kesalahan saat mengimpor data: ' . $e->getMessage());
+                echo 'Error loading spreadsheet: ' . $e->getMessage();
             }
-        } else {
-            return redirect()->route('gudangBk.index')->with('error', 'File yang diunggah bukan file Excel yang valid');
+
+            unlink(storage_path("app/{$filePath}"));
+
+            // Jika ada kesalahan, batalkan semua pembaruan
+            if ($hasError) {
+                echo 'Pembaruan dibatalkan karena terjadi kesalahan.';
+            }
         }
     }
     private function import_buku_bk(Request $r)
@@ -772,6 +650,8 @@ class GudangBkController extends Controller
                         $gudang = 'reject';
                     } elseif ($title === 'wip ( ini nama sinta)') {
                         $gudang = 'wip';
+                    } elseif ($title === '⁠penggabungan grd sama') {
+                        $gudang = 'gabung';
                     } else {
                         $hasError = true;
                     }
@@ -787,7 +667,7 @@ class GudangBkController extends Controller
                             $rowData[] = $cell->getValue();
                         }
 
-                        if (empty(array_slice($rowData, 0, 12))) {
+                        if (empty(array_filter(array_slice($rowData, 0, 13), 'strlen'))) {
                             continue;
                         }
 
@@ -863,7 +743,7 @@ class GudangBkController extends Controller
                                         'rupiah' => $rowData[7],
                                         'no_lot' => empty($buku_campur->no_nota) ? $rowData[8] : $buku_campur->no_lot,
                                         'ket' => empty($rowData[9]) ? ' ' : $rowData[9],
-                                        'ket' => empty($rowData[10]) ? ' ' : $rowData[10],
+                                        'ket2' => empty($rowData[10]) ? ' ' : $rowData[10],
                                         'lok_tgl' => empty($rowData[12]) ? ' ' : $rowData[12],
                                         'gudang' => $gudang,
                                     ]);
