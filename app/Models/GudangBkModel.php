@@ -24,6 +24,7 @@ class GudangBkModel extends Model
         if(a.approve = 'T',a.gr,d.gr) as gr, 
         if(a.approve = 'T',a.rupiah,d.rupiah) as rupiah,
         if(a.approve = 'T',a.ket,d.ket) as ket,
+        if(a.approve = 'T',a.ket2,d.ket2) as ket2,
         if(a.approve = 'T',a.lok_tgl,d.lok_tgl) as lok_tgl,
         if(a.approve = 'T',a.no_produksi,d.no_produksi) as no_produksi,d.pcs_diambil,d.gr_diambil
         FROM buku_campur as a
@@ -37,7 +38,7 @@ class GudangBkModel extends Model
 
         return $result;
     }
-    public static function export_getPembelianBk()
+    public static function export_getPembelianBk($gudang)
     {
 
         $result = DB::select("SELECT 
@@ -51,6 +52,7 @@ class GudangBkModel extends Model
         if(a.approve = 'T',a.gr,d.gr) as gr, 
         if(a.approve = 'T',a.rupiah,d.rupiah) as rupiah,
         if(a.approve = 'T',a.ket,d.ket) as ket,
+        if(a.approve = 'T',a.ket2,d.ket2) as ket2,
         if(a.approve = 'T',a.lok_tgl,d.lok_tgl) as lok_tgl,
         if(a.approve = 'T',a.no_produksi,d.no_produksi) as no_produksi,d.pcs_diambil,d.gr_diambil
         FROM buku_campur as a
@@ -59,8 +61,8 @@ class GudangBkModel extends Model
         left join buku_campur_approve as d on d.id_buku_campur = a.id_buku_campur
         left join invoice_bk as e on e.no_nota = a.no_nota
         left join tb_suplier as f on f.id_suplier = e.id_suplier
-        where if(a.approve = 'T',a.gudang,d.gudang) != 'wip' and a.gabung = 'T' ;
-        ");
+        where if(a.approve = 'T',a.gudang,d.gudang) = ? and a.gabung = 'T' ;
+        ", [$gudang]);
         return $result;
     }
     public static function getPembelianBkExport($id_buku_campur)

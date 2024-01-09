@@ -53,17 +53,16 @@
                                         <th class="dhead">Rp/Gr</th>
                                     @endif
                                     <th class="dhead">Lot</th>
-                                    <th class="dhead">Keterangan / Nama Partai</th>
+                                    <th class="dhead">Keterangan / Nama Partai Herry</th>
+                                    <th class="dhead">Keterangan / Nama Partai Sinta</th>
                                     @if ($presiden)
                                         <th class="dhead text-end">Ttl Rp <br> {{ number_format($ttlRp, 0) }}</th>
                                     @endif
                                     <th class="dhead">Lok</th>
                                     <th class="dhead text-center">
                                         @if ($nm_gudang == 'produksi' || $nm_gudang == 'wip')
-                                            @if ($presiden)
-                                                <button type="submit" name="submit" value="export_produksi"
-                                                    class="badge bg-success"><i class="fas fa-file-excel"></i></button>
-                                            @endif
+                                            <button type="submit" name="submit" value="export_produksi"
+                                                class="badge bg-success"><i class="fas fa-file-excel"></i></button>
                                         @else
                                             <button type="submit" name="submit" value="export"
                                                 class="badge bg-success"><i class="fas fa-file-excel"></i></button>
@@ -92,6 +91,7 @@
                                         @endif
                                         <td>{{ $g->no_lot }}</td>
                                         <td>{{ $g->ket }}</td>
+                                        <td>{{ $g->ket2 }}</td>
                                         @if ($presiden)
                                             <td class="text-end">{{ number_format($g->rupiah * $g->gr, 0) }}</td>
                                         @endif
