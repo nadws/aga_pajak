@@ -39,7 +39,7 @@
                                 <tr>
                                     <th class="dhead" rowspan="2">#</th>
                                     <th class="dhead" rowspan="2">Ket / nama partai</th>
-                                    <th class="dhead" rowspan="2">No Lot</th>
+                                    <th class="dhead" rowspan="2">Grade / No Lot</th>
                                     <th class="dhead text-center" colspan="2">Gudang Wip</th>
                                     <th class="dhead text-center" colspan="2">BK</th>
                                     <th class="text-white text-center bg-danger" colspan="2">Wip Sisa</th>
@@ -60,7 +60,7 @@
                                     <th class="dhead text-center">Pcs Akhir</th>
                                     <th class="dhead text-center">Gr Akhir</th>
                                     <th class="dhead text-center">Susut</th>
-                                    <th class="dhead text-center">Eo</th>
+                                    <th class="dhead text-center">Eot</th>
                                     <th class="dhead text-center">Flx</th>
 
                                     <th class="text-white bg-danger text-center">Pcs</th>
@@ -87,13 +87,19 @@
                                             <a href="#" class="float-end show_lot show{{ $no + 1 }}"
                                                 partai="{{ $g->ket }}" no="{{ $no + 1 }}">
                                                 <i class="fas fa-sort-down fa-lg text-primary "></i>
+
+                                                <div class="spinner-border spinerLot loadLotLoading{{$no+1}} spinner-border-sm text-primary" role="status">
+                                                    <span class="visually-hidden">Loading...</span>
+                                                </div>
                                             </a>
+                                            
                                             <a href="#" class="float-end hide_lot hide{{ $no + 1 }}" hidden
                                                 no="{{ $no + 1 }}">
                                                 <i class="fas fa-sort-up fa-lg text-primary "></i>
                                             </a>
+                                            
                                         </td>
-                                        <td class="text-center fw-bold"></td>
+                                        <td class="text-center fw-bold">{{ $g->nm_grade }}</td>
                                         <td class="text-end fw-bold">{{ number_format($wipPcs, 0) }}</td>
                                         <td class="text-end fw-bold">{{ number_format($wipGr, 0) }}</td>
                                         <td class="text-end fw-bold">{{ number_format($bkPcs, 0) }}</td>
@@ -112,8 +118,8 @@
                                         <td class="text-end fw-bold">{{ number_format($c->pcs_akhir ?? 0, 0) }}</td>
                                         <td class="text-end fw-bold">{{ number_format($c->gr_akhir ?? 0, 0) }}</td>
                                         <td class="text-end fw-bold">{{ number_format($c->susut ?? 0, 0) }}</td>
-                                        <td class="text-end fw-bold">{{ number_format($c->susut ?? 0, 0) }}</td>
-                                        <td class="text-end fw-bold">{{ number_format($c->susut ?? 0, 0) }}</td>
+                                        <td class="text-end fw-bold">{{ number_format($c->eot ?? 0, 0) }}</td>
+                                        <td class="text-end fw-bold">{{ number_format($c->gr_flx ?? 0, 0) }}</td>
                                         @php
                                             $pcs_awal_bk = $b->pcs_awal ?? 0;
                                             $gr_awal_bk = $b->gr_awal ?? 0;
@@ -173,12 +179,13 @@
                     // Setel properti checked dari kotak centang individu sesuai dengan status "cek semua"
                     $('.checkbox-item').prop('checked', $(this).prop('checked'));
                 });
-
-
+                $('.spinerLot').addClass('d-none');
                 $('.show_lot').click(function(e) {
+                    
                     e.preventDefault();
                     var nm_partai = $(this).attr('partai');
                     var no = $(this).attr('no');
+                    $('.loadLotLoading'+no).removeClass('d-none');
                     $.ajax({
                         type: "get",
                         url: "{{ route('summarybk.get_no_lot') }}",
@@ -186,13 +193,13 @@
                             nm_partai: nm_partai
                         },
                         success: function(response) {
+                            $('.loadLotLoading'+no).addClass('d-none');
                             $('.load_lot' + no).html(response);
                             $(".show" + no).hide();
                             $(".hide" + no).show();
                             $(".hide" + no).removeAttr("hidden");
                         }
                     });
-
 
                 });
                 $('.hide_lot').click(function(e) {

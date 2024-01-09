@@ -212,8 +212,8 @@ class SummaryController extends Controller
             
             $cbtSusut = empty($c->gr_awal) ? 0 : 1 - ((($gr_awal_bk - $gr_awal_cbt)+$c->gr_akhir)/$c->gr_awal);
             $sheet1->setCellValue('O' . $kolom, $cbtSusut);
-            $sheet1->setCellValue('P' . $kolom, 0);
-            $sheet1->setCellValue('Q' . $kolom, 0);
+            $sheet1->setCellValue('P' . $kolom, $c->eot ?? 0);
+            $sheet1->setCellValue('Q' . $kolom, $c->gr_flx ?? 0);
 
             $sheet1->setCellValue('R' . $kolom, $pcs_awal_bk - $pcs_awal_cbt);
             $sheet1->setCellValue('S' . $kolom, $gr_awal_bk - $gr_awal_cbt);
@@ -266,8 +266,21 @@ class SummaryController extends Controller
         $sheet1->setCellValue('T' . $kolom, $ttl_rp);
 
         $sheet1->getStyle('A2:T' . $kolom - 1)->applyFromArray($style);
+        
         $sheet1->getStyle('A' . $kolom . ':T' . $kolom)->applyFromArray($style_bawah);
+
+        $sheet1->getStyle('I1:J' . $kolom)->getFont()
+        ->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_RED));
+        $sheet1->getStyle('R1:S' . $kolom)->getFont()
+        ->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_RED));
+        
+        $sheet1->getStyle('I' . $kolom . ':J' . $kolom)->getFont()
+        ->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_RED));
+        $sheet1->getStyle('R' . $kolom . ':S' . $kolom)->getFont()
+        ->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_RED));
+
         $namafile = "Summary Wip.xlsx";
+
 
         $writer = new Xlsx($spreadsheet);
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
