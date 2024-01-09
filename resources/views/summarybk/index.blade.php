@@ -88,16 +88,17 @@
                                                 partai="{{ $g->ket }}" no="{{ $no + 1 }}">
                                                 <i class="fas fa-sort-down fa-lg text-primary "></i>
 
-                                                <div class="spinner-border spinerLot loadLotLoading{{$no+1}} spinner-border-sm text-primary" role="status">
+                                                <div class="spinner-border spinerLot loadLotLoading{{ $no + 1 }} spinner-border-sm text-primary"
+                                                    role="status">
                                                     <span class="visually-hidden">Loading...</span>
                                                 </div>
                                             </a>
-                                            
+
                                             <a href="#" class="float-end hide_lot hide{{ $no + 1 }}" hidden
                                                 no="{{ $no + 1 }}">
                                                 <i class="fas fa-sort-up fa-lg text-primary "></i>
                                             </a>
-                                            
+
                                         </td>
                                         <td class="text-center fw-bold">{{ $g->nm_grade }}</td>
                                         <td class="text-end fw-bold">{{ number_format($wipPcs, 0) }}</td>
@@ -167,11 +168,13 @@
             </button>
             <div class="load_box"></div>
         </x-theme.modal>
+
     </x-slot>
 
 
 
     @section('scripts')
+
         <script>
             $(document).ready(function() {
                 pencarian('pencarian', 'tableSearch')
@@ -181,11 +184,11 @@
                 });
                 $('.spinerLot').addClass('d-none');
                 $('.show_lot').click(function(e) {
-                    
+
                     e.preventDefault();
                     var nm_partai = $(this).attr('partai');
                     var no = $(this).attr('no');
-                    $('.loadLotLoading'+no).removeClass('d-none');
+                    $('.loadLotLoading' + no).removeClass('d-none');
                     $.ajax({
                         type: "get",
                         url: "{{ route('summarybk.get_no_lot') }}",
@@ -193,7 +196,7 @@
                             nm_partai: nm_partai
                         },
                         success: function(response) {
-                            $('.loadLotLoading'+no).addClass('d-none');
+                            $('.loadLotLoading' + no).addClass('d-none');
                             $('.load_lot' + no).html(response);
                             $(".show" + no).hide();
                             $(".hide" + no).show();
