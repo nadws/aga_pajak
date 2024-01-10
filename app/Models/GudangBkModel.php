@@ -136,7 +136,7 @@ class GudangBkModel extends Model
         $result = DB::select("SELECT a.id_buku_campur, a.no_lot, a.ket,a.ket2, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.rupiah * a.gr) as total_rp , a.selesai_1, a.selesai_2
         FROM buku_campur_approve as a 
         left join buku_campur as b on b.id_buku_campur = a.id_buku_campur
-        WHERE a.gudang = 'wip' and a.ket = ? and b.gabung = 'T'
+        WHERE a.gudang = 'wip' and a.ket2 = ? and b.gabung = 'T'
         GROUP by a.ket2, a.no_lot;
         ", [$ket]);
 
