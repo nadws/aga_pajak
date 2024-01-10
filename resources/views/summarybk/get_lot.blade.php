@@ -1,7 +1,7 @@
 @foreach ($lot as $no2 => $g)
     @php
         $response = Http::get("$linkApi/sarang",[
-            'nm_partai' => $g->ket,
+            'nm_partai' => $g->ket2,
             'no_lot' => $g->no_lot
         ]);
         $b = $response->object()->bk_cabut;
@@ -18,7 +18,7 @@
         </td>
         <td></td>
         <td class="text-center">
-            <a href="#" data-bs-toggle="modal" no_lot="{{ $g->no_lot }}" nm_partai="{{ $g->ket }}"
+            <a href="#" data-bs-toggle="modal" no_lot="{{ $g->no_lot }}" nm_partai="{{ $g->ket2 }}"
                 data-bs-target="#load_bk_cabut" class="float-end show_box">{{ $g->no_lot }} <i
                     class="fas fa-search text-primary "></i></a>
         </td>

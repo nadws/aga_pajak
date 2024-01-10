@@ -174,15 +174,15 @@ class SummaryController extends Controller
         $ttlPcsSisaSinta = 0;
         $ttGrSisaSinta = 0;
         foreach ($gudang as $no => $g) {
-            $response = Http::get("$this->linkApi/bk_sum?nm_partai=$g->ket");
+            $response = Http::get("$this->linkApi/bk_sum?nm_partai=$g->ket2");
             $b = $response->object();
 
-            $resSum = Http::get("$this->linkApi/sarang_sum?nm_partai=$g->ket");
+            $resSum = Http::get("$this->linkApi/sarang_sum?nm_partai=$g->ket2");
             $c = $resSum->object();
 
 
             $sheet1->setCellValue('A' . $kolom, $no + 1);
-            $sheet1->setCellValue('B' . $kolom, $g->ket);
+            $sheet1->setCellValue('B' . $kolom, $g->ket2);
             $sheet1->setCellValue('C' . $kolom, $g->nm_grade);
 
             $sheet1->setCellValue('D' . $kolom, $g->pcs ?? 0);
@@ -376,7 +376,7 @@ class SummaryController extends Controller
         $ttl_rp = 0;
         foreach ($gudang as $no => $g) {
             $response = Http::get("$this->linkApi/sarang",[
-                'nm_partai' => $g->ket,
+                'nm_partai' => $g->ket2,
                 'no_lot' => $g->no_lot
             ]);
             $b = $response->object()->bk_cabut;
@@ -384,7 +384,7 @@ class SummaryController extends Controller
 
 
             $sheet1->setCellValue('A' . $kolom, $no + 1);
-            $sheet1->setCellValue('B' . $kolom, $g->ket);
+            $sheet1->setCellValue('B' . $kolom, $g->ket2);
             $sheet1->setCellValue('C' . $kolom, $g->no_lot);
 
             $sheet1->setCellValue('D' . $kolom, $g->pcs ?? 0);

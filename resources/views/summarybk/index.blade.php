@@ -70,7 +70,7 @@
                             <tbody>
                                 @foreach ($gudang as $no => $g)
                                     @php
-                                        $ket = $g->ket;
+                                        $ket = $g->ket2;
                                         $response = Http::get("$linkApi/bk_sum", ['nm_partai' => $ket]);
                                         $b = $response->object();
 
