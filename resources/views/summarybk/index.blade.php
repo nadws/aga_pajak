@@ -83,9 +83,9 @@
                                     @endphp
                                     <tr>
                                         <td>{{ $no + 1 }}</td>
-                                        <td>{{ $g->ket }}
+                                        <td>{{ $g->ket2 }}
                                             <a href="#" class="float-end show_lot show{{ $no + 1 }}"
-                                                partai="{{ $g->ket }}" no="{{ $no + 1 }}">
+                                                partai="{{ $g->ket2 }}" no="{{ $no + 1 }}">
                                                 <i class="fas fa-sort-down fa-lg text-primary "></i>
 
                                                 <div class="spinner-border spinerLot loadLotLoading{{ $no + 1 }} spinner-border-sm text-primary"
@@ -174,7 +174,6 @@
 
 
     @section('scripts')
-
         <script>
             $(document).ready(function() {
                 pencarian('pencarian', 'tableSearch')
