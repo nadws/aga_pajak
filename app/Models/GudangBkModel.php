@@ -133,7 +133,7 @@ class GudangBkModel extends Model
     }
     public static function getSummaryWipLot($ket)
     {
-        $result = DB::select("SELECT a.id_buku_campur, a.no_lot, a.ket, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.rupiah * a.gr) as total_rp , a.selesai_1, a.selesai_2
+        $result = DB::select("SELECT a.id_buku_campur, a.no_lot, a.ket,a.ket2, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.rupiah * a.gr) as total_rp , a.selesai_1, a.selesai_2
         FROM buku_campur_approve as a 
         left join buku_campur as b on b.id_buku_campur = a.id_buku_campur
         WHERE a.gudang = 'wip' and a.ket = ? and b.gabung = 'T'
