@@ -137,7 +137,7 @@ class GudangBkModel extends Model
         FROM buku_campur_approve as a 
         left join buku_campur as b on b.id_buku_campur = a.id_buku_campur
         WHERE a.gudang = 'wip' and a.ket = ? and b.gabung = 'T'
-        GROUP by a.ket, a.no_lot;
+        GROUP by a.ket2, a.no_lot;
         ", [$ket]);
 
         return $result;
