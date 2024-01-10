@@ -1,11 +1,11 @@
 @foreach ($lot as $no2 => $g)
     @php
-        $response = Http::get("$linkApi/sarang?nm_partai=$g->ket&no_lot=$g->no_lot");
-        $bk = $response['data']['bk_cabut'] ?? null;
-        $b = json_decode(json_encode($bk));
-
-        $cbt = $response['data']['cabut'] ?? null;
-        $c = json_decode(json_encode($cbt));
+        $response = Http::get("$linkApi/sarang",[
+            'nm_partai' => $g->ket,
+            'no_lot' => $g->no_lot
+        ]);
+        $b = $response->object()->bk_cabut;
+        $c = $response->object()->cabut;
 
         $wipPcs = $g->pcs ?? 0;
         $wipGr = $g->gr ?? 0;

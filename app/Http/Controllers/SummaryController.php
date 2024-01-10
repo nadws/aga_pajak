@@ -375,12 +375,12 @@ class SummaryController extends Controller
         $gr_akhir_cbt_ttl = 0;
         $ttl_rp = 0;
         foreach ($gudang as $no => $g) {
-            $response = Http::get("$this->linkApi/sarang?nm_partai=$g->ket&no_lot=$g->no_lot");
-            $bk = $response['data']['bk_cabut'] ?? null;
-            $b = json_decode(json_encode($bk));
-
-            $cbt = $response['data']['cabut'] ?? null;
-            $c = json_decode(json_encode($cbt));
+            $response = Http::get("$this->linkApi/sarang",[
+                'nm_partai' => $g->ket,
+                'no_lot' => $g->no_lot
+            ]);
+            $b = $response->object()->bk_cabut;
+            $c = $response->object()->cabut;
 
 
             $sheet1->setCellValue('A' . $kolom, $no + 1);
