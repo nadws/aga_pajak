@@ -1,8 +1,8 @@
 @foreach ($lot as $no2 => $g)
     @php
-        $response = Http::get("$linkApi/sarang",[
+        $response = Http::get("$linkApi/sarang", [
             'nm_partai' => $g->ket2,
-            'no_lot' => $g->no_lot
+            'no_lot' => $g->no_lot,
         ]);
         $b = $response->object()->bk_cabut;
         $c = $response->object()->cabut;
