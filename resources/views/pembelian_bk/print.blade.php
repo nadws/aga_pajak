@@ -13,7 +13,7 @@
     <title>Hello, world!</title>
 </head>
 
-<body class="py-5">
+<body class="py-2">
     <style>
         .bdr {
             border-radius: 16px;
@@ -46,25 +46,47 @@
     </style>
     @for ($i = 0; $i < 2; $i++)
         <div class="container text-center">
-            <div class="row justify-content-center">
-                <div class="col">
-                    <img src="/assets/login/img/empat.svg" width="100" alt="">
-                </div>
-                <div class="col">
-                    <h5>PT Agrika Gatya Arum</h5>
-                    <p>Alamat disini</p>
+            <div class="row align-items-center">
+                <div class="col-6"></div>
+                <div class="col-6">
+                    <table>
+                        <tr>
+                            <td><img src="/assets/login/img/empat.svg" width="100" alt=""></td>
+                            <td>
+                                <h5 style="color:#0071C1">PT Agrika Gatya Arum</h5>
+                            </td>
+                        </tr>
+                    </table>
+                    
                 </div>
             </div>
             <hr class="text-black" style="border: 1px solid black">
             <div class="row">
                 <div class="col text-start">
-                    <h6>Tagihan Kepada</h6>
-                    <h4>{{ strtoupper($pembelian->suplier_akhir) }}</h4>
+                    <p style="margin-bottom: 1px; font-size: 12px">Kpd Yth, Bpk/Ibu</p>
+                    <h6 style="font-size: 12px">{{ strtoupper($pembelian->suplier_akhir) }}</h6>
                 </div>
                 <div class="col"></div>
                 <div class="col">
-                    <p class="text-end"><span class="fw-bold">#{{ $pembelian->no_nota }}</span></p>
-                    <p class="text-end"><span class="fw-bold">{{ tanggal($pembelian->tgl) }}</span></p>
+                    <table>
+                        <tr>
+                            <td align="left">
+
+                                No Nota
+                            </td>
+                            <td width="10">:</td>
+                            <th width="130" class="text-end">#{{ $pembelian->no_nota }}</th>
+                        </tr>
+                        <tr>
+                            <td align="left">
+
+                                Tanggal
+                            </td>
+                            <td width="10">:</td>
+                            <th width="130" class="text-end">{{ tanggal($pembelian->tgl) }}</th>
+                        </tr>
+                    </table>
+
                 </div>
             </div>
 
@@ -72,14 +94,13 @@
                 <div class="col">
                     <div class="tbl-container bdr">
                         <table class="table ">
-                            <thead class=" text-white" style="background-color: #716F6C">
+                            <thead class=" text-white" style="background-color: #309fee">
                                 <tr>
-                                    <th class="text-start">Nama Produk</th>
+                                    <th class="text-start">Grade</th>
                                     <th>Keterangan</th>
-                                    <th class="text-end">Qty</th>
-                                    <th class="text-center">Satuan</th>
-                                    <th class="text-end">Harga</th>
-                                    <th class="text-end">Total</th>
+                                    <th class="text-end" style="padding-right: 18px">Gr</th>
+                                    <th class="text-end" style="padding-right: 18px">Rp</th>
+                                    <th class="text-end">Total Rp</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -94,34 +115,20 @@
                                         <td align="left">{{ $p->nm_produk }}</td>
                                         <td>{{ $p->ket }}</td>
                                         <td align="right">{{ number_format($p->qty, 0) }}</td>
-                                        <td align="center">{{ $p->nm_satuan }}</td>
                                         <td align="right">{{ number_format($p->h_satuan, 0) }}</td>
                                         <td align="right">
                                             {{ $p->id_produk == '7' ? number_format($p->h_satuan, 0) : number_format($p->qty == '0' ? '0' : $p->qty * $p->h_satuan, 0) }}
                                         </td>
                                     </tr>
-                                    @php
-                                        $no++;
-                                    @endphp
                                 @endforeach
-                                @php
-                                    $row = 5 - $no;
-                                    if ($row < 0) {
-                                        $rows = 100;
-                                    } else {
-                                        $rows = $row * 15;
-                                    }
-                                @endphp
-
                             </tbody>
-                            <tfoot class="rounded-tfoot" style="background-color: #ffd61f;">
+                            <tfoot class="rounded-tfoot" style="background-color: #D3D3D3;border-top: 2px solid white;">
                                 <tr>
-                                    <th style="text-align: center;">Total</th>
+                                    <th style="text-align: start;">Total</th>
                                     <th></th>
                                     <th style="text-align: right;">
                                         <?= number_format($qty_total, 0) ?>
                                     </th>
-                                    <th></th>
                                     <th style="text-align: right;">
                                         <?= number_format($pembelian->total_harga == '0' ? '0' : $pembelian->total_harga / $qty_total, 0) ?>
                                     </th>
@@ -136,15 +143,19 @@
                     </div>
                 </div>
             </div>
-            <p class="text-start">Catatan : <br> Jangan Dibanting</p>
+            <div class="row">
+                <div class="col">
+                    <p class="float-start" style="margin-left: 30px"><em>T e r i m a k a s i h !</em></p>
+                    <p class="float-end"><span class="badge bg-info badge-sm">{{ $i == 0 ? 'Mitra' : 'Kantor' }}</span>
+                    </p>
+                </div>
+            </div>
+
             @if ($i == 0)
                 <h6 class="dotted-line">Gunting disini</h6>
             @endif
         </div>
     @endfor
-
-
-
 
 
 
