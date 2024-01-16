@@ -28,7 +28,7 @@
                         <td style="text-align: right">{{ number_format($grading->pcs_awal, 0) }}</td>
                         <td style="text-align: right">{{ number_format($grading->gr_kering, 0) }}</td>
                         <td style="text-align: right">
-                            {{ number_format((1 - $grading->qty / $grading->gr_kering) * 100, 0) }}
+                            {{ number_format((1 - $grading->qty / $grading->gr_kering) * -100, 0) }}
                             %</td>
                         <td style="text-align: right">
                             {{ number_format((1 - $grading->gr_kering / $grading->gr_basah) * 100, 0) }}
