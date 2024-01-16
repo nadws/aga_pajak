@@ -146,7 +146,6 @@
             <div class="row">
                 <div class="col">
                     <p class="float-start" style="margin-left: 30px"><em>T e r i m a k a s i h !</em></p>
-                    <p class="float-end"><span class="badge bg-info badge-sm">{{ $i == 0 ? 'Mitra' : 'Kantor' }}</span>
                     </p>
                 </div>
             </div>
