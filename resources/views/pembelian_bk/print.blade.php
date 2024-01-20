@@ -67,9 +67,9 @@
     </style>
     @for ($i = 0; $i < 2; $i++)
         <div class="container text-center">
-            <div class="logoHp row align-items-center">
+            <div class="logoHp row text-center float-center align-items-center">
                 <div class="col"></div>
-                <div class="col-sm-12 col-lg-6 col-md-6">
+                <div class="col-sm-12 text-center col-lg-6 col-md-6">
                     <table>
                         <tr>
                             <td><img src="/assets/login/img/empat.svg" width="100" alt=""></td>
