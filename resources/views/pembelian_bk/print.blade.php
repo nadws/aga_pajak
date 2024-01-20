@@ -13,7 +13,7 @@
     <title>Hello, world!</title>
 </head>
 
-<body class="py-2">
+<body class="py-2 px-3">
     <style>
         .bdr {
             border-radius: 16px;
@@ -23,6 +23,8 @@
         .rounded-tfoot th:first-child {
             border-bottom-left-radius: 16px;
         }
+
+
 
         .rounded-tfoot th:last-child {
             border-bottom-right-radius: 16px;
@@ -43,32 +45,64 @@
             vertical-align: 3px;
             padding-left: 10px;
         }
+
+        @media (max-width:1600px) {
+            .logoHp {
+                display: none
+            }
+
+        
+        }
+
+        @media (max-width:480px) {
+            .logoHp {
+                display: block
+            }
+
+            .logoDesktop {
+                display: none
+            }
+        }
+
     </style>
     @for ($i = 0; $i < 2; $i++)
         <div class="container text-center">
-            <div class="row align-items-center">
-                <div class="col-6"></div>
-                <div class="col-6">
-                    <table>
+            <div class="logoHp row text-center float-center align-items-center">
+                <div class="col-6 float-center justify-content-center">
+                    <table class="text-center float-center">
                         <tr>
                             <td><img src="/assets/login/img/empat.svg" width="100" alt=""></td>
                             <td>
-                                <h5 style="color:#0071C1">PT Agrika Gatya Arum</h5>
+                                <h5 class=" text-end" style="color:#0071C1">PT Agrika Gatya Arum</h5>
                             </td>
                         </tr>
                     </table>
-                    
+
+                </div>
+            </div>
+            <div class="logoDesktop row align-items-center">
+                <div class="col"></div>
+                <div class="col float-end">
+                    <table class="text-end">
+                        <tr>
+                            <td><img src="/assets/login/img/empat.svg" width="100" alt=""></td>
+                            <td>
+                                <h5 class=" text-end" style="color:#0071C1">PT Agrika Gatya Arum</h5>
+                            </td>
+                        </tr>
+                    </table>
+
                 </div>
             </div>
             <hr class="text-black" style="border: 1px solid black">
             <div class="row">
-                <div class="col text-start">
+                <div class="col-4 col-lg-6 text-start">
+
                     <p style="margin-bottom: 1px; font-size: 12px">Kpd Yth, Bpk/Ibu</p>
                     <h6 style="font-size: 12px">{{ strtoupper($pembelian->suplier_akhir) }}</h6>
                 </div>
-                <div class="col"></div>
-                <div class="col">
-                    <table>
+                <div class="col-8 col-lg-6 text-end">
+                    <table class="float-end" style="font-size: 13px;">
                         <tr>
                             <td align="left">
 
@@ -93,11 +127,11 @@
             <div class="row mt-4">
                 <div class="col">
                     <div class="tbl-container bdr">
-                        <table class="table ">
+                        <table class="table">
                             <thead class=" text-white" style="background-color: #309fee">
                                 <tr>
                                     <th class="text-start">Grade</th>
-                                    <th>Keterangan</th>
+                                    <th>ket</th>
                                     <th class="text-end" style="padding-right: 18px">Gr</th>
                                     <th class="text-end" style="padding-right: 18px">Rp</th>
                                     <th class="text-end">Total Rp</th>
@@ -110,8 +144,10 @@
                                 @foreach ($produk as $no => $p)
                                     @php
                                         $qty_total += $p->qty;
+                                        $ket = $p->ket;
+                                        $ket_with_br = strlen($ket) > 50 ? wordwrap($ket, 50, "<br>\n") : $ket;
                                     @endphp
-                                    <tr>
+                                    <tr class="align-middle">
                                         <td align="left">{{ $p->nm_produk }}</td>
                                         <td>{{ $p->ket }}</td>
                                         <td align="right">{{ number_format($p->qty, 0) }}</td>
@@ -136,8 +172,6 @@
                                         <?= number_format($pembelian->total_harga, 0) ?>
                                     </th>
                                 </tr>
-
-
                             </tfoot>
                         </table>
                     </div>
@@ -145,13 +179,13 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <p class="float-start" style="margin-left: 30px"><em>T e r i m a k a s i h !</em></p>
+                    <p class="float-start" style="margin-left: 30px; color:#0071C1"><em>T e r i m a k a s i h !</em></p>
                     </p>
                 </div>
             </div>
 
             @if ($i == 0)
-                <h6 class="dotted-line">Gunting disini</h6>
+                <h6 class="dotted-line"></h6>
             @endif
         </div>
     @endfor
