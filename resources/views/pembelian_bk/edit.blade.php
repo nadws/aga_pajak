@@ -57,10 +57,11 @@
                             <tr>
                                 <th width="2%">#</th>
                                 <th width="15%">Produk</th>
+                                <th width="15%">Keterangan</th>
                                 <th width="7%">Qty</th>
                                 <th width="10%">Satuan</th>
-                                <th width="12%" style="text-align: right;">Harga Satuan</th>
-                                <th width="12%" style="text-align: right;">Total Harga</th>
+                                <th width="12%" style="text-align: right;white-space: nowrap;">Harga Satuan</th>
+                                <th width="12%" style="text-align: right;white-space: nowrap;">Total Harga</th>
                                 <th width="5%">Aksi</th>
                             </tr>
                         </thead>
