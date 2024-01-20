@@ -46,24 +46,45 @@
             padding-left: 10px;
         }
 
-        @media (min-width:320px) {
-            .mobileTeks {
-                font-size: 11px;
+        @media (max-width:1600px) {
+            .logoHp {
+                display: none
+            }
+
+        
+        }
+
+        @media (max-width:480px) {
+            .logoHp {
+                display: block
+            }
+
+            .logoDesktop {
+                display: none
             }
         }
 
-        @media (min-width:1281px) {
-            .mobileTeks {
-                font-size: 20px;
-            }
-        }
     </style>
     @for ($i = 0; $i < 2; $i++)
         <div class="container text-center">
-            <div class="row align-items-center">
+            <div class="logoHp row align-items-center">
                 <div class="col"></div>
                 <div class="col-sm-12 col-lg-6 col-md-6">
                     <table>
+                        <tr>
+                            <td><img src="/assets/login/img/empat.svg" width="100" alt=""></td>
+                            <td>
+                                <h5 class=" text-end" style="color:#0071C1">PT Agrika Gatya Arum</h5>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+            </div>
+            <div class="logoDesktop row align-items-center">
+                <div class="col"></div>
+                <div class="col float-end">
+                    <table class="text-end">
                         <tr>
                             <td><img src="/assets/login/img/empat.svg" width="100" alt=""></td>
                             <td>
@@ -111,7 +132,7 @@
                             <thead class=" text-white" style="background-color: #309fee">
                                 <tr>
                                     <th class="text-start">Grade</th>
-                                    <th >ket</th>
+                                    <th>ket</th>
                                     <th class="text-end" style="padding-right: 18px">Gr</th>
                                     <th class="text-end" style="padding-right: 18px">Rp</th>
                                     <th class="text-end">Total Rp</th>
@@ -120,16 +141,16 @@
                             <tbody>
                                 @php
                                     $qty_total = 0;
-                                    @endphp
+                                @endphp
                                 @foreach ($produk as $no => $p)
-                                @php
+                                    @php
                                         $qty_total += $p->qty;
                                         $ket = $p->ket;
                                         $ket_with_br = strlen($ket) > 50 ? wordwrap($ket, 50, "<br>\n") : $ket;
                                     @endphp
                                     <tr class="align-middle">
                                         <td align="left">{{ $p->nm_produk }}</td>
-                                        <td>{{$p->ket}}</td>
+                                        <td>{{ $p->ket }}</td>
                                         <td align="right">{{ number_format($p->qty, 0) }}</td>
                                         <td align="right">{{ number_format($p->h_satuan, 0) }}</td>
                                         <td align="right">
