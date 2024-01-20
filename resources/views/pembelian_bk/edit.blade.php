@@ -361,7 +361,7 @@
                 });
                 $(document).on("keyup", ".h_satuan", function() {
                     var count = $(this).attr("count");
-                    alert(count);
+
                     var id_produk = $(this).attr('id_produk');
                     var input = $(this).val();
                     input = input.replace(/[^\d\,]/g, "");
