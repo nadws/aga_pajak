@@ -405,7 +405,8 @@
                     var debit = $(".total").text(totalRupiahall);
                 });
 
-                var count = 2;
+
+                var count = 99;
                 $(document).on("click", ".tbh_baris", function() {
                     count = count + 1;
                     $.ajax({
