@@ -57,10 +57,11 @@
                             <tr>
                                 <th width="2%">#</th>
                                 <th width="15%">Produk</th>
+                                <th width="15%">Keterangan</th>
                                 <th width="7%">Qty</th>
                                 <th width="10%">Satuan</th>
-                                <th width="12%" style="text-align: right;">Harga Satuan</th>
-                                <th width="12%" style="text-align: right;">Total Harga</th>
+                                <th width="12%" style="text-align: right;white-space: nowrap;">Harga Satuan</th>
+                                <th width="12%" style="text-align: right;white-space: nowrap;">Total Harga</th>
                                 <th width="5%">Aksi</th>
                             </tr>
                         </thead>
@@ -91,6 +92,10 @@
                                                     {{ $p->nm_produk }}</option>
                                             @endforeach
                                         </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="ket[]"
+                                            value="{{ $g->ket }}">
                                     </td>
 
                                     <td style="vertical-align: top;">
@@ -356,6 +361,7 @@
                 });
                 $(document).on("keyup", ".h_satuan", function() {
                     var count = $(this).attr("count");
+
                     var id_produk = $(this).attr('id_produk');
                     var input = $(this).val();
                     input = input.replace(/[^\d\,]/g, "");
@@ -399,7 +405,8 @@
                     var debit = $(".total").text(totalRupiahall);
                 });
 
-                var count = 2;
+
+                var count = 99;
                 $(document).on("click", ".tbh_baris", function() {
                     count = count + 1;
                     $.ajax({
