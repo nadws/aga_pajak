@@ -80,10 +80,9 @@
                                     <a href="{{ route('print_bk', ['no_nota' => $c->no_invoice_bk]) }}"
                                         class="btn btn-sm btn-success"><i class="fas fa-print"></i></a>
                                 @endif
-
-
-
-                                <a href="#" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                                <a href="#" class="btn btn-sm btn-danger delete_nota"
+                                    id_invoice_congan="{{ $c->id_invoice_congan }}" data-bs-toggle="modal"
+                                    data-bs-target="#delete"><i class="fas fa-trash"></i></a>
                             </td>
                         </tr>
                     @endforeach
@@ -159,7 +158,8 @@
                                 <td>
                                     <h6>Harga Beli &nbsp;</h6>
                                 </td>
-                                <td><input type="text" class="form-control hrga_beli" name="hrga_beli[]" required>
+                                <td><input type="text" class="form-control hrga_beli" name="hrga_beli[]"
+                                        value="0">
                                 </td>
                             </tr>
                             <tr>
@@ -193,6 +193,29 @@
         </form>
 
 
+        <form action="{{ route('congan.delete_nota') }}" method="get">
+            <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="row">
+                                <h5 class="text-danger ms-4 mt-4"><i class="fas fa-trash"></i> Hapus Data</h5>
+                                <p class=" ms-4 mt-4">Apa anda yakin ingin menghapus ?</p>
+                                <input type="hidden" class="id_invoice_congan" name="id_invoice_congan">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-danger"
+                                data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-danger">Hapus</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
 
 
 
@@ -217,8 +240,8 @@
                 pencarian('pencarian', 'tableSearch')
 
                 $(document).on('click', '.delete_nota', function() {
-                    var no_nota = $(this).attr('no_nota');
-                    $('.no_nota').val(no_nota);
+                    var id_invoice_congan = $(this).attr('id_invoice_congan');
+                    $('.id_invoice_congan').val(id_invoice_congan);
                 });
 
                 $(document).on("keyup", ".gr", function() {

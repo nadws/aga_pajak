@@ -7,19 +7,19 @@
             </div>
             <div class="col-lg-6">
                 @if (!empty($import))
-                <x-theme.button modal="Y" idModal="import" icon="fa-upload" variant="success" addClass="float-end"
-                    teks="Import" />
+                    <x-theme.button modal="Y" idModal="import" icon="fa-upload" variant="success"
+                        addClass="float-end" teks="Import" />
                 @endif
 
                 @if (!empty($export))
-                <x-theme.button modal="T"
-                    href="/export_jurnal?tgl1={{ $tgl1 }}&tgl2={{ $tgl2 }}&id_proyek={{ $id_proyek }}&id_buku=2"
-                    icon="fa-file-excel" addClass="float-end float-end btn btn-success me-2" teks="Export" />
+                    <x-theme.button modal="T"
+                        href="/export_jurnal?tgl1={{ $tgl1 }}&tgl2={{ $tgl2 }}&id_proyek={{ $id_proyek }}&id_buku=2"
+                        icon="fa-file-excel" addClass="float-end float-end btn btn-success me-2" teks="Export" />
                 @endif
 
                 @if (!empty($tambah))
-                <x-theme.button modal="T" href="{{ route('jurnal.add') }}" icon="fa-plus" addClass="float-end"
-                    teks="Buat Baru" />
+                    <x-theme.button modal="T" href="{{ route('jurnal.add') }}" icon="fa-plus" addClass="float-end"
+                        teks="Buat Baru" />
                 @endif
 
                 <x-theme.btn_filter />
@@ -48,71 +48,71 @@
                 </thead>
                 <tbody>
                     @foreach ($jurnal as $no => $a)
-                    <tr>
-                        <td>{{ $no + 1 }}</td>
-                        <td>{{ $a->no_nota }}</td>
-                        <td>{{ $a->no_urut }}</td>
-                        <td class="nowrap">{{ date('d-m-Y', strtotime($a->tgl)) }}</td>
-                        <td><a
-                                href="{{ route('summary_buku_besar.detail', ['id_akun' => $a->id_akun, 'tgl1' => $tgl1, 'tgl2' => $tgl2]) }}">{{
-                                ucwords(strtolower($a->nm_akun)) }}</a>
-                        </td>
-                        <td>{{ ucwords(strtolower($a->nm_post ?? '')) }}</td>
-                        @if (strlen($a->ket) > 60)
-                        <td>
-                            <span class="teksLimit{{ $a->id_jurnal }}">
-                                {{ Str::limit($a->ket, 30, '...') }}
-                                <a href="#" class="readMore" id="{{ $a->id_jurnal }}">read
-                                    more</a>
-                            </span>
-                            <span class="teksFull{{ $a->id_jurnal }}" style="display:none">{{ $a->ket }}
-                                <a href="#" class="less" id="{{ $a->id_jurnal }}">less</a></span>
-                        </td>
-                        @else
-                        <td>
-                            {{ $a->ket }}
-                        </td>
-                        @endif
-                        <td align="right">{{ number_format($a->debit, 2) }}</td>
-                        <td align="right">{{ number_format($a->kredit, 2) }}</td>
-                        <td>
-                            <div class="btn-group" role="group">
-                                <span class="btn btn-sm" data-bs-toggle="dropdown">
-                                    <i class="fas fa-ellipsis-v text-primary"></i>
-                                </span>
-                                <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                    @php
-                                    $empty = [$edit, $hapus, $detail];
-                                    @endphp
-                                    <x-theme.dropdown_kosong :emptyKondisi="$empty" />
+                        <tr>
+                            <td>{{ $no + 1 }}</td>
+                            <td>{{ $a->no_nota }}</td>
+                            <td>{{ $a->no_urut }}</td>
+                            <td class="nowrap">{{ date('d-m-Y', strtotime($a->tgl)) }}</td>
+                            <td><a
+                                    href="{{ route('summary_buku_besar.detail', ['id_akun' => $a->id_akun, 'tgl1' => $tgl1, 'tgl2' => $tgl2]) }}">{{ ucwords(strtolower($a->nm_akun)) }}</a>
+                            </td>
+                            <td>{{ ucwords(strtolower($a->nm_post ?? '')) }}</td>
+                            @if (strlen($a->ket) > 60)
+                                <td>
+                                    <span class="teksLimit{{ $a->id_jurnal }}">
+                                        {{ Str::limit($a->ket, 30, '...') }}
+                                        <a href="#" class="readMore" id="{{ $a->id_jurnal }}">read
+                                            more</a>
+                                    </span>
+                                    <span class="teksFull{{ $a->id_jurnal }}" style="display:none">{{ $a->ket }}
+                                        <a href="#" class="less" id="{{ $a->id_jurnal }}">less</a></span>
+                                </td>
+                            @else
+                                <td>
+                                    {{ $a->ket }}
+                                </td>
+                            @endif
+                            <td align="right">{{ number_format($a->debit, 2) }}</td>
+                            <td align="right">{{ number_format($a->kredit, 2) }}</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <span class="btn btn-sm" data-bs-toggle="dropdown">
+                                        <i class="fas fa-ellipsis-v text-primary"></i>
+                                    </span>
+                                    <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                        @php
+                                            $empty = [$edit, $hapus, $detail];
+                                        @endphp
+                                        <x-theme.dropdown_kosong :emptyKondisi="$empty" />
 
-                                    @if (!empty($edit))
-                                    <li><a class="dropdown-item text-primary edit_akun"
-                                            href="{{ route('edit_jurnal', ['no_nota' => $a->no_nota]) }}"><i
-                                                class="me-2 fas fa-pen"></i>Edit</a>
-                                    </li>
-                                    @endif
+                                        @if (!empty($edit))
+                                            <li><a class="dropdown-item text-primary edit_akun"
+                                                    href="{{ route('edit_jurnal', ['no_nota' => $a->no_nota]) }}"><i
+                                                        class="me-2 fas fa-pen"></i>Edit</a>
+                                            </li>
+                                        @endif
 
 
-                                    @if (!empty($hapus))
-                                    <li>
-                                        <a class="dropdown-item text-danger delete_nota" no_nota="{{ $a->no_nota }}"
-                                            href="#" data-bs-toggle="modal" data-bs-target="#delete"><i
-                                                class="me-2 fas fa-trash"></i>Delete
-                                        </a>
-                                    </li>
-                                    @endif
+                                        @if (!empty($hapus))
+                                            <li>
+                                                <a class="dropdown-item text-danger delete_nota"
+                                                    no_nota="{{ $a->no_nota }}" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#delete"><i class="me-2 fas fa-trash"></i>Delete
+                                                </a>
+                                            </li>
+                                        @endif
 
-                                    @if (!empty($detail))
-                                    <li><a class="dropdown-item  text-info detail_nota" href="#"
-                                            no_nota="{{ $a->no_nota }}" href="#" data-bs-toggle="modal"
-                                            data-bs-target="#detail"><i class="me-2 fas fa-search"></i>Detail</a>
-                                    </li>
-                                    @endif
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
+                                        @if (!empty($detail))
+                                            <li><a class="dropdown-item  text-info detail_nota" href="#"
+                                                    no_nota="{{ $a->no_nota }}" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#detail"><i
+                                                        class="me-2 fas fa-search"></i>Detail</a>
+                                            </li>
+                                        @endif
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
                     @endforeach
                 </tbody>
             </table>
@@ -133,7 +133,8 @@
         </form>
 
         <form action="{{ route('jurnal-delete') }}" method="get">
-            <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-body">
@@ -147,7 +148,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Batal</button>
+                            <button type="button" class="btn btn-outline-danger"
+                                data-bs-dismiss="modal">Batal</button>
                             <button type="submit" class="btn btn-danger">Hapus</button>
                         </div>
                     </div>
@@ -169,8 +171,8 @@
 
     </x-slot>
     @section('js')
-    <script>
-        $(document).ready(function() {
+        <script>
+            $(document).ready(function() {
 
                 function readMore() {
                     $(document).on('click', '.readMore', function(e) {
@@ -208,6 +210,6 @@
 
                 });
             });
-    </script>
+        </script>
     @endsection
 </x-theme.app>

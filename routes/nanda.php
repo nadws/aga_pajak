@@ -404,5 +404,6 @@ Route::middleware('auth')->group(function () {
             Route::get('/buat_nota', 'buat_nota')->name('buat_nota');
             Route::post('/save_pembelian_bk', 'save_pembelian_bk')->name('save_pembelian_bk');
             Route::get('/export', 'export')->name('export');
+            Route::get('/delete_nota', 'delete_nota')->name('delete_nota');
         });
 });

@@ -109,20 +109,7 @@ class ConganController extends Controller
             $gr = $r->{"gr" . $count[$y]};
             $harga = $r->{"harga" . $count[$y]};
 
-
             for ($x = 0; $x < count($id_grade); $x++) {
-                if (!empty($gr[$x])) {
-                    $data  = [
-                        'tgl' => $r->tgl,
-                        'id_grade' => $id_grade[$x],
-                        'gr' => $gr[$x],
-                        'hrga' => $harga[$x],
-                        'urutan' => $urutan,
-                        'no_nota' => $urutan,
-                        'ket' => $r->ket[$y]
-                    ];
-                    DB::table('tb_cong')->insert($data);
-                }
                 $ttl_gr += $gr[$x];
             }
 
@@ -136,7 +123,23 @@ class ConganController extends Controller
                 'gr' => $ttl_gr
 
             ];
-            DB::table('invoice_congan')->insert($data);
+            $idInvoiceCongan = DB::table('invoice_congan')->insertGetId($data);
+
+            for ($x = 0; $x < count($id_grade); $x++) {
+                if (!empty($gr[$x])) {
+                    $data  = [
+                        'tgl' => $r->tgl,
+                        'id_grade' => $id_grade[$x],
+                        'gr' => $gr[$x],
+                        'hrga' => $harga[$x],
+                        'urutan' => $urutan,
+                        'no_nota' => $urutan,
+                        'ket' => $r->ket[$y],
+                        'id_invoice_congan' => $idInvoiceCongan
+                    ];
+                    DB::table('tb_cong')->insert($data);
+                }
+            }
         }
 
         return redirect()->route('congan.index')->with('sukses', 'Data berhasil disimpan');
@@ -149,7 +152,6 @@ class ConganController extends Controller
         $urutan = $r->no_nota;
 
         DB::table('tb_cong')->where('no_nota', $urutan)->delete();
-        DB::table('invoice_congan')->where('no_nota', $urutan)->delete();
 
         for ($y = 0; $y < count($r->pemilik); $y++) {
             $count = $r->count;
@@ -158,6 +160,21 @@ class ConganController extends Controller
             $id_grade = $r->{"id_grade" . $count[$y]};
             $gr = $r->{"gr" . $count[$y]};
             $harga = $r->{"harga" . $count[$y]};
+            for ($x = 0; $x < count($id_grade); $x++) {
+                $ttl_gr += $gr[$x];
+            }
+            $data = [
+                'tgl' => $r->tgl[$y],
+                'pemilik' => $r->pemilik[$y],
+                'ket' => $r->ket[$y],
+                'persen_air' => $r->persen_air[$y],
+                'hrga_beli' => $r->hrga_beli[$y],
+                'no_nota' => $urutan,
+                'gr' => $ttl_gr
+
+            ];
+            DB::table('invoice_congan')->where('id_invoice_congan', $r->id_invoice_congan[$y])->update($data);
+
 
 
             for ($x = 0; $x < count($id_grade); $x++) {
@@ -169,24 +186,12 @@ class ConganController extends Controller
                         'hrga' => $harga[$x],
                         'urutan' => $urutan,
                         'no_nota' => $urutan,
-                        'ket' => $r->ket[$y]
+                        'ket' => $r->ket[$y],
+                        'id_invoice_congan' => $r->id_invoice_congan[$y]
                     ];
                     DB::table('tb_cong')->insert($data);
                 }
-                $ttl_gr += $gr[$x];
             }
-
-            $data = [
-                'tgl' => $r->tgl[$y],
-                'pemilik' => $r->pemilik[$y],
-                'ket' => $r->ket[$y],
-                'persen_air' => $r->persen_air[$y],
-                'hrga_beli' => $r->hrga_beli[$y],
-                'no_nota' => $urutan,
-                'gr' => $ttl_gr
-
-            ];
-            DB::table('invoice_congan')->insert($data);
         }
 
         return redirect()->route('congan.index')->with('sukses', 'Data berhasil disimpan');
@@ -456,5 +461,13 @@ class ConganController extends Controller
         $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
         $writer->save('php://output');
         exit();
+    }
+
+    public function delete_nota(Request $r)
+    {
+        DB::table('invoice_congan')->where('id_invoice_congan', $r->id_invoice_congan)->delete();
+        DB::table('tb_cong')->where('id_invoice_congan', $r->id_invoice_congan)->delete();
+
+        return redirect()->route('congan.index')->with('sukses', 'Data berhasil dihapus');
     }
 }

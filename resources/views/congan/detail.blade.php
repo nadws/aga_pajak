@@ -38,6 +38,8 @@
                         <div class="col-lg-2 col-4">
                             <label for="">Tanggal</label>
                             <input type="date" class="form-control" name="tgl[]" value="{{ $c->tgl }}">
+                            <input type="hidden" class="form-control" name="id_invoice_congan[]"
+                                value="{{ $c->id_invoice_congan }}">
                         </div>
                         <div class="col-lg-2 col-4">
                             <label for="">Pemilik</label>

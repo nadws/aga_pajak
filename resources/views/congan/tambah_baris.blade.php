@@ -52,7 +52,7 @@
                 <td>
                     <h6>Harga Beli &nbsp;</h6>
                 </td>
-                <td><input type="text" class="form-control hrga_beli" name="hrga_beli[]" required></td>
+                <td><input type="text" class="form-control hrga_beli" name="hrga_beli[]" value="0"></td>
             </tr>
             <tr>
                 <td>
