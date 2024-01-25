@@ -51,7 +51,7 @@
                 display: none
             }
 
-        
+
         }
 
         @media (max-width:480px) {
@@ -63,10 +63,27 @@
                 display: none
             }
         }
-
     </style>
+    <style>
+        @media print {
+            .print_hilang {
+                display: none;
+            }
+        }
+    </style>
+    <div class="row print_hilang">
+        <div class="col-lg-6">
+            <a href="#" class="print btn btn-success float-start me-2">Print</a>
+            <a href="{{ route('edit_pembelian_bk', ['nota' => $pembelian->no_nota]) }}"
+                class=" btn btn-warning float-start">Back</a>
+        </div>
+        <div class="col-lg-12">
+            <hr style="border: 1px solid black">
+        </div>
+    </div>
     @for ($i = 0; $i < 2; $i++)
         <div class="container text-center">
+
             <div class="logoHp row text-center float-center align-items-center">
                 <div class="col-12 float-center justify-content-center">
                     <table class="text-center float-center">
@@ -192,11 +209,18 @@
 
 
 
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
-        window.print()
+        $('.print').click(function(e) {
+            e.preventDefault();
+            window.print()
+        });
     </script>
 </body>
 

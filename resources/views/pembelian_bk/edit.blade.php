@@ -244,8 +244,8 @@
                     <hr style="border: 1px solid blue">
                     <table class="" width="100%">
                         <tr>
-                            <td width="20%">Total</td>
-                            <td width="40%" class="total" style="text-align: right;">Rp.
+                            <td width="20%" style="font-size: 16px">Total</td>
+                            <td width="40%" class="total" style="text-align: right;font-size: 16px">Rp.
                                 {{ number_format($total_all, 0, ',', '.') }}</td>
                             <input type="hidden" class="total_biasa" name="total_harga"
                                 value="{{ $total_all }}">
@@ -340,6 +340,7 @@
                     var totalRupiah = total.toLocaleString("id-ID", {
                         style: "currency",
                         currency: "IDR",
+                        minimumFractionDigits: 0,
                     });
 
                     $('.total_harga_biasa' + count).val(total);
@@ -353,6 +354,7 @@
                     var totalRupiahall = total_all.toLocaleString("id-ID", {
                         style: "currency",
                         currency: "IDR",
+                        minimumFractionDigits: 0,
                     });
                     var tl = $(".total_biasa").val(total_all);
                     var debit = $(".total").text(totalRupiahall);
@@ -388,6 +390,7 @@
                     var totalRupiah = total.toLocaleString("id-ID", {
                         style: "currency",
                         currency: "IDR",
+                        minimumFractionDigits: 0,
                     });
                     $('.total_harga_biasa' + count).val(total);
                     var debit = $(".total_harga" + count).val(totalRupiah);
@@ -400,6 +403,7 @@
                     var totalRupiahall = total_all.toLocaleString("id-ID", {
                         style: "currency",
                         currency: "IDR",
+                        minimumFractionDigits: 0,
                     });
                     var tl = $(".total_biasa").val(total_all);
                     var debit = $(".total").text(totalRupiahall);
@@ -430,6 +434,7 @@
                     var totalRupiahall = total_all.toLocaleString("id-ID", {
                         style: "currency",
                         currency: "IDR",
+                        minimumFractionDigits: 0,
                     });
                     var tl = $(".total_biasa").val(total_all);
                     var debit = $(".total").text(totalRupiahall);

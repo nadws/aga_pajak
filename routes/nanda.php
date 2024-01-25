@@ -5,6 +5,7 @@ use App\Http\Controllers\AkunController;
 use App\Http\Controllers\BukuBesarController;
 use App\Http\Controllers\BukuCampurController;
 use App\Http\Controllers\CashflowController;
+use App\Http\Controllers\ConganController;
 use App\Http\Controllers\ControlflowController;
 use App\Http\Controllers\CrudPermissionController;
 use App\Http\Controllers\FakturPenjualanController;
@@ -390,5 +391,18 @@ Route::middleware('auth')->group(function () {
             Route::get('/get_no_lot', 'get_no_lot')->name('get_no_lot');
             Route::get('/get_no_box', 'get_no_box')->name('get_no_box');
             Route::get('/export_summary_lot', 'export_summary_lot')->name('export_summary_lot');
+        });
+    Route::controller(ConganController::class)
+        ->prefix('congan')
+        ->name('congan.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/add_congan', 'add_congan')->name('add_congan');
+            Route::get('/load_row', 'load_row')->name('load_row');
+            Route::get('/detail_nota', 'detail_nota')->name('detail_nota');
+            Route::post('/edit_congan', 'edit_congan')->name('edit_congan');
+            Route::get('/buat_nota', 'buat_nota')->name('buat_nota');
+            Route::post('/save_pembelian_bk', 'save_pembelian_bk')->name('save_pembelian_bk');
+            Route::get('/export', 'export')->name('export');
         });
 });

@@ -150,6 +150,12 @@ class NavbarController extends Controller
     {
         $data = [
             [
+                'judul' => 'Congan',
+                'route' => 'congan.index',
+                'img' => 'test-sample.png',
+                'deskripsi' => 'membuat pengajuan pembelian ke pemasok',
+            ],
+            [
                 'judul' => 'Pembelian',
                 'route' => 'pembelian_bk',
                 'img' => 'buy.png',

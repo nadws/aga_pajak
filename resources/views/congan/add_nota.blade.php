@@ -11,14 +11,14 @@
 
 
     <x-slot name="cardBody">
-        <form action="{{ route('save_pembelian_bk') }}" method="post" class="save_jurnal">
+        <form action="{{ route('congan.save_pembelian_bk') }}" method="post" class="save_jurnal">
             @csrf
             <section class="row">
 
                 <div class="col-lg-2 col-6">
                     <label for="">Tanggal</label>
-                    <input type="text">
-                    <input type="date" class="form-control tgl_nota" name="tgl" value="{{ date('Y-m-d') }}">
+                    <input type="date" class="form-control tgl_nota" name="tgl" value="{{ $invoice->tgl }}">
+                    <input type="hidden" class="form-control" name="not_cong" value="{{ $nota_cong }}">
                 </div>
                 <div class="col-lg-2 col-6">
                     <label for="">No Nota</label>
@@ -41,7 +41,8 @@
                 </div>
                 <div class="col-lg-2 col-6">
                     <label for="">Suplier Akhir</label>
-                    <input type="text" class="form-control" name="suplier_akhir" value="" required>
+                    <input type="text" class="form-control" name="suplier_akhir" value="{{ $invoice->pemilik }}"
+                        required>
                 </div>
 
                 <div class="col-lg-12">
@@ -63,58 +64,76 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="baris1">
-                                    <td style="vertical-align: top;">
-                                        {{-- <button type="button" data-bs-toggle="collapse" href=".join1"
+                                @php
+                                    $total_all = 0;
+                                @endphp
+                                @foreach ($congan as $no => $c)
+                                    @php
+                                        $total_all += $c->gr * $c->hrga_beli;
+                                    @endphp
+                                    <tr class="baris{{ $no + 1 }}">
+                                        <td style="vertical-align: top;">
+                                            {{-- <button type="button" data-bs-toggle="collapse" href=".join1"
                                             class="btn rounded-pill " count="1"><i class="fas fa-angle-down"></i>
                                         </button> --}}
-                                    </td>
-                                    <td>
-                                        <select name="id_produk[]" id=""
-                                            class="select2_add pilih_produk pilih_produk1" count='1'>
-                                            <option value="">Pilih Produk</option>
-                                            @foreach ($produk as $p)
-                                                <option value="{{ $p->id_produk }}">{{ $p->nm_produk }}</option>
-                                            @endforeach
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" name="ket[]">
-                                    </td>
+                                        </td>
+                                        <td>
+                                            <select name="id_produk[]" id=""
+                                                class="select2_add pilih_produk pilih_produk{{ $no + 1 }}"
+                                                count='{{ $no + 1 }}'>
+                                                <option value="">Pilih Produk</option>
+                                                @foreach ($produk as $p)
+                                                    <option value="{{ $p->id_produk }}">{{ $p->nm_produk }}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" name="ket[]"
+                                                value="{{ $c->ket }}">
+                                        </td>
 
-                                    <td style="vertical-align: top;">
-                                        <input type="text" class="form-control qty qty1 input-nanda input-nanda1"
-                                            count='1' style="vertical-align: top; width: 80px;" value="0">
-                                        <input type="hidden" name="qty[]" class="form-control qty_biasa qty_biasa1"
-                                            count='1' style="vertical-align: top" value="0">
+                                        <td style="vertical-align: top;">
+                                            <input type="text"
+                                                class="form-control qty qty{{ $no + 1 }} input-nanda input-nanda{{ $no + 1 }}"
+                                                count='{{ $no + 1 }}' style="vertical-align: top; width: 80px;"
+                                                value="0">
+                                            <input type="hidden" name="qty[]"
+                                                class="form-control qty_biasa qty_biasa{{ $no + 1 }}"
+                                                count='{{ $no + 1 }}' style="vertical-align: top" value="0">
 
-                                    </td>
-                                    <td style="vertical-align: top;">
-                                        <select name="id_satuan[]" id="" style="width: 110px;"
-                                            class="select2_add satuan1">
+                                        </td>
+                                        <td style="vertical-align: top;">
+                                            <select name="id_satuan[]" id="" style="width: 110px;"
+                                                class="select2_add satuan{{ $no + 1 }}">
 
-                                        </select>
+                                            </select>
 
-                                    </td>
-                                    <td style="vertical-align: top;" align="right">
-                                        <input type="text" class="form-control h_satuan h_satuan1 text-end "
-                                            value="Rp 0" count="1" style="width: 150px;">
-                                        <input type="hidden" class="form-control h_satuan_biasa h_satuan_biasa1"
-                                            value="0" name="h_satuan[]">
-                                    </td>
-                                    <td style="vertical-align: top;" align="right">
-                                        <input type="text" class="form-control total_harga1 text-end "
-                                            value="" count="1" style="width: 150px" readonly>
-                                        <input type="hidden"
-                                            class="form-control total_harga_biasa total_harga_biasa1 text-end"
-                                            value="" readonly>
-                                    </td>
-                                    <td style="vertical-align: top;">
-                                        <button type="button" class="btn rounded-pill remove_baris"
-                                            count="1"><i class="fas fa-trash text-danger"></i>
-                                        </button>
-                                    </td>
-                                </tr>
+                                        </td>
+                                        <td style="vertical-align: top;" align="right">
+                                            <input type="text"
+                                                class="form-control h_satuan h_satuan{{ $no + 1 }} text-end "
+                                                value="Rp {{ number_format($c->hrga_beli, 0) }}"
+                                                count="{{ $no + 1 }}" style="width: 150px;">
+                                            <input type="hidden"
+                                                class="form-control h_satuan_biasa h_satuan_biasa{{ $no + 1 }}"
+                                                value="{{ $c->hrga_beli }}" name="h_satuan[]">
+                                        </td>
+                                        <td style="vertical-align: top;" align="right">
+                                            <input type="text"
+                                                class="form-control total_harga{{ $no + 1 }} text-end "
+                                                value="0" count="{{ $no + 1 }}" style="width: 150px"
+                                                readonly>
+                                            <input type="hidden"
+                                                class="form-control total_harga_biasa total_harga_biasa{{ $no + 1 }} text-end"
+                                                value="0" readonly>
+                                        </td>
+                                        <td style="vertical-align: top;">
+                                            <button type="button" class="btn rounded-pill remove_baris"
+                                                count="{{ $no + 1 }}"><i class="fas fa-trash text-danger"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @endforeach
 
                             </tbody>
                             <tbody id="tb_baris">
@@ -179,7 +198,8 @@
                     <table class="" width="100%">
                         <tr>
                             <td width="20%" style="font-size: 16px">Total</td>
-                            <td width="40%" class="total" style="text-align: right;font-size: 16px">Rp.0</td>
+                            <td width="40%" class="total" style="text-align: right; font-size: 16px">
+                                Rp. 0</td>
                             <input type="hidden" class="total_biasa" name="total_harga" value="0">
                         </tr>
                     </table>
@@ -218,7 +238,7 @@
             <span class="spinner-border spinner-border-sm " role="status" aria-hidden="true"></span>
             Loading...
         </button>
-        <a href="{{ route('jurnal') }}" class="float-end btn btn-outline-primary me-2">Batal</a>
+        <a href="{{ route('congan.index') }}" class="float-end btn btn-outline-primary me-2">Batal</a>
         </form>
     </x-slot>
 
@@ -273,6 +293,7 @@
                     var totalRupiah = total.toLocaleString("id-ID", {
                         style: "currency",
                         currency: "IDR",
+                        minimumFractionDigits: 0,
                     });
 
                     $('.total_harga_biasa' + count).val(total);
@@ -286,6 +307,7 @@
                     var totalRupiahall = total_all.toLocaleString("id-ID", {
                         style: "currency",
                         currency: "IDR",
+                        minimumFractionDigits: 0,
                     });
                     var tl = $(".total_biasa").val(total_all);
                     var debit = $(".total").text(totalRupiahall);
@@ -340,6 +362,7 @@
                     var totalRupiah = total.toLocaleString("id-ID", {
                         style: "currency",
                         currency: "IDR",
+                        minimumFractionDigits: 0,
                     });
                     $('.total_harga_biasa' + count).val(total);
                     var debit = $(".total_harga" + count).val(totalRupiah);
@@ -352,12 +375,13 @@
                     var totalRupiahall = total_all.toLocaleString("id-ID", {
                         style: "currency",
                         currency: "IDR",
+                        minimumFractionDigits: 0,
                     });
                     var tl = $(".total_biasa").val(total_all);
                     var debit = $(".total").text(totalRupiahall);
                 });
 
-                var count = 2;
+                var count = 55;
                 $(document).on("click", ".tbh_baris", function() {
                     count = count + 1;
                     $.ajax({

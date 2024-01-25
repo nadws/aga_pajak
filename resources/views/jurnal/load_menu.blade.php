@@ -31,7 +31,7 @@
                 <select name="id_akun[]" id="" class="select pilih_akun pilih_akun1" count="1" required>
                     <option value="">Pilih</option>
                     @foreach ($akun as $a)
-                    <option value="{{$a->id_akun}}">{{$a->nm_akun}}</option>
+                        <option value="{{ $a->id_akun }}">{{ $a->nm_akun }}</option>
                     @endforeach
                 </select>
                 {{-- <div class="collapse join1">
@@ -82,7 +82,7 @@
                 <select name="id_akun[]" id="" class="select pilih_akun pilih_akun2" count="2" required>
                     <option value="">Pilih</option>
                     @foreach ($akun as $a)
-                    <option value="{{$a->id_akun}}">{{$a->nm_akun}}</option>
+                        <option value="{{ $a->id_akun }}">{{ $a->nm_akun }}</option>
                     @endforeach
                 </select>
                 {{-- <div class="collapse join2">
