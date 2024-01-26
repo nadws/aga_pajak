@@ -1,16 +1,13 @@
-
-
-
 <div class="row">
     <div class="col-lg-1 mb-2">
         <label for="">Load Data</label>
         <select name="example" class="form-control select2 load-data" id="">
             @php
-                $val = [5,25,50,100,'ALL'];
+                $val = [5, 25, 50, 100, 'ALL'];
             @endphp
             <option value="">Pilih</option>
             @foreach ($val as $d)
-            <option value="{{ $d }}">{{ $d }}</option>
+                <option value="{{ $d }}">{{ $d }}</option>
             @endforeach
         </select>
     </div>
@@ -23,6 +20,15 @@
 </div>
 <div class="row">
     <div class="col-lg-12">
+        <style>
+            thead {
+                position: sticky;
+                top: 0;
+                background-color: #f1f1f1;
+                /* Warna latar belakang header yang tetap */
+                z-index: 1;
+            }
+        </style>
         <table class="table table-bordered" id="tblAldi2">
             <thead>
                 <tr>
@@ -39,23 +45,22 @@
                 <tr>
                     <th class="dhead text-center">Pcs</th>
                     <th class="dhead text-center">Gr</th>
-        
+
                     <th class="dhead text-center">Pcs Awal</th>
                     <th class="dhead text-center">Gr Awal</th>
                     <th class="dhead text-center">Pcs Akhir</th>
                     <th class="dhead text-center">Gr Akhir</th>
                     <th class="dhead text-center">Susut</th>
                     <th class="dhead text-center">Rp</th>
-        
+
                     <th class="dhead text-center">Pcs</th>
                     <th class="dhead text-center">Gr</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($bk as $no => $g)
-                   
                     <tr>
-                        <td class="text-center">{{ $no+1 }}</td>
+                        <td class="text-center">{{ $no + 1 }}</td>
                         <td class="text-center">{{ $g->nm_partai ?? '-' }}</td>
                         <td class="text-center">{{ $g->tipe ?? '-' }}</td>
                         <td class="text-center">{{ $g->no_lot ?? '-' }}</td>
@@ -70,14 +75,15 @@
                         @php
                             $pcs_awal_bk = $g->pcs_awal ?? 0;
                             $gr_awal_bk = $g->gr_awal ?? 0;
-        
+
                             $pcs_awal_cbt = $g->pcs_awal ?? 0;
                             $gr_awal_cbt = $g->gr_awal ?? 0;
                             $pcs_akhir_cbt = $g->pcs_akhir ?? 0;
                             $gr_akhir_cbt = $g->gr_akhir ?? 0;
                         @endphp
                         <td class="text-center">
-                            {{ $gr_akhir_cbt == 0 ? '0' : number_format((1 - $gr_akhir_cbt / $gr_awal_cbt) * 100, 1) }} %
+                            {{ $gr_akhir_cbt == 0 ? '0' : number_format((1 - $gr_akhir_cbt / $gr_awal_cbt) * 100, 1) }}
+                            %
                         </td>
                         <td class="text-center">
                             {{ $gr_akhir_cbt == 0 ? number_format($g->rupiah ?? 0, 0) : number_format($g->ttl_rp ?? 0, 0) }}
