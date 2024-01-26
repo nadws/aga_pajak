@@ -12,8 +12,8 @@
                 {{--
                 <x-theme.button modal="Y" idModal="import" icon="fas fa-upload" addClass="float-end" teks="Import" />
                 --}}
-                <x-theme.button href="{{ route('summarybk.export_summary') }}" icon="fas fa-file-excel"
-                    addClass="float-end" teks="Export Per Partai" />
+                <x-theme.button href="{{ route('summarybk.export_summary', ['nm_gudang' => $nm_gudang]) }}"
+                    icon="fas fa-file-excel" addClass="float-end" teks="Export Per Partai" />
                 <x-theme.button href="{{ route('summarybk.export_summary_lot') }}" icon="fas fa-file-excel"
                     addClass="float-end" teks="Export Per Lot" />
             </div>
@@ -40,26 +40,56 @@
                                     <th class="dhead" rowspan="2">#</th>
                                     <th class="dhead" rowspan="2">Ket / nama partai</th>
                                     <th class="dhead" rowspan="2">Grade / No Lot</th>
-                                    <th class="dhead text-center" colspan="3">Wip</th>
-                                    <th class="dhead text-center" colspan="2">BK</th>
+
+                                    @if ($nm_gudang == 'summary')
+                                        <th class="dhead text-center" colspan="3">Wip</th>
+                                        <th class="dhead text-center" colspan="3">BK</th>
+                                    @else
+                                        <th class="dhead text-center" colspan="2">Wip</th>
+                                        <th class="dhead text-center" colspan="2">BK</th>
+                                    @endif
+
+
+
                                     <th class="dhead text-center" colspan="2">Susut Wip - bk</th>
-                                    <th class="text-white text-center bg-danger" colspan="3">Wip Sisa</th>
+                                    @if ($nm_gudang == 'summary')
+                                        <th class="text-white text-center bg-danger" colspan="3">Wip Sisa</th>
+                                    @else
+                                        <th class="text-white text-center bg-danger" colspan="2">Wip Sisa</th>
+                                    @endif
 
                                     <th class="dhead text-center" colspan="7">Cabut</th>
                                     <th class="bg-danger text-white text-center" colspan="2">Bk Sisa Pgws</th>
                                     <th class="dhead" rowspan="2">Ttl Rp</th>
                                 </tr>
                                 <tr>
-                                    <th class="dhead text-center">Pcs</th>
-                                    <th class="dhead text-center">Gr</th>
-                                    <th class="dhead text-center">Ttl Rp</th>
-                                    <th class="dhead text-center">Pcs</th>
-                                    <th class="dhead text-center">Gr</th>
+                                    @if ($nm_gudang == 'summary')
+                                        <th class="dhead text-center">Pcs</th>
+                                        <th class="dhead text-center">Gr</th>
+                                        <th class="dhead text-center">Ttl Rp</th>
+                                        <th class="dhead text-center">Pcs</th>
+                                        <th class="dhead text-center">Gr</th>
+                                        <th class="dhead text-center">Ttl Rp</th>
+                                    @else
+                                        <th class="dhead text-center">Pcs</th>
+                                        <th class="dhead text-center">Gr</th>
+                                        <th class="dhead text-center">Pcs</th>
+                                        <th class="dhead text-center">Gr</th>
+                                    @endif
+
+
+
                                     <th class="dhead text-center">Gr</th>
                                     <th class="dhead text-center">sst(%)</th>
-                                    <th class="text-white text-center bg-danger">Pcs</th>
-                                    <th class="text-white text-center bg-danger">Gr</th>
-                                    <th class="text-white text-center bg-danger">Ttl Rp</th>
+                                    @if ($nm_gudang == 'summary')
+                                        <th class="text-white text-center bg-danger">Pcs</th>
+                                        <th class="text-white text-center bg-danger">Gr</th>
+                                        <th class="text-white text-center bg-danger">Ttl Rp</th>
+                                    @else
+                                        <th class="text-white text-center bg-danger">Pcs</th>
+                                        <th class="text-white text-center bg-danger">Gr</th>
+                                    @endif
+
 
                                     <th class="dhead text-center">Pcs Awal</th>
                                     <th class="dhead text-center">Gr Awal</th>
@@ -109,11 +139,29 @@
 
                                         </td>
                                         <td class="text-center fw-bold">{{ $g->nm_grade }}</td>
-                                        <td class="text-end fw-bold">{{ number_format($wipPcs, 0) }}</td>
-                                        <td class="text-end fw-bold">{{ number_format($wipGr, 0) }}</td>
-                                        <td class="text-end fw-bold">{{ number_format($wipTllrp, 0) }}</td>
-                                        <td class="text-end fw-bold">{{ number_format($bkPcs, 0) }}</td>
-                                        <td class="text-end fw-bold">{{ number_format($bkGr, 0) }}</td>
+                                        @php
+                                            $hrga_modal_satuan = $wipTllrp / $wipGr;
+                                        @endphp
+                                        @if ($nm_gudang == 'summary')
+                                            <td class="text-end fw-bold">{{ number_format($wipPcs, 0) }}</td>
+                                            <td class="text-end fw-bold">{{ number_format($wipGr, 0) }}</td>
+                                            <td class="text-end fw-bold">{{ number_format($wipTllrp, 0) }}</td>
+                                            <td class="text-end fw-bold">{{ number_format($bkPcs, 0) }}</td>
+                                            <td class="text-end fw-bold">{{ number_format($bkGr, 0) }}</td>
+                                            <td class="text-end fw-bold">
+                                                {{ number_format($bkGr * $hrga_modal_satuan, 0) }}
+                                            </td>
+                                        @else
+                                            <td class="text-end fw-bold">{{ number_format($wipPcs, 0) }}</td>
+                                            <td class="text-end fw-bold">{{ number_format($wipGr, 0) }}</td>
+                                            <td class="text-end fw-bold">{{ number_format($bkPcs, 0) }}</td>
+                                            <td class="text-end fw-bold">{{ number_format($bkGr, 0) }}</td>
+                                        @endif
+
+
+
+
+
 
                                         <td class="text-end fw-bold">{{ number_format($g->gr_susut ?? 0, 0) }}</td>
                                         <td class="text-end fw-bold">
@@ -124,12 +172,26 @@
                                             $WipSisaPcs = $wipPcs - $bkPcs;
                                             $WipSisaGr = $wipGr - $bkGr - $gr_susut;
                                         @endphp
-                                        <td class="text-end fw-bold text-danger">{{ number_format($WipSisaPcs, 0) }}
-                                        </td>
-                                        <td class="text-end fw-bold text-danger">{{ number_format($WipSisaGr, 0) }}
-                                        </td>
-                                        <td class="text-end fw-bold text-danger">{{ number_format($wipTllrp, 0) }}
-                                        </td>
+
+                                        @if ($nm_gudang == 'summary')
+                                            <td class="text-end fw-bold text-danger">
+                                                {{ number_format($WipSisaPcs, 0) }}
+                                            </td>
+                                            <td class="text-end fw-bold text-danger">
+                                                {{ number_format($WipSisaGr, 0) }}
+                                            </td>
+                                            <td class="text-end fw-bold text-danger">
+                                                {{ number_format($hrga_modal_satuan * $WipSisaGr, 0) }}
+                                            </td>
+                                        @else
+                                            <td class="text-end fw-bold text-danger">
+                                                {{ number_format($WipSisaPcs, 0) }}
+                                            </td>
+                                            <td class="text-end fw-bold text-danger">
+                                                {{ number_format($WipSisaGr, 0) }}
+                                            </td>
+                                        @endif
+
 
                                         <td class="text-end fw-bold">{{ number_format($c->pcs_awal ?? 0, 0) }}</td>
                                         <td class="text-end fw-bold">{{ number_format($c->gr_awal ?? 0, 0) }}</td>

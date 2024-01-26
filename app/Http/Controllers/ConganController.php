@@ -86,8 +86,7 @@ class ConganController extends Controller
             where a.no_nota = '$r->no_nota'
             group by a.no_nota, a.ket
             order by a.no_nota DESC
-            ")
-
+            "),
         ];
         return view('congan.detail', $data);
     }

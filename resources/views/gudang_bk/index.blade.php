@@ -119,7 +119,7 @@
             <x-theme.modal title="Gudang Bk" idModal="import" btnSave="Y">
                 <div class="row">
                     <div class="col-lg-12">
-                        <label for="">File fdfs</label>
+                        <label for="">File</label>
                         <input type="file" class="form-control" name="file">
                         <input type="hidden" name="gudang" value="{{ $nm_gudang }}" id="">
                     </div>
