@@ -9,18 +9,12 @@
                 <h6>Total Rp Invoice : {{ number_format($total_invoice->ttl_hrga, 0) }}</h6> --}}
             </div>
             <div class="col-lg-6">
-                {{--
-                <x-theme.button modal="Y" idModal="import" icon="fas fa-upload" addClass="float-end" teks="Import" />
-                --}}
-                <x-theme.button href="{{ route('summarybk.export_summary') }}" icon="fas fa-file-excel"
-                    addClass="float-end" teks="Export Per Partai" />
-                <x-theme.button href="{{ route('summarybk.export_summary_lot') }}" icon="fas fa-file-excel"
-                    addClass="float-end" teks="Export Per Lot" />
             </div>
         </div>
     </x-slot>
     <x-slot name="cardBody">
-        <form action="{{ route('gudangBk.export_buku_campur_bk') }}" method="get">
+        <form action="{{ route('summarybk.save_susut') }}" method="post">
+            @csrf
             <section class="row">
 
                 <div class="col-lg-8">
@@ -32,6 +26,10 @@
                         <td><input type="text" id="pencarian" class="form-control float-end"></td>
                     </table>
                 </div>
+
+                <div class="col-lg-12">
+                    <button type="submit" class="btn btn-sm btn-primary float-end mt-2">Simpan Susut</button>
+                </div>
                 <div class="col-lg-12 mt-2">
                     <div class="table-container table-responsive">
                         <table class="table table-hover table-bordered" id="tableSearch" width="100%">
@@ -42,12 +40,8 @@
                                     <th class="dhead" rowspan="2">Grade / No Lot</th>
                                     <th class="dhead text-center" colspan="3">Wip</th>
                                     <th class="dhead text-center" colspan="2">BK</th>
-                                    <th class="dhead text-center" colspan="2">Susut Wip - bk</th>
-                                    <th class="text-white text-center bg-danger" colspan="3">Wip Sisa</th>
-
-                                    <th class="dhead text-center" colspan="7">Cabut</th>
-                                    <th class="bg-danger text-white text-center" colspan="2">Bk Sisa Pgws</th>
-                                    <th class="dhead" rowspan="2">Ttl Rp</th>
+                                    <th class="dhead text-center" colspan="2">Susut Wip</th>
+                                    <th class="text-white text-center bg-danger" colspan="2">Wip Sisa</th>
                                 </tr>
                                 <tr>
                                     <th class="dhead text-center">Pcs</th>
@@ -56,21 +50,12 @@
                                     <th class="dhead text-center">Pcs</th>
                                     <th class="dhead text-center">Gr</th>
                                     <th class="dhead text-center">Gr</th>
-                                    <th class="dhead text-center">sst(%)</th>
+                                    <th class="dhead text-center">Sst(%)</th>
                                     <th class="text-white text-center bg-danger">Pcs</th>
                                     <th class="text-white text-center bg-danger">Gr</th>
-                                    <th class="text-white text-center bg-danger">Ttl Rp</th>
 
-                                    <th class="dhead text-center">Pcs Awal</th>
-                                    <th class="dhead text-center">Gr Awal</th>
-                                    <th class="dhead text-center">Pcs Akhir</th>
-                                    <th class="dhead text-center">Gr Akhir</th>
-                                    <th class="dhead text-center">Susut</th>
-                                    <th class="dhead text-center">Eot</th>
-                                    <th class="dhead text-center">Flx</th>
 
-                                    <th class="text-white bg-danger text-center">Pcs</th>
-                                    <th class="text-white bg-danger text-center">Gr</th>
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -91,23 +76,7 @@
                                     @endphp
                                     <tr>
                                         <td>{{ $no + 1 }}</td>
-                                        <td>{{ $g->ket2 }}
-                                            <a href="#" class="float-end show_lot show{{ $no + 1 }}"
-                                                partai="{{ $g->ket2 }}" no="{{ $no + 1 }}">
-                                                <i class="fas fa-sort-down fa-lg text-primary "></i>
-
-                                                <div class="spinner-border spinerLot loadLotLoading{{ $no + 1 }} spinner-border-sm text-primary"
-                                                    role="status">
-                                                    <span class="visually-hidden">Loading...</span>
-                                                </div>
-                                            </a>
-
-                                            <a href="#" class="float-end hide_lot hide{{ $no + 1 }}" hidden
-                                                no="{{ $no + 1 }}">
-                                                <i class="fas fa-sort-up fa-lg text-primary "></i>
-                                            </a>
-
-                                        </td>
+                                        <td>{{ $g->ket2 }}</td>
                                         <td class="text-center fw-bold">{{ $g->nm_grade }}</td>
                                         <td class="text-end fw-bold">{{ number_format($wipPcs, 0) }}</td>
                                         <td class="text-end fw-bold">{{ number_format($wipGr, 0) }}</td>
@@ -115,9 +84,14 @@
                                         <td class="text-end fw-bold">{{ number_format($bkPcs, 0) }}</td>
                                         <td class="text-end fw-bold">{{ number_format($bkGr, 0) }}</td>
 
-                                        <td class="text-end fw-bold">{{ number_format($g->gr_susut ?? 0, 0) }}</td>
-                                        <td class="text-end fw-bold">
-                                            {{ number_format((1 - $bkGr / $wipGr) * 100, 1) }}%
+                                        <td class="fw-bold" width="120px">
+                                            <input type="text" class="form-control"
+                                                style="width: 100%; font-size: 13px" name="gr_susut[]"
+                                                value="{{ $g->gr_susut ?? 0 }}">
+                                            <input type="hidden" class="form-control" name="ket[]"
+                                                value="{{ $g->ket2 }}">
+                                        </td>
+                                        <td class="text-end fw-bold">{{ number_format((1 - $bkGr / $wipGr) * 100, 0) }}
                                         </td>
                                         @php
                                             $gr_susut = $g->gr_susut ?? 0;
@@ -128,34 +102,12 @@
                                         </td>
                                         <td class="text-end fw-bold text-danger">{{ number_format($WipSisaGr, 0) }}
                                         </td>
-                                        <td class="text-end fw-bold text-danger">{{ number_format($wipTllrp, 0) }}
-                                        </td>
 
-                                        <td class="text-end fw-bold">{{ number_format($c->pcs_awal ?? 0, 0) }}</td>
-                                        <td class="text-end fw-bold">{{ number_format($c->gr_awal ?? 0, 0) }}</td>
-                                        <td class="text-end fw-bold">{{ number_format($c->pcs_akhir ?? 0, 0) }}</td>
-                                        <td class="text-end fw-bold">{{ number_format($c->gr_akhir ?? 0, 0) }}</td>
-                                        <td class="text-end fw-bold">{{ number_format($c->susut ?? 0, 0) }}</td>
-                                        <td class="text-end fw-bold">{{ number_format($c->eot ?? 0, 0) }}</td>
-                                        <td class="text-end fw-bold">{{ number_format($c->gr_flx ?? 0, 0) }}</td>
-                                        @php
-                                            $pcs_awal_bk = $b->pcs_awal ?? 0;
-                                            $gr_awal_bk = $b->gr_awal ?? 0;
 
-                                            $pcs_awal_cbt = $c->pcs_awal ?? 0;
-                                            $gr_awal_cbt = $c->gr_awal ?? 0;
-                                        @endphp
-                                        <td class="text-end text-danger fw-bold">
-                                            {{ number_format($pcs_awal_bk - $pcs_awal_cbt, 0) }}</td>
-                                        <td class="text-end text-danger fw-bold">
-                                            {{ number_format($gr_awal_bk - $gr_awal_cbt, 0) }}
-                                        </td>
 
-                                        <td class="text-end fw-bold">{{ number_format($c->ttl_rp ?? 0, 0) }}</td>
 
                                     </tr>
-                            <tbody class="load_lot{{ $no + 1 }}"></tbody>
-                            @endforeach
+                                @endforeach
 
 
 

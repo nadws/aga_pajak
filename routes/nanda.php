@@ -391,6 +391,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/get_no_lot', 'get_no_lot')->name('get_no_lot');
             Route::get('/get_no_box', 'get_no_box')->name('get_no_box');
             Route::get('/export_summary_lot', 'export_summary_lot')->name('export_summary_lot');
+            Route::get('/susut', 'susut')->name('susut');
+            Route::post('/save_susut', 'save_susut')->name('save_susut');
         });
     Route::controller(ConganController::class)
         ->prefix('congan')

@@ -24,5 +24,10 @@
             href="{{ route('summarybk.index', ['nm_gudang' => 'summary']) }}" type="button" role="tab"
             aria-controls="pills-home" aria-selected="true">Summary Wip</a>
     </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link {{ request()->routeIs('summarybk.susut') && request()->query('nm_gudang') == 'susut' ? 'active' : '' }}"
+            href="{{ route('summarybk.susut', ['nm_gudang' => 'susut']) }}" type="button" role="tab"
+            aria-controls="pills-home" aria-selected="true">Susut</a>
+    </li>
 
 </ul>

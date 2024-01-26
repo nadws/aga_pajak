@@ -11,23 +11,46 @@
         <input type="text" class="form-control" value="0" name="persen_air[]">
     </div>
 </div>
+<div class="row  mt-4 baris{{ $count }}">
+    <div class="col-lg-4">
+        <div class="row">
+            <div class="col-lg-6 col-4"><label for="">Grade</label></div>
+            <div class="col-lg-3 col-4"><label for="">Gr</label></div>
+            <div class="col-lg-3 col-4"><label for="">Harga</label></div>
+        </div>
+    </div>
+    <div class="col-lg-4 label_hilang">
+        <div class="row">
+            <div class="col-lg-6 col-4"><label for="">Grade</label></div>
+            <div class="col-lg-3 col-4"><label for="">Gr</label></div>
+            <div class="col-lg-3 col-4"><label for="">Harga</label></div>
+        </div>
+    </div>
+    <div class="col-lg-4 label_hilang">
+        <div class="row">
+            <div class="col-lg-6 col-4"><label for="">Grade</label></div>
+            <div class="col-lg-3 col-4"><label for="">Gr</label></div>
+            <div class="col-lg-3 col-4"><label for="">Harga</label></div>
+        </div>
+    </div>
+</div>
 <div class="row baris{{ $count }}">
     @foreach ($grade as $g)
         <div class="col-lg-4 mt-2" style="border-right: 1px solid black">
             <div class="row">
                 <div class="col-lg-6 col-4">
-                    <label for="">Grade</label>
+
                     <input type="hidden" name="id_grade{{ $count }}[]" value="{{ $g->id_grade_cong }}">
                     <input type="text" class="form-control" style="font-size: 12px" value="{{ $g->nm_grade }}"
                         readonly>
                 </div>
                 <div class="col-lg-3 col-4">
-                    <label for="">Gr</label>
+
                     <input type="text" class="form-control gr gr{{ $count }}" count="{{ $count }}"
                         value="0" name="gr{{ $count }}[]">
                 </div>
                 <div class="col-lg-3 col-4">
-                    <label for="">Harga</label>
+
                     <input type="text" class="form-control" value="0" name="harga{{ $count }}[]"
                         readonly>
                 </div>

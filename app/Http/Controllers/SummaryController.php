@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\GudangBkModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
@@ -127,7 +128,7 @@ class SummaryController extends Controller
 
 
         $sheet1->getStyle("A1:T1")->applyFromArray($style_atas);
-        
+
         $koloms = [
             'A' => '#',
             'B' => 'Ket / nama partai',
@@ -154,8 +155,8 @@ class SummaryController extends Controller
 
             'T' => "Ttl Rp"
         ];
-        foreach($koloms as $kolom => $d) {
-            $sheet1->setCellValue($kolom.'1', $d);
+        foreach ($koloms as $kolom => $d) {
+            $sheet1->setCellValue($kolom . '1', $d);
         }
 
         $kolom = 2;
@@ -209,8 +210,8 @@ class SummaryController extends Controller
 
             $pcs_awal_cbt = $c->pcs_awal ?? 0;
             $gr_awal_cbt = $c->gr_awal ?? 0;
-            
-            $cbtSusut = empty($c->gr_awal) ? 0 : 1 - ((($gr_awal_bk - $gr_awal_cbt)+$c->gr_akhir)/$c->gr_awal);
+
+            $cbtSusut = empty($c->gr_awal) ? 0 : 1 - ((($gr_awal_bk - $gr_awal_cbt) + $c->gr_akhir) / $c->gr_awal);
             $sheet1->setCellValue('O' . $kolom, $cbtSusut);
             $sheet1->setCellValue('P' . $kolom, $c->eot ?? 0);
             $sheet1->setCellValue('Q' . $kolom, $c->gr_flx ?? 0);
@@ -266,18 +267,18 @@ class SummaryController extends Controller
         $sheet1->setCellValue('T' . $kolom, $ttl_rp);
 
         $sheet1->getStyle('A2:T' . $kolom - 1)->applyFromArray($style);
-        
+
         $sheet1->getStyle('A' . $kolom . ':T' . $kolom)->applyFromArray($style_bawah);
 
         $sheet1->getStyle('I1:J' . $kolom)->getFont()
-        ->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_RED));
+            ->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_RED));
         $sheet1->getStyle('R1:S' . $kolom)->getFont()
-        ->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_RED));
-        
+            ->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_RED));
+
         $sheet1->getStyle('I' . $kolom . ':J' . $kolom)->getFont()
-        ->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_RED));
+            ->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_RED));
         $sheet1->getStyle('R' . $kolom . ':S' . $kolom)->getFont()
-        ->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_RED));
+            ->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_RED));
 
         $namafile = "Summary Wip.xlsx";
 
@@ -375,7 +376,7 @@ class SummaryController extends Controller
         $gr_akhir_cbt_ttl = 0;
         $ttl_rp = 0;
         foreach ($gudang as $no => $g) {
-            $response = Http::get("$this->linkApi/sarang",[
+            $response = Http::get("$this->linkApi/sarang", [
                 'nm_partai' => $g->ket2,
                 'no_lot' => $g->no_lot
             ]);
@@ -528,5 +529,54 @@ class SummaryController extends Controller
             'selesai_2' => 'Y'
         ]);
         return redirect()->route('summarybk.index', ['nm_gudang' => 'summary'])->with('sukses', 'Data berhasil diselesaikan');
+    }
+
+    public function susut(Request $r)
+    {
+        if (empty($r->nm_gudang)) {
+            $nmgudang = 'bk';
+        } else {
+            $nmgudang = $r->nm_gudang;
+        }
+
+        $gudang = GudangBkModel::getSummaryWip();
+        $total = GudangBkModel::getPembelianBk('bk');
+
+        $ttl_bk = 0;
+        foreach ($total as $t) {
+            $ttl_bk += $t->rupiah * $t->gr;
+        }
+
+        $listBulan = DB::table('bulan')->get();
+        $id_user = auth()->user()->id;
+        $data =  [
+            'title' => 'Summary Wip',
+            'gudang' => $gudang,
+            'listbulan' => $listBulan,
+            'nm_gudang' => $nmgudang,
+            'total_bk' => $ttl_bk,
+            'linkApi' => $this->linkApi,
+            'total_invoice' => DB::selectOne("SELECT a.no_nota, b.no_nota, sum(a.total_harga) as ttl_hrga
+            FROM invoice_bk as a left 
+            join grading as b on b.no_nota = a.no_nota 
+            where b.no_nota is null;")
+        ];
+        return view('summarybk.susut', $data);
+    }
+
+    public function save_susut(Request $r)
+    {
+        DB::table('table_susut')->truncate();
+        for ($x = 0; $x < count($r->ket); $x++) {
+
+            $data = [
+                'ket' => $r->ket[$x],
+                'gr' => $r->gr_susut[$x],
+                'admin' => Auth::user()->name,
+            ];
+            DB::table('table_susut')->insert($data);
+        }
+
+        return redirect()->route('summarybk.susut', ['nm_gudang' => 'susut'])->with('sukses', 'Data berhasil diselesaikan');
     }
 }

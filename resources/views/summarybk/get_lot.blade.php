@@ -24,8 +24,11 @@
         </td>
         <td class="text-end">{{ number_format($wipPcs, 0) }}</td>
         <td class="text-end">{{ number_format($wipGr, 0) }}</td>
+        <td class="text-end">0</td>
         <td class="text-end">{{ number_format($bkPcs, 0) }}</td>
         <td class="text-end">{{ number_format($bkGr, 0) }}</td>
+        <td class="text-end">0</td>
+        <td class="text-end">0</td>
         <td class="text-end">{{ number_format($wipPcs - $bkPcs, 0) }}</td>
         <td class="text-end">{{ number_format($wipGr - $bkGr, 0) }}</td>
 

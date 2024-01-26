@@ -9,6 +9,7 @@
             <th width="184px">Suplier Akhir</th>
             <th width="151px">Keterangan</th>
             <th width="125px">Gr Beli</th>
+            <th width="125px">Harga rata2</th>
             <th width="156px">Total Nota Bk</th>
             <th width="151px">Gr Basah</th>
             <th width="114px">Pcs Awal</th>
@@ -53,6 +54,7 @@
                 <td>{{ strtoupper($p->suplier_akhir) }}</td>
                 <td></td>
                 <td>{{ $p->gr_beli }}</td>
+                <td>{{ $p->gr_beli == 0 ? 0 : $p->total_harga / $p->gr_beli }}</td>
                 <td>{{ $p->total_harga }}</td>
                 <td>{{ $p->gr_basah }}</td>
                 <td>{{ $p->pcs_awal }}</td>
