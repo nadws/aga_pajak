@@ -17,6 +17,9 @@
             <input type="text" id="pencarianBox" name="example" class="form-control">
         </div>
     </div>
+    <div class="col-lg-4">
+        <a href="{{ route('summarybk.export_show_box') }}" class="btn btn-sm btn-success">Export</a>
+    </div>
 </div>
 <div class="row">
     <div class="col-lg-12">

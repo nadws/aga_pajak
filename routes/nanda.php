@@ -393,6 +393,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/export_summary_lot', 'export_summary_lot')->name('export_summary_lot');
             Route::get('/susut', 'susut')->name('susut');
             Route::post('/save_susut', 'save_susut')->name('save_susut');
+            Route::get('/export_show_box', 'export_show_box')->name('export_show_box');
         });
     Route::controller(ConganController::class)
         ->prefix('congan')

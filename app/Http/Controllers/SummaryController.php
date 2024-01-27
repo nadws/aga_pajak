@@ -767,4 +767,9 @@ class SummaryController extends Controller
 
         return redirect()->route('summarybk.susut', ['nm_gudang' => 'susut'])->with('sukses', 'Data berhasil diselesaikan');
     }
+
+    public function export_show_box(Request $r)
+    {
+        return view('summarybk.export_show');
+    }
 }
