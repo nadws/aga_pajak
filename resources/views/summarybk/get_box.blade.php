@@ -92,7 +92,7 @@
                             %
                         </td>
                         <td class="text-center">
-                            {{ $gr_akhir_cbt == 0 ? number_format($g->rupiah ?? 0, 0) : number_format($g->ttl_rp ?? 0 + $ttl_rp_eo, 0) }}
+                            {{ number_format($g->ttl_rp ?? 0 + $ttl_rp_eo, 0) }}
                         </td>
                         <td class="text-center">
                             {{ number_format($pcs_awal_bk - $pcs_awal_cbt) }}
