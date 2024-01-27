@@ -628,8 +628,8 @@ class GudangBkController extends Controller
     }
     private function import_buku_bk(Request $r)
     {
+        DB::table('buku_campur')->update(['gabung' => 'Y']);
         $hasError = false; // Variabel flag untuk melacak apakah ada kesalahan
-
         if ($r->hasFile('file')) {
             $file = $r->file('file');
             $filePath = $file->storeAs('temp', 'imported_file.xlsx');
@@ -684,6 +684,7 @@ class GudangBkController extends Controller
                                     'lok_tgl' => empty($rowData[12]) ? ' ' : $rowData[12],
                                     'approve' => 'Y',
                                     'gudang' => $gudang,
+                                    'gabung' => 'T'
 
                                 ]);
                                 $idBukuCampur = DB::getPdo()->lastInsertId();
@@ -717,6 +718,8 @@ class GudangBkController extends Controller
                                     'approve' => 'Y',
                                     'no_lot' => empty($buku_campur->no_nota) ? $rowData[8] : $buku_campur->no_lot,
                                     'gudang' => $gudang,
+                                    'gabung' => 'T'
+
                                 ]);
 
                                 $bk_approve = DB::table('buku_campur_approve')->where('id_buku_campur', $rowData[0])->first();
