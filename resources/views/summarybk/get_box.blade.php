@@ -18,7 +18,8 @@
         </div>
     </div>
     <div class="col-lg-9">
-        <a href="{{ route('summarybk.export_show_box') }}" class="btn btn-sm btn-success float-end">Export</a>
+        <a href="{{ route('summarybk.export_show_box', ['nm_partai' => $nm_partai, 'no_lot' => $no_lot, 'limit' => 1000]) }}"
+            class="btn btn-sm btn-success float-end">Export</a>
     </div>
 </div>
 <div class="row">

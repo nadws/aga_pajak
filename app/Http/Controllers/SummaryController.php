@@ -60,23 +60,7 @@ class SummaryController extends Controller
         ];
         return view('summarybk.get_lot', $data);
     }
-    function get_no_box(Request $r)
-    {
-        $response = Http::get(
-            "$this->linkApi/show_box",
-            [
-                'nm_partai' => $r->nm_partai,
-                'no_lot' => $r->no_lot,
-                'limit' => $r->limit,
-            ]
-        );
-        $b = $response->object();
-        $data =  [
-            'bk' => $b,
-            'linkApi' => $this->linkApi
-        ];
-        return view('summarybk.get_box', $data);
-    }
+
     public function export_summary(Request $r)
     {
         if ($r->nm_gudang == 'summary') {
@@ -768,8 +752,41 @@ class SummaryController extends Controller
         return redirect()->route('summarybk.susut', ['nm_gudang' => 'susut'])->with('sukses', 'Data berhasil diselesaikan');
     }
 
+    function get_no_box(Request $r)
+    {
+        $response = Http::get(
+            "$this->linkApi/show_box",
+            [
+                'nm_partai' => $r->nm_partai,
+                'no_lot' => $r->no_lot,
+                'limit' => $r->limit,
+            ]
+        );
+        $b = $response->object();
+        $data =  [
+            'bk' => $b,
+            'linkApi' => $this->linkApi,
+            'nm_partai' => $r->nm_partai,
+            'no_lot' => $r->no_lot,
+        ];
+        return view('summarybk.get_box', $data);
+    }
+
     public function export_show_box(Request $r)
     {
-        return view('summarybk.export_show');
+        $response = Http::get(
+            "$this->linkApi/show_box",
+            [
+                'nm_partai' => $r->nm_partai,
+                'no_lot' => $r->no_lot,
+                'limit' => $r->limit,
+            ]
+        );
+        $b = $response->object();
+        $data =  [
+            'bk' => $b,
+            'linkApi' => $this->linkApi
+        ];
+        return view('summarybk.export_show', $data);
     }
 }
