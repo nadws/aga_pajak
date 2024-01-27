@@ -110,7 +110,7 @@
                                         $response = Http::get("$linkApi/bk_sum", ['nm_partai' => $ket]);
                                         $b = $response->object();
 
-                                        $resSum = Http::get("$linkApi/sarang_sum", ['nm_partai' => $ket]);
+                                        $resSum = Http::get("$linkApi/datacabutsum2", ['nm_partai' => $ket]);
                                         $c = $resSum->object();
 
                                         $wipPcs = $g->pcs ?? 0;
