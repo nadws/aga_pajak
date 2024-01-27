@@ -59,6 +59,11 @@
             </thead>
             <tbody>
                 @foreach ($bk as $no => $g)
+                    @php
+                        $gr_eo_awal = $g->gr_eo_awal ?? 0;
+                        $gr_eo_akhir = $g->gr_eo_akhir ?? 0;
+                        $ttl_rp_eo = $g->ttl_rp_eo ?? 0;
+                    @endphp
                     <tr>
                         <td class="text-center">{{ $no + 1 }}</td>
                         <td class="text-center">{{ $g->nm_partai ?? '-' }}</td>
@@ -69,9 +74,9 @@
                         <td class="text-center">{{ $g->pcs_awal ?? 0 }}</td>
                         <td class="text-center">{{ $g->gr_awal ?? 0 }}</td>
                         <td class="text-center">{{ $g->pcs_awal ?? 0 }}</td>
-                        <td class="text-center">{{ $g->gr_awal ?? 0 }}</td>
+                        <td class="text-center">{{ $g->gr_awal ?? 0 + $gr_eo_awal }}</td>
                         <td class="text-center">{{ $g->pcs_akhir ?? 0 }}</td>
-                        <td class="text-center">{{ $g->gr_akhir ?? 0 }}</td>
+                        <td class="text-center">{{ $g->gr_akhir ?? 0 + $gr_eo_akhir }}</td>
                         @php
                             $pcs_awal_bk = $g->pcs_awal ?? 0;
                             $gr_awal_bk = $g->gr_awal ?? 0;
@@ -80,13 +85,14 @@
                             $gr_awal_cbt = $g->gr_awal ?? 0;
                             $pcs_akhir_cbt = $g->pcs_akhir ?? 0;
                             $gr_akhir_cbt = $g->gr_akhir ?? 0;
+
                         @endphp
                         <td class="text-center">
-                            {{ $gr_akhir_cbt == 0 ? '0' : number_format((1 - $gr_akhir_cbt / $gr_awal_cbt) * 100, 1) }}
+                            {{ $gr_akhir_cbt == 0 ? '0' : number_format((1 - ($gr_akhir_cbt + $gr_eo_akhir) / ($gr_awal_cbt + $gr_eo_awal)) * 100, 1) }}
                             %
                         </td>
                         <td class="text-center">
-                            {{ $gr_akhir_cbt == 0 ? number_format($g->rupiah ?? 0, 0) : number_format($g->ttl_rp ?? 0, 0) }}
+                            {{ $gr_akhir_cbt == 0 ? number_format($g->rupiah ?? 0, 0) : number_format($g->ttl_rp ?? 0 + $ttl_rp_eo, 0) }}
                         </td>
                         <td class="text-center">
                             {{ number_format($pcs_awal_bk - $pcs_awal_cbt) }}
