@@ -88,7 +88,7 @@
 
                         @endphp
                         <td class="text-center">
-                            {{ $gr_akhir_cbt == 0 ? '0' : number_format((1 - ($gr_akhir_cbt + $gr_eo_akhir) / ($gr_awal_cbt + $gr_eo_awal)) * 100, 1) }}
+                            {{ $gr_akhir_cbt + $gr_eo_akhir == 0 ? '0' : number_format((1 - ($gr_akhir_cbt + $gr_eo_akhir) / ($gr_awal_cbt + $gr_eo_awal)) * 100, 1) }}
                             %
                         </td>
                         <td class="text-center">
