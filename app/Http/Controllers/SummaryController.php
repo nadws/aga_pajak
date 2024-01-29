@@ -722,7 +722,7 @@ class SummaryController extends Controller
         $listBulan = DB::table('bulan')->get();
         $id_user = auth()->user()->id;
         $data =  [
-            'title' => 'Summary Wip',
+            'title' => 'Susut Wip',
             'gudang' => $gudang,
             'listbulan' => $listBulan,
             'nm_gudang' => $nmgudang,
@@ -744,11 +744,30 @@ class SummaryController extends Controller
             $data = [
                 'ket' => $r->ket[$x],
                 'gr' => $r->gr_susut[$x],
+                'selesai' => $r->selesai[$x],
                 'admin' => Auth::user()->name,
             ];
             DB::table('table_susut')->insert($data);
         }
 
+        return redirect()->route('summarybk.susut', ['nm_gudang' => 'susut'])->with('sukses', 'Data berhasil disimpan');
+    }
+
+    function selesai_susut(Request $r)
+    {
+        $data = [
+            'selesai' => 'Y'
+        ];
+        DB::table('table_susut')->where('ket', $r->ket)->update($data);
+        return redirect()->route('summarybk.susut', ['nm_gudang' => 'susut'])->with('sukses', 'Data berhasil diselesaikan');
+    }
+
+    function cancel_susut(Request $r)
+    {
+        $data = [
+            'selesai' => 'T'
+        ];
+        DB::table('table_susut')->where('ket', $r->ket)->update($data);
         return redirect()->route('summarybk.susut', ['nm_gudang' => 'susut'])->with('sukses', 'Data berhasil diselesaikan');
     }
 
@@ -788,5 +807,9 @@ class SummaryController extends Controller
             'linkApi' => $this->linkApi
         ];
         return view('summarybk.export_show', $data);
+    }
+
+    public function sum_cetak(Request $r)
+    {
     }
 }

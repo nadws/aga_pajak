@@ -121,7 +121,7 @@ class GudangBkModel extends Model
 
     public static function getSummaryWip()
     {
-        $result = DB::select("SELECT a.nm_grade,count(a.no_lot) as no_lot1, a.id_buku_campur, a.no_lot, a.ket,a.ket2, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.rupiah * a.gr) as total_rp , a.selesai_1, a.selesai_2, a.ket2, c.gr as gr_susut
+        $result = DB::select("SELECT a.nm_grade,count(a.no_lot) as no_lot1, a.id_buku_campur, a.no_lot, a.ket,a.ket2, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.rupiah * a.gr) as total_rp , a.selesai_1, a.selesai_2, a.ket2, c.gr as gr_susut, c.selesai
         FROM buku_campur_approve as a 
         left join buku_campur as b on b.id_buku_campur = a.id_buku_campur
         left join table_susut as c on c.ket = a.ket2

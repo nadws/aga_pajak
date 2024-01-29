@@ -394,6 +394,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/susut', 'susut')->name('susut');
             Route::post('/save_susut', 'save_susut')->name('save_susut');
             Route::get('/export_show_box', 'export_show_box')->name('export_show_box');
+            Route::get('/selesai_susut', 'selesai_susut')->name('selesai_susut');
+            Route::get('/cancel_susut', 'cancel_susut')->name('cancel_susut');
         });
     Route::controller(ConganController::class)
         ->prefix('congan')

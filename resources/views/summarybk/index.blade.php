@@ -23,10 +23,10 @@
         <form action="{{ route('gudangBk.export_buku_campur_bk') }}" method="get">
             <section class="row">
 
-                <div class="col-lg-8">
+                <div class="col-lg-9">
                     @include('gudang_bk.nav')
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-3">
                     <table class="float-end">
                         <td>Search :</td>
                         <td><input type="text" id="pencarian" class="form-control float-end"></td>
@@ -118,7 +118,12 @@
                                         $wipTllrp = $g->total_rp ?? 0;
                                         $bkPcs = $b->pcs_awal ?? 0;
                                         $bkGr = $b->gr_awal ?? 0;
+
+                                        $gr_susut = $g->gr_susut ?? 0;
+                                        $WipSisaPcs = $wipPcs - $bkPcs;
+                                        $WipSisaGr = $wipGr - $bkGr - $gr_susut;
                                     @endphp
+
                                     <tr>
                                         <td>{{ $no + 1 }}</td>
                                         <td>{{ $g->ket2 }}
@@ -149,7 +154,7 @@
                                             <td class="text-end fw-bold">{{ number_format($bkPcs, 0) }}</td>
                                             <td class="text-end fw-bold">{{ number_format($bkGr, 0) }}</td>
                                             <td class="text-end fw-bold">
-                                                {{ number_format($bkGr * $hrga_modal_satuan, 0) }}
+                                                {{ $g->selesai == 'Y' ? number_format(($bkGr + $gr_susut) * $hrga_modal_satuan, 0) : '0' }}
                                             </td>
                                         @else
                                             <td class="text-end fw-bold">{{ number_format($wipPcs, 0) }}</td>
@@ -167,11 +172,7 @@
                                         <td class="text-end fw-bold">
                                             {{ number_format((1 - $bkGr / $wipGr) * 100, 1) }}%
                                         </td>
-                                        @php
-                                            $gr_susut = $g->gr_susut ?? 0;
-                                            $WipSisaPcs = $wipPcs - $bkPcs;
-                                            $WipSisaGr = $wipGr - $bkGr - $gr_susut;
-                                        @endphp
+
 
                                         @if ($nm_gudang == 'summary')
                                             <td class="text-end fw-bold text-danger">

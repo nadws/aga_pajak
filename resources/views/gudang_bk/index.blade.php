@@ -16,10 +16,10 @@
             @csrf
             <section class="row">
 
-                <div class="col-lg-8">
+                <div class="col-lg-9">
                     @include('gudang_bk.nav')
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-3">
                     <table class="float-end">
                         <td>Search :</td>
                         <td><input type="text" id="pencarian" class="form-control float-end"></td>
