@@ -16,7 +16,7 @@ class SummaryController extends Controller
     protected $linkApi;
     public function __construct()
     {
-        $this->linkApi = "https://sarang.ptagafood.com/api/apibk";
+        $this->linkApi = "https://sarangbackup.ptagafood.com/api/apibk";
     }
     function index(Request $r)
     {
