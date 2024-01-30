@@ -11,6 +11,7 @@ use App\Http\Controllers\CrudPermissionController;
 use App\Http\Controllers\FakturPenjualanController;
 use App\Http\Controllers\GudangBkController;
 use App\Http\Controllers\GudangController;
+use App\Http\Controllers\HalawalGudangController;
 use App\Http\Controllers\JurnalController;
 use App\Http\Controllers\JurnalPenyesuaianController;
 use App\Http\Controllers\NavbarController;
@@ -374,6 +375,7 @@ Route::middleware('auth')->group(function () {
         ->name('gudangBk.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
+            Route::get('/wip', 'wip')->name('wip');
             Route::post('/export_buku_campur_bk', 'export_buku_campur_bk')->name('export_buku_campur_bk');
             Route::post('/import_buku_campur_bk', 'import_buku_campur_bk')->name('import_buku_campur_bk');
             Route::post('/import_summary_wip', 'import_summary_wip')->name('import_summary_wip');
@@ -410,5 +412,11 @@ Route::middleware('auth')->group(function () {
             Route::post('/save_pembelian_bk', 'save_pembelian_bk')->name('save_pembelian_bk');
             Route::get('/export', 'export')->name('export');
             Route::get('/delete_nota', 'delete_nota')->name('delete_nota');
+        });
+    Route::controller(HalawalGudangController::class)
+        ->prefix('halawal')
+        ->name('halawal.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
         });
 });

@@ -16,7 +16,7 @@
     </li>
     <li class="nav-item" role="presentation">
         <a class="nav-link {{ $nm_gudang == 'wip' ? 'active' : '' }}"
-            href="{{ route('gudangBk.index', ['nm_gudang' => 'wip']) }}" type="button" role="tab"
+            href="{{ route('halawal.index', ['nm_gudang' => 'wip']) }}" type="button" role="tab"
             aria-controls="pills-home" aria-selected="true">Gudang Wip</a>
     </li>
     @if (Auth::user()->posisi_id == '1')
@@ -32,11 +32,7 @@
             href="{{ route('summarybk.index', ['nm_gudang' => 'summarysinta']) }}" type="button" role="tab"
             aria-controls="pills-home" aria-selected="true">Summary Wip Sinta</a>
     </li>
-    <li class="nav-item" role="presentation">
-        <a class="nav-link {{ request()->routeIs('summarybk.index') && request()->query('nm_gudang') == 'cetak' ? 'active' : '' }}"
-            href="{{ route('summarybk.index', ['nm_gudang' => 'cetak']) }}" type="button" role="tab"
-            aria-controls="pills-home" aria-selected="true">Summary Wip Cetak</a>
-    </li>
+
 
     <li class="nav-item" role="presentation">
         <a class="nav-link {{ request()->routeIs('summarybk.susut') && request()->query('nm_gudang') == 'susut' ? 'active' : '' }}"

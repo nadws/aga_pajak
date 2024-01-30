@@ -18,6 +18,8 @@ class SummaryController extends Controller
     {
         $this->linkApi = "https://sarangbackup.ptagafood.com/api/apibk";
     }
+
+
     function index(Request $r)
     {
         if (empty($r->nm_gudang)) {
