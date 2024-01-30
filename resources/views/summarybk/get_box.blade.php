@@ -18,7 +18,7 @@
         </div>
     </div>
     <div class="col-lg-9">
-        <a href="{{ route('summarybk.export_show_box', ['nm_partai' => $nm_partai, 'no_lot' => $no_lot, 'limit' => 1000]) }}"
+        <a href="{{ route('summarybk.export_show_box', ['nm_partai' => $nm_partai, 'limit' => 1000]) }}"
             class="btn btn-sm btn-success float-end">Export</a>
     </div>
 </div>
@@ -39,7 +39,7 @@
                     <th class="dhead" rowspan="2">#</th>
                     <th class="dhead" rowspan="2">Ket / nama partai</th>
                     <th class="dhead" rowspan="2">Grade</th>
-                    <th class="dhead" rowspan="2">No Lot</th>
+
                     <th class="dhead" rowspan="2">No Box</th>
                     <th class="dhead" rowspan="2">Pengawas</th>
                     <th class="dhead text-center" colspan="2">BK</th>
@@ -72,18 +72,18 @@
                         <td class="text-center">{{ $no + 1 }}</td>
                         <td class="text-center">{{ $g->nm_partai ?? '-' }}</td>
                         <td class="text-center">{{ $g->tipe ?? '-' }}</td>
-                        <td class="text-center">{{ $g->no_lot ?? '-' }}</td>
+
                         <td class="text-center">{{ $g->no_box ?? '-' }}</td>
                         <td class="text-center">{{ $g->name ?? '-' }}</td>
-                        <td class="text-center">{{ $g->pcs_awal ?? 0 }}</td>
-                        <td class="text-center">{{ $g->gr_awal ?? 0 }}</td>
+                        <td class="text-center">{{ $g->pcs_awal_bk ?? 0 }}</td>
+                        <td class="text-center">{{ $g->gr_awal_bk ?? 0 }}</td>
                         <td class="text-center">{{ $g->pcs_awal ?? 0 }}</td>
                         <td class="text-center">{{ $g->gr_awal ?? 0 + $gr_eo_awal }}</td>
                         <td class="text-center">{{ $g->pcs_akhir ?? 0 }}</td>
                         <td class="text-center">{{ $g->gr_akhir ?? 0 + $gr_eo_akhir }}</td>
                         @php
-                            $pcs_awal_bk = $g->pcs_awal ?? 0;
-                            $gr_awal_bk = $g->gr_awal ?? 0;
+                            $pcs_awal_bk = $g->pcs_awal_bk ?? 0;
+                            $gr_awal_bk = $g->gr_awal_bk ?? 0;
 
                             $pcs_awal_cbt = $g->pcs_awal ?? 0;
                             $gr_awal_cbt = $g->gr_awal ?? 0;

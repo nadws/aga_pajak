@@ -398,6 +398,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/export_show_box', 'export_show_box')->name('export_show_box');
             Route::get('/selesai_susut', 'selesai_susut')->name('selesai_susut');
             Route::get('/cancel_susut', 'cancel_susut')->name('cancel_susut');
+            Route::get('/sum_bagi', 'sum_bagi')->name('sum_bagi');
         });
     Route::controller(ConganController::class)
         ->prefix('congan')
@@ -418,5 +419,6 @@ Route::middleware('auth')->group(function () {
         ->name('halawal.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
+            Route::get('/summary_wip', 'summary_wip')->name('summary_wip');
         });
 });

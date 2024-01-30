@@ -14,4 +14,13 @@ class HalawalGudangController extends Controller
         ];
         return view('halawal.gudangwip', $data);
     }
+
+    function summary_wip(Request $r)
+    {
+        $data = [
+            'title' => 'Summary Wip',
+            'nm_gudang' => $r->nm_gudang
+        ];
+        return view('halawal.summarywip', $data);
+    }
 }

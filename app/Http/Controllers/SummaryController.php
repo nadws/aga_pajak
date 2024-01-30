@@ -779,7 +779,6 @@ class SummaryController extends Controller
             "$this->linkApi/show_box",
             [
                 'nm_partai' => $r->nm_partai,
-                'no_lot' => $r->no_lot,
                 'limit' => $r->limit,
             ]
         );
@@ -788,7 +787,6 @@ class SummaryController extends Controller
             'bk' => $b,
             'linkApi' => $this->linkApi,
             'nm_partai' => $r->nm_partai,
-            'no_lot' => $r->no_lot,
         ];
         return view('summarybk.get_box', $data);
     }
@@ -811,7 +809,36 @@ class SummaryController extends Controller
         return view('summarybk.export_show', $data);
     }
 
-    public function sum_cetak(Request $r)
+    function sum_bagi(Request $r)
     {
+        if (empty($r->nm_gudang)) {
+            $nmgudang = 'bk';
+        } else {
+            $nmgudang = $r->nm_gudang;
+        }
+
+        $gudang = GudangBkModel::getSummaryWip();
+        $total = GudangBkModel::getPembelianBk('bk');
+
+        $ttl_bk = 0;
+        foreach ($total as $t) {
+            $ttl_bk += $t->rupiah * $t->gr;
+        }
+
+        $listBulan = DB::table('bulan')->get();
+        $id_user = auth()->user()->id;
+        $data =  [
+            'title' => 'Summary Wip',
+            'gudang' => $gudang,
+            'listbulan' => $listBulan,
+            'nm_gudang' => $nmgudang,
+            'total_bk' => $ttl_bk,
+            'linkApi' => $this->linkApi,
+            'total_invoice' => DB::selectOne("SELECT a.no_nota, b.no_nota, sum(a.total_harga) as ttl_hrga
+            FROM invoice_bk as a left 
+            join grading as b on b.no_nota = a.no_nota 
+            where b.no_nota is null;")
+        ];
+        return view('summarybk.bagi', $data);
     }
 }
