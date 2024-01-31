@@ -39,7 +39,7 @@ class SummaryController extends Controller
         $listBulan = DB::table('bulan')->get();
         $id_user = auth()->user()->id;
         $data =  [
-            'title' => 'Summary Wip',
+            'title' => 'Summary Wip Cabut',
             'gudang' => $gudang,
             'listbulan' => $listBulan,
             'nm_gudang' => $nmgudang,
@@ -828,7 +828,7 @@ class SummaryController extends Controller
         $listBulan = DB::table('bulan')->get();
         $id_user = auth()->user()->id;
         $data =  [
-            'title' => 'Summary Wip',
+            'title' => 'Summary Wip Cabut',
             'gudang' => $gudang,
             'listbulan' => $listBulan,
             'nm_gudang' => $nmgudang,

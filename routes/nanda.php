@@ -35,6 +35,7 @@ use App\Http\Controllers\SaldoController;
 use App\Http\Controllers\Stock_telurController;
 use App\Http\Controllers\Stok_telur_alpaController;
 use App\Http\Controllers\SummaryController;
+use App\Http\Controllers\SummarySortirController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -420,5 +421,11 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/summary_wip', 'summary_wip')->name('summary_wip');
+        });
+    Route::controller(SummarySortirController::class)
+        ->prefix('sumsortir')
+        ->name('sumsortir.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
         });
 });

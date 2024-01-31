@@ -53,7 +53,7 @@
                 </div>
             </div>
             <div class="col-lg-4 mt-4 card-pilihan">
-                <a href="#" class="opencabut" gudang='summary'>
+                <a href="#" class="opencabut" gudang='summary' lokasi="wip">
                     <div class="card kartu" style="border: 1px solid blue; ">
                         <div class="card-body">
                             <div class="text-center mb-4">
@@ -81,7 +81,7 @@
                 </a>
             </div>
             <div class="col-lg-4 mt-4 card-pilihan">
-                <a href="#" class="opencabut" gudang='wipsortir'>
+                <a href="#" class="opencabut" gudang='summary' lokasi="wipsortir">
                     <div class="card kartu" style="border: 1px solid blue; ">
                         <div class="card-body">
                             <div class="text-center mb-4">
@@ -113,13 +113,22 @@
                 $(document).on('click', '.opencabut', function(e) {
                     e.preventDefault();
                     var nm_gudang = $(this).attr('gudang');
+                    var lokasi = $(this).attr('lokasi');
                     $('.card-pilihan').hide();
                     $('.loadingbk').show();
+
+                    if (lokasi == 'wip') {
+                        var url = "{{ route('summarybk.sum_bagi') }}";
+                    } else {
+                        var url = "{{ route('sumsortir.index') }}";
+                    }
+
+
                     $.ajax({
                         type: "get",
-                        url: "{{ route('summarybk.sum_bagi') }}",
+                        url: url,
                         data: {
-                            nm_gudang: nm_gudang
+                            nm_gudang: nm_gudang,
                         },
                         success: function(response) {
 
