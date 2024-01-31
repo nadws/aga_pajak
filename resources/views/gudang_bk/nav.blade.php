@@ -28,15 +28,15 @@
     @endif
 
     <li class="nav-item" role="presentation">
-        <a class="nav-link {{ request()->routeIs('summarybk.index') && request()->query('nm_gudang') == 'summarysinta' ? 'active' : '' }}"
-            href="{{ route('summarybk.index', ['nm_gudang' => 'summarysinta']) }}" type="button" role="tab"
+        <a class="nav-link {{ request()->routeIs('halawal.summary_wip') && request()->query('nm_gudang') == 'summarysinta' ? 'active' : '' }}"
+            href="{{ route('halawal.summary_wip', ['nm_gudang' => 'summarysinta']) }}" type="button" role="tab"
             aria-controls="pills-home" aria-selected="true">Summary Wip Sinta</a>
     </li>
 
 
     <li class="nav-item" role="presentation">
-        <a class="nav-link {{ request()->routeIs('summarybk.susut') && request()->query('nm_gudang') == 'susut' ? 'active' : '' }}"
-            href="{{ route('summarybk.susut', ['nm_gudang' => 'susut']) }}" type="button" role="tab"
+        <a class="nav-link {{ request()->routeIs('halawal.susut') && request()->query('nm_gudang') == 'susut' ? 'active' : '' }}"
+            href="{{ route('halawal.susut', ['nm_gudang' => 'susut']) }}" type="button" role="tab"
             aria-controls="pills-home" aria-selected="true">Susut</a>
     </li>
 

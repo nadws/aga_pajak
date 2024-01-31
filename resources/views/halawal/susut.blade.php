@@ -52,7 +52,7 @@
                 </div>
             </div>
             <div class="col-lg-4 mt-4 card-pilihan">
-                <a href="#" class="opencabut" gudang='{{ $nm_gudang }}' lokasi="wip">
+                <a href="#" class="opencabut" lokasi="wip">
                     <div class="card kartu" style="border: 1px solid blue; ">
                         <div class="card-body">
                             <div class="text-center mb-4">
@@ -66,7 +66,7 @@
                 </a>
             </div>
             <div class="col-lg-4 mt-4 card-pilihan">
-                <a href="#" class="opencabut" gudang='{{ $nm_gudang }}' lokasi="wipcetak">
+                <a href="#" class="opencabut" lokasi="wipcetak">
                     <div class="card kartu" style="border: 1px solid blue; ">
                         <div class="card-body">
                             <div class="text-center mb-4">
@@ -80,7 +80,7 @@
                 </a>
             </div>
             <div class="col-lg-4 mt-4 card-pilihan">
-                <a href="#" class="opencabut" gudang='{{ $nm_gudang }}' lokasi="wipsortir">
+                <a href="#" class="opencabut" lokasi="wipsortir">
                     <div class="card kartu" style="border: 1px solid blue; ">
                         <div class="card-body">
                             <div class="text-center mb-4">
@@ -109,34 +109,14 @@
         <script>
             $(document).ready(function() {
 
-                $(document).on('click', '.opencabut', function(e) {
-                    e.preventDefault();
-                    var nm_gudang = $(this).attr('gudang');
-                    var lokasi = $(this).attr('lokasi');
 
-
-                    if (lokasi == 'wip') {
-                        var url = "{{ route('summarybk.sum_bagi') }}";
-                        $('.card-pilihan').hide();
-                        $('.loadingbk').show();
-                    } else if (lokasi == 'wipsortir') {
-                        var url = "{{ route('sumsortir.index') }}";
-                        $('.card-pilihan').hide();
-                        $('.loadingbk').show();
-                    } else if (lokasi == 'wipcetak') {
-                        var url = "{{ route('sumsortir.cetak') }}";
-                        $('.card-pilihan').hide();
-                        $('.loadingbk').show();
-
-                    } else {
-                        alert('sedang terjadi masalah, masih dalam perbaikan')
-                        exit();
-                    }
-
+                function load_susut(nm_gudang) {
+                    $('.card-pilihan').hide();
+                    $('.loadingbk').show();
 
                     $.ajax({
                         type: "get",
-                        url: url,
+                        url: "{{ route('sumsortir.susut_wip_cabut') }}",
                         data: {
                             nm_gudang: nm_gudang,
                         },
@@ -147,6 +127,12 @@
 
                         }
                     });
+                }
+                $(document).on('click', '.opencabut', function(e) {
+                    e.preventDefault();
+                    var nm_gudang = $(this).attr('lokasi');
+
+                    load_susut(nm_gudang);
 
                 });
                 $(document).on('click', '.kembali', function(e) {
@@ -159,6 +145,112 @@
                     }, 500);
 
 
+                });
+                $(document).on('click', '.selesai_susut', function(e) {
+                    e.preventDefault();
+                    var nm_gudang = $(this).attr('gudang');
+                    var ket = $(this).attr('ket');
+
+                    $('.loadingbk').show();
+                    $('#load_data').html('');
+                    $.ajax({
+                        type: "get",
+                        url: "{{ route('summarybk.selesai_susut') }}",
+                        data: {
+                            nm_gudang: nm_gudang,
+                            ket: ket,
+                        },
+                        success: function(response) {
+
+                            load_susut(nm_gudang);
+                            Toastify({
+                                text: "Data berhasil diselesaikan",
+                                duration: 3000,
+                                style: {
+                                    background: "#EAF7EE",
+                                    color: "#7F8B8B"
+                                },
+                                close: true,
+                                avatar: "https://cdn-icons-png.flaticon.com/512/190/190411.png"
+                            }).showToast();
+
+                        }
+                    });
+
+
+                });
+                $(document).on('click', '.cancel_susut', function(e) {
+                    e.preventDefault();
+                    var nm_gudang = $(this).attr('gudang');
+                    var ket = $(this).attr('ket');
+
+                    $('.loadingbk').show();
+                    $('#load_data').html('');
+                    $.ajax({
+                        type: "get",
+                        url: "{{ route('summarybk.cancel_susut') }}",
+                        data: {
+                            nm_gudang: nm_gudang,
+                            ket: ket,
+                        },
+                        success: function(response) {
+
+                            load_susut(nm_gudang);
+                            Toastify({
+                                text: "Data berhasil dicancel",
+                                duration: 3000,
+                                style: {
+                                    background: "#EAF7EE",
+                                    color: "#7F8B8B"
+                                },
+                                close: true,
+                                avatar: "https://cdn-icons-png.flaticon.com/512/190/190411.png"
+                            }).showToast();
+
+                        }
+                    });
+
+
+                });
+                $(document).on('submit', '#save_susut', function(e) {
+                    e.preventDefault();
+
+                    // Display loading spinner or any UI indication if needed
+
+                    // Serialize form data
+                    var formData = $(this).serialize();
+                    var nm_gudang = $('.gudang').val();
+
+                    // Make an Ajax request
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ route('summarybk.save_susut') }}", // Replace with your actual backend endpoint
+                        data: formData,
+                        success: function(response) {
+                            // Handle success response, if needed
+                            console.log(response);
+                            load_susut(nm_gudang);
+                            Toastify({
+                                text: "Data berhasil disimpan",
+                                duration: 3000,
+                                style: {
+                                    background: "#EAF7EE",
+                                    color: "#7F8B8B"
+                                },
+                                close: true,
+                                avatar: "https://cdn-icons-png.flaticon.com/512/190/190411.png"
+                            }).showToast();
+                        },
+                        error: function(error) {
+                            // Handle error response, if needed
+                            console.log(error);
+                            load_susut(nm_gudang);
+                            alert('Error submitting form');
+                        },
+                        complete: function() {
+                            // Hide loading spinner or any UI indication if needed
+                        }
+                    });
                 });
             });
             $(document).ready(function() {
@@ -250,6 +342,9 @@
                     $('.show_td').show();
 
                 });
+
+
+
 
 
 

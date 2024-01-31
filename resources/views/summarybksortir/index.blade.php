@@ -112,8 +112,8 @@
                             $response = Http::get("$linkApi/bk_sum_sortir", ['nm_partai' => $ket]);
                             $b = $response->object();
 
-                            // $resSum = Http::get("$linkApi/datacabutsum2", ['nm_partai' => $ket]);
-                            // $c = $resSum->object();
+                            $resSum = Http::get("$linkApi/datasortirsum", ['nm_partai' => $ket]);
+                            $c = $resSum->object();
 
                             $wipPcs = $g->pcs ?? 0;
                             $wipGr = $g->gr ?? 0;
@@ -124,6 +124,8 @@
                             $gr_susut = $g->gr_susut ?? 0;
                             $WipSisaPcs = $wipPcs - $bkPcs;
                             $WipSisaGr = $wipGr - $bkGr - $gr_susut;
+
+                            $susut_str = $c->susut ?? 0;
                         @endphp
 
                         <tr>
@@ -131,6 +133,12 @@
                             <td>
                                 <a href="#" data-bs-toggle="modal" nm_partai="{{ $g->ket2 }}"
                                     data-bs-target="#load_bk_cabut" class="show_box">{{ $g->ket2 }}</a>
+
+                                @if ($g->selesai == 'Y')
+                                    <i class="fas text-end fa-check text-success"></i>
+                                @else
+                                    <i class="fas text-end fa-hourglass-half text-danger"></i>
+                                @endif
                             </td>
                             <td class="text-center fw-bold">
                                 {{ $g->nm_grade }}
@@ -153,10 +161,6 @@
                                 <td class="text-end fw-bold tdhide">{{ number_format($bkPcs, 0) }}</td>
                                 <td class="text-end fw-bold tdhide">{{ number_format($bkGr, 0) }}</td>
                             @endif
-
-
-
-
 
 
                             <td class="text-end fw-bold tdhide">{{ number_format($g->gr_susut ?? 0, 0) }}
@@ -184,25 +188,26 @@
                             @endif
 
 
-                            <td class="text-end fw-bold">0</td>
-                            <td class="text-end fw-bold">0</td>
-                            <td class="text-end fw-bold">0</td>
-                            <td class="text-end fw-bold">0</td>
-                            <td class="text-end fw-bold">0</td>
-                            {{-- @php
+                            <td class="text-end fw-bold">{{ number_format($c->pcs_awal ?? 0, 0) }}</td>
+                            <td class="text-end fw-bold">{{ number_format($c->gr_awal ?? 0, 0) }}</td>
+                            <td class="text-end fw-bold">{{ number_format($c->pcs_akhir ?? 0, 0) }}</td>
+                            <td class="text-end fw-bold">{{ number_format($c->gr_akhir ?? 0, 0) }}</td>
+                            <td class="text-end fw-bold">{{ number_format($susut_str * 100, 1) }} %</td>
+                            @php
                                 $pcs_awal_bk = $b->pcs_awal ?? 0;
                                 $gr_awal_bk = $b->gr_awal ?? 0;
 
                                 $pcs_awal_cbt = $c->pcs_awal ?? 0;
                                 $gr_awal_cbt = $c->gr_awal ?? 0;
-                            @endphp --}}
+                            @endphp
                             <td class="text-end text-danger fw-bold">
-                                0</td>
+                                {{ number_format($pcs_awal_bk - $pcs_awal_cbt, 0) }}
+                            </td>
                             <td class="text-end text-danger fw-bold">
-                                0
+                                {{ number_format($gr_awal_bk - $gr_awal_cbt, 0) }}
                             </td>
 
-                            <td class="text-end fw-bold">0</td>
+                            <td class="text-end fw-bold">{{ number_format($c->ttl_rp ?? 0, 0) }}</td>
 
                         </tr>
                     @endforeach

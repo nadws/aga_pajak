@@ -740,7 +740,7 @@ class SummaryController extends Controller
 
     public function save_susut(Request $r)
     {
-        DB::table('table_susut')->truncate();
+        DB::table('table_susut')->where('gudang', $r->gudang)->delete();
         for ($x = 0; $x < count($r->ket); $x++) {
 
             $data = [
@@ -748,11 +748,10 @@ class SummaryController extends Controller
                 'gr' => $r->gr_susut[$x],
                 'selesai' => $r->selesai[$x],
                 'admin' => Auth::user()->name,
+                'gudang' => $r->gudang
             ];
             DB::table('table_susut')->insert($data);
         }
-
-        return redirect()->route('summarybk.susut', ['nm_gudang' => 'susut'])->with('sukses', 'Data berhasil disimpan');
     }
 
     function selesai_susut(Request $r)
@@ -760,8 +759,7 @@ class SummaryController extends Controller
         $data = [
             'selesai' => 'Y'
         ];
-        DB::table('table_susut')->where('ket', $r->ket)->update($data);
-        return redirect()->route('summarybk.susut', ['nm_gudang' => 'susut'])->with('sukses', 'Data berhasil diselesaikan');
+        DB::table('table_susut')->where('ket', $r->ket)->where('gudang', $r->nm_gudang)->update($data);
     }
 
     function cancel_susut(Request $r)
@@ -769,8 +767,7 @@ class SummaryController extends Controller
         $data = [
             'selesai' => 'T'
         ];
-        DB::table('table_susut')->where('ket', $r->ket)->update($data);
-        return redirect()->route('summarybk.susut', ['nm_gudang' => 'susut'])->with('sukses', 'Data berhasil diselesaikan');
+        DB::table('table_susut')->where('ket', $r->ket)->where('gudang', $r->nm_gudang)->update($data);
     }
 
     function get_no_box(Request $r)
@@ -809,7 +806,7 @@ class SummaryController extends Controller
         return view('summarybk.export_show', $data);
     }
 
-    function sum_bagi(Request $r)
+    public function sum_bagi(Request $r)
     {
         if (empty($r->nm_gudang)) {
             $nmgudang = 'bk';

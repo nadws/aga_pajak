@@ -421,11 +421,14 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/summary_wip', 'summary_wip')->name('summary_wip');
+            Route::get('/susut', 'susut')->name('susut');
         });
     Route::controller(SummarySortirController::class)
         ->prefix('sumsortir')
         ->name('sumsortir.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
+            Route::get('/cetak', 'cetak')->name('cetak');
+            Route::get('/susut_wip_cabut', 'susut_wip_cabut')->name('susut_wip_cabut');
         });
 });

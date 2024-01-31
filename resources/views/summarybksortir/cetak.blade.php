@@ -18,6 +18,7 @@
             <td><input type="text" id="pencarian" class="form-control float-end"></td>
         </table>
     </div>
+
     <style>
         .tdhide {
             display: none;
@@ -61,7 +62,7 @@
                             <th class="text-white text-center bg-danger tdhide" colspan="2">Wip Sisa</th>
                         @endif
 
-                        <th class="dhead text-center" colspan="7">Cabut</th>
+                        <th class="dhead text-center" colspan="5">Cetak</th>
                         <th class="bg-danger text-white text-center" colspan="2">Bk Sisa Pgws</th>
                         <th class="dhead" rowspan="2">Ttl Rp</th>
                     </tr>
@@ -99,8 +100,6 @@
                         <th class="dhead text-center">Pcs Akhir</th>
                         <th class="dhead text-center">Gr Akhir</th>
                         <th class="dhead text-center">Susut</th>
-                        <th class="dhead text-center">Eot</th>
-                        <th class="dhead text-center">Flx</th>
 
                         <th class="text-white bg-danger text-center">Pcs</th>
                         <th class="text-white bg-danger text-center">Gr</th>
@@ -110,10 +109,10 @@
                     @foreach ($gudang as $no => $g)
                         @php
                             $ket = $g->ket2;
-                            $response = Http::get("$linkApi/bk_sum", ['nm_partai' => $ket]);
+                            $response = Http::get("$linkApi/bk_sum_cetak", ['nm_partai' => $ket]);
                             $b = $response->object();
 
-                            $resSum = Http::get("$linkApi/datacabutsum2", ['nm_partai' => $ket]);
+                            $resSum = Http::get("$linkApi/datacetak", ['nm_partai' => $ket]);
                             $c = $resSum->object();
 
                             $wipPcs = $g->pcs ?? 0;
@@ -125,6 +124,8 @@
                             $gr_susut = $g->gr_susut ?? 0;
                             $WipSisaPcs = $wipPcs - $bkPcs;
                             $WipSisaGr = $wipGr - $bkGr - $gr_susut;
+
+                            $susut_str = $c->susut ?? 0;
                         @endphp
 
                         <tr>
@@ -132,15 +133,14 @@
                             <td>
                                 <a href="#" data-bs-toggle="modal" nm_partai="{{ $g->ket2 }}"
                                     data-bs-target="#load_bk_cabut" class="show_box">{{ $g->ket2 }}</a>
-                                @if ($g->selesai == 'Y')
-                                    <i class="fas  fa-check text-success"></i>
-                                @else
-                                    <i class="fas  fa-hourglass-half text-danger"></i>
-                                @endif
 
+                                @if ($g->selesai == 'Y')
+                                    <i class="fas text-end fa-check text-success"></i>
+                                @else
+                                    <i class="fas text-end fa-hourglass-half text-danger"></i>
+                                @endif
                             </td>
                             <td class="text-center fw-bold">
-
                                 {{ $g->nm_grade }}
                             </td>
                             @php
@@ -163,17 +163,11 @@
                             @endif
 
 
-
-
-
-
                             <td class="text-end fw-bold tdhide">{{ number_format($g->gr_susut ?? 0, 0) }}
                             </td>
                             <td class="text-end fw-bold tdhide">
                                 {{ number_format((1 - $bkGr / $wipGr) * 100, 1) }}%
                             </td>
-
-
                             @if ($nm_gudang == 'summary')
                                 <td class="text-end fw-bold text-danger tdhide">
                                     {{ number_format($WipSisaPcs, 0) }}
@@ -198,9 +192,7 @@
                             <td class="text-end fw-bold">{{ number_format($c->gr_awal ?? 0, 0) }}</td>
                             <td class="text-end fw-bold">{{ number_format($c->pcs_akhir ?? 0, 0) }}</td>
                             <td class="text-end fw-bold">{{ number_format($c->gr_akhir ?? 0, 0) }}</td>
-                            <td class="text-end fw-bold">{{ number_format($c->susut ?? 0, 0) }}</td>
-                            <td class="text-end fw-bold">{{ number_format($c->eot ?? 0, 0) }}</td>
-                            <td class="text-end fw-bold">{{ number_format($c->gr_flx ?? 0, 0) }}</td>
+                            <td class="text-end fw-bold">{{ number_format($susut_str * 100, 1) }} %</td>
                             @php
                                 $pcs_awal_bk = $b->pcs_awal ?? 0;
                                 $gr_awal_bk = $b->gr_awal ?? 0;
@@ -209,7 +201,8 @@
                                 $gr_awal_cbt = $c->gr_awal ?? 0;
                             @endphp
                             <td class="text-end text-danger fw-bold">
-                                {{ number_format($pcs_awal_bk - $pcs_awal_cbt, 0) }}</td>
+                                {{ number_format($pcs_awal_bk - $pcs_awal_cbt, 0) }}
+                            </td>
                             <td class="text-end text-danger fw-bold">
                                 {{ number_format($gr_awal_bk - $gr_awal_cbt, 0) }}
                             </td>
