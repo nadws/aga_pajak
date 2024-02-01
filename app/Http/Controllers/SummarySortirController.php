@@ -11,7 +11,7 @@ class SummarySortirController extends Controller
     protected $linkApi;
     public function __construct()
     {
-        $this->linkApi = "https://sarangbackup.ptagafood.com/api/apibk";
+        $this->linkApi = "https://sarang.ptagafood.com/api/apibk";
     }
     public function index(Request $r)
     {
