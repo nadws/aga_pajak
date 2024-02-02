@@ -60,10 +60,12 @@
                         @else
                             <th class="text-white text-center bg-danger tdhide" colspan="2">Wip Sisa</th>
                         @endif
+                        <th class="dhead text-center" rowspan="2">Selesai Bk</th>
 
                         <th class="dhead text-center" colspan="7">Cabut</th>
                         <th class="bg-danger text-white text-center" colspan="2">Bk Sisa Pgws</th>
                         <th class="dhead" rowspan="2">Ttl Rp</th>
+                        <th class="dhead" rowspan="2">Selesai</th>
                     </tr>
                     <tr>
                         @if ($nm_gudang == 'summary')
@@ -125,6 +127,7 @@
                             $gr_susut = $g->gr_susut ?? 0;
                             $WipSisaPcs = $wipPcs - $bkPcs;
                             $WipSisaGr = $wipGr - $bkGr - $gr_susut;
+                            $selesai_bk = $b->selesai ?? 'T';
                         @endphp
 
                         <tr>
@@ -132,11 +135,7 @@
                             <td>
                                 <a href="#" data-bs-toggle="modal" nm_partai="{{ $g->ket2 }}"
                                     data-bs-target="#load_bk_cabut" class="show_box">{{ $g->ket2 }}</a>
-                                @if ($g->selesai == 'Y')
-                                    <i class="fas  fa-check text-success"></i>
-                                @else
-                                    <i class="fas  fa-hourglass-half text-danger"></i>
-                                @endif
+
 
                             </td>
                             <td class="text-center fw-bold">
@@ -192,6 +191,13 @@
                                     {{ number_format($WipSisaGr, 0) }}
                                 </td>
                             @endif
+                            <td class="text-center fw-bold">
+                                @if ($g->selesai == 'Y')
+                                    <i class="fas  fa-check text-success"></i>
+                                @else
+                                    <i class="fas  fa-hourglass-half text-danger"></i>
+                                @endif
+                            </td>
 
 
                             <td class="text-end fw-bold">{{ number_format($c->pcs_awal ?? 0, 0) }}</td>
@@ -215,6 +221,13 @@
                             </td>
 
                             <td class="text-end fw-bold">{{ number_format($c->ttl_rp ?? 0, 0) }}</td>
+                            <td class="text-center fw-bold">
+                                @if ($selesai_bk == 'Y')
+                                    <i class="fas  fa-check text-success"></i>
+                                @else
+                                    <i class="fas  fa-hourglass-half text-danger"></i>
+                                @endif
+                            </td>
 
                         </tr>
                     @endforeach

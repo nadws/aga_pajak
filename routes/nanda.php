@@ -430,5 +430,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/cetak', 'cetak')->name('cetak');
             Route::get('/susut_wip_cabut', 'susut_wip_cabut')->name('susut_wip_cabut');
+
+            Route::get('/get_no_box_sortir', 'get_no_box_sortir')->name('get_no_box_sortir');
         });
 });

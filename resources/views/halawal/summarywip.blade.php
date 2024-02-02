@@ -102,6 +102,13 @@
             </button>
             <div class="load_box"></div>
         </x-theme.modal>
+        <x-theme.modal title="Data Bk Cabut" idModal="load_bk_sortir" btnSave="T" size="modal-lg-max">
+            <button class="btn btn-primary btn-loading" type="button" disabled="">
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Loading...
+            </button>
+            <div class="load_box_sortir"></div>
+        </x-theme.modal>
 
     </x-slot>
 
@@ -212,6 +219,15 @@
                     $('.load_box').html('');
                     loadBoxData(no_lot, nm_partai, 5); // Default limit 5
                 });
+                $(document).on('click', '.show_box_sortir', function(e) {
+                    e.preventDefault();
+                    $('.btn-loading').removeClass('d-none');
+                    var nm_partai = $(this).attr('nm_partai');
+                    currentNmPartai = nm_partai;
+                    $('.nm_partai_input').val(nm_partai);
+                    $('.load_box_sortir').html('');
+                    loadBoxDataSortir(nm_partai, 5); // Default limit 5
+                });
 
                 $(document).on('change', '.load-data', function() {
                     $('.btn-loading').removeClass('d-none');
@@ -233,6 +249,23 @@
                         success: function(response) {
                             $('.btn-loading').addClass('d-none');
                             $('.load_box').html(response);
+                            pencarian('pencarianBox', 'tblAldi2')
+
+                        }
+                    });
+                }
+
+                function loadBoxDataSortir(nm_partai, limit) {
+                    $.ajax({
+                        type: "get",
+                        url: "{{ route('sumsortir.get_no_box_sortir') }}",
+                        data: {
+                            nm_partai: nm_partai,
+                            limit: limit // Menambahkan parameter limit ke dalam data yang dikirimkan
+                        },
+                        success: function(response) {
+                            $('.btn-loading').addClass('d-none');
+                            $('.load_box_sortir').html(response);
                             pencarian('pencarianBox', 'tblAldi2')
 
                         }

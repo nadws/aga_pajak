@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\GudangBkModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class SummarySortirController extends Controller
 {
@@ -75,5 +76,23 @@ class SummarySortirController extends Controller
             'linkApi' => $this->linkApi,
         ];
         return view('summarybksortir.susut_wip_cabut', $data);
+    }
+
+    function get_no_box_sortir(Request $r)
+    {
+        $response = Http::get(
+            "$this->linkApi/show_box_sortir",
+            [
+                'nm_partai' => $r->nm_partai,
+                'limit' => $r->limit,
+            ]
+        );
+        $b = $response->object();
+        $data =  [
+            'bk' => $b,
+            'linkApi' => $this->linkApi,
+            'nm_partai' => $r->nm_partai,
+        ];
+        return view('summarybksortir.get_box_sortir', $data);
     }
 }

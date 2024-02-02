@@ -62,6 +62,7 @@
                             <th class="text-white text-center bg-danger tdhide" colspan="2">Wip Sisa</th>
                         @endif
 
+                        <th class="dhead text-center" rowspan="2">Selesai</th>
                         <th class="dhead text-center" colspan="5">Cetak</th>
                         <th class="bg-danger text-white text-center" colspan="2">Bk Sisa Pgws</th>
                         <th class="dhead" rowspan="2">Ttl Rp</th>
@@ -134,11 +135,6 @@
                                 <a href="#" data-bs-toggle="modal" nm_partai="{{ $g->ket2 }}"
                                     data-bs-target="#load_bk_cabut" class="show_box">{{ $g->ket2 }}</a>
 
-                                @if ($g->selesai == 'Y')
-                                    <i class="fas text-end fa-check text-success"></i>
-                                @else
-                                    <i class="fas text-end fa-hourglass-half text-danger"></i>
-                                @endif
                             </td>
                             <td class="text-center fw-bold">
                                 {{ $g->nm_grade }}
@@ -186,6 +182,13 @@
                                     {{ number_format($WipSisaGr, 0) }}
                                 </td>
                             @endif
+                            <td class="text-center fw-bold">
+                                @if ($g->selesai == 'Y')
+                                    <i class="fas text-end fa-check text-success"></i>
+                                @else
+                                    <i class="fas text-end fa-hourglass-half text-danger"></i>
+                                @endif
+                            </td>
 
 
                             <td class="text-end fw-bold">{{ number_format($c->pcs_awal ?? 0, 0) }}</td>
