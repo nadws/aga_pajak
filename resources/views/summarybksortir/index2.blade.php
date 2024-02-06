@@ -1,34 +1,14 @@
 <div class="row">
-    <div class="col-lg-12">
-        <hr>
-    </div>
-    <div class="col-lg-3">
-        <h5>{{ $title }}</h5>
-    </div>
-    <div class="col-lg-9"></div>
-    <div class="col-lg-3">
-        <button class="btn btn-warning kembali">Kembali</button>
-    </div>
-    <div class="col-lg-6">
 
-    </div>
     <div class="col-lg-3">
         <table class="float-end">
-            <tr>
-                <td></td>
-                <td>
-                    <button class="btn float-end btn-primary btn-sm history" lokasi='cabut' data-bs-toggle="modal"
-                        data-bs-target="#load_history"><i class="fas fa-history"></i>
-                        History
-                    </button>
-                </td>
-            </tr>
             <tr>
                 <td>Search :</td>
                 <td><input type="text" id="pencarian" class="form-control float-end"></td>
             </tr>
         </table>
     </div>
+
     <style>
         .tdhide {
             display: none;
@@ -65,19 +45,18 @@
 
 
 
-                        <th class="dhead text-center tdhide" colspan="3">Susut Wip - bk</th>
+                        <th class="dhead text-center tdhide" colspan="2">Susut Wip - bk</th>
                         @if ($nm_gudang == 'summary')
                             <th class="text-white text-center bg-danger tdhide" colspan="3">Wip Sisa</th>
                         @else
                             <th class="text-white text-center bg-danger tdhide" colspan="2">Wip Sisa</th>
                         @endif
-                        <th class="dhead text-center" rowspan="2">Selesai Bk</th>
 
-                        <th class="dhead text-center" colspan="7">Cabut</th>
+                        <th class="dhead text-center" rowspan="2">Selesai</th>
+                        <th class="dhead text-center" colspan="5">Sortir</th>
                         <th class="bg-danger text-white text-center" colspan="2">Bk Sisa Pgws</th>
                         <th class="dhead" rowspan="2">Ttl Rp Cost</th>
                         <th class="dhead" rowspan="2">Ttl Rp Bk</th>
-                        <th class="dhead" rowspan="2">Selesai</th>
                     </tr>
                     <tr>
                         @if ($nm_gudang == 'summary')
@@ -93,7 +72,9 @@
                             <th class="dhead text-center tdhide">Pcs</th>
                             <th class="dhead text-center tdhide">Gr</th>
                         @endif
-                        <th class="dhead text-center tdhide">Pcs</th>
+
+
+
                         <th class="dhead text-center tdhide">Gr</th>
                         <th class="dhead text-center tdhide">sst(%)</th>
                         @if ($nm_gudang == 'summary')
@@ -111,8 +92,6 @@
                         <th class="dhead text-center">Pcs Akhir</th>
                         <th class="dhead text-center">Gr Akhir</th>
                         <th class="dhead text-center">Susut</th>
-                        <th class="dhead text-center">Eot</th>
-                        <th class="dhead text-center">Flx</th>
 
                         <th class="text-white bg-danger text-center">Pcs</th>
                         <th class="text-white bg-danger text-center">Gr</th>
@@ -122,8 +101,14 @@
                     @foreach ($gudang as $no => $g)
                         @php
                             $ket = $g->ket2;
-                            $resSum = Cache::remember('datacabutsum2_' . $ket, now()->addHours(8), function () use ($ket, $linkApi) {
-                                return Http::get("$linkApi/datacabutsum2", ['nm_partai' => $ket])->object();
+                            $resSum = Cache::remember('bk_sum_sortir_' . $ket, now()->addHours(8), function () use ($ket, $linkApi) {
+                                return Http::get("$linkApi/bk_sum_sortir", ['nm_partai' => $ket])->object();
+                            });
+                            $b = $resSum;
+                            $g->relatedModel = $b;
+
+                            $resSum = Cache::remember('datasortirsum_' . $ket, now()->addHours(8), function () use ($ket, $linkApi) {
+                                return Http::get("$linkApi/datasortirsum", ['nm_partai' => $ket])->object();
                             });
                             $c = $resSum;
                             $g->relatedModel = $c;
@@ -131,22 +116,21 @@
                             $wipPcs = $g->pcs ?? 0;
                             $wipGr = $g->gr ?? 0;
                             $wipTllrp = $g->total_rp ?? 0;
-                            $bkPcs = $c->pcs_bk ?? 0;
-                            $bkGr = $c->gr_awal_bk ?? 0;
+                            $bkPcs = $b->pcs_awal ?? 0;
+                            $bkGr = $b->gr_awal ?? 0;
 
                             $gr_susut = $g->gr_susut ?? 0;
-                            $pcs_susut = $g->pcs_susut ?? 0;
-                            $WipSisaPcs = $wipPcs - $bkPcs - $pcs_susut;
+                            $WipSisaPcs = $wipPcs - $bkPcs;
                             $WipSisaGr = $wipGr - $bkGr - $gr_susut;
-                            $selesai_bk = $c->selesai ?? 'T';
-                            $gr_akhir_cbt = $c->gr_akhir ?? 0;
+
+                            $susut_str = $c->susut ?? 0;
                         @endphp
 
                         <tr>
                             <td>{{ $no + 1 }}</td>
                             <td>
                                 <a href="#" data-bs-toggle="modal" nm_partai="{{ $g->ket2 }}"
-                                    data-bs-target="#load_bk_cabut" class="show_box">{{ $g->ket2 }}</a>
+                                    data-bs-target="#load_bk_sortir" class="show_box_sortir">{{ $g->ket2 }}</a>
                             </td>
                             <td class="text-center fw-bold">
                                 {{ $g->nm_grade }}
@@ -169,8 +153,8 @@
                                 <td class="text-end fw-bold tdhide">{{ number_format($bkPcs, 0) }}</td>
                                 <td class="text-end fw-bold tdhide">{{ number_format($bkGr, 0) }}</td>
                             @endif
-                            <td class="text-end fw-bold tdhide">{{ number_format($g->pcs_susut ?? 0, 0) }}
-                            </td>
+
+
                             <td class="text-end fw-bold tdhide">{{ number_format($g->gr_susut ?? 0, 0) }}
                             </td>
                             <td class="text-end fw-bold tdhide">
@@ -194,7 +178,7 @@
                                     {{ number_format($WipSisaGr, 0) }}
                                 </td>
                             @endif
-                            <td class="text-center fw-bold">
+                            <td class="text-center">
                                 @if ($g->selesai_1 == 'Y')
                                     <i class="fas fa-check text-success fa-lg"></i>
                                 @else
@@ -204,47 +188,40 @@
                                             lokasi="{{ $lokasi }}" nm_partai="{{ $g->ket2 }}"
                                             gudang="{{ $nm_gudang }}">Selesai</a>
                                     @else
-                                        <a href="#"><i class="fas  fa-hourglass-half text-danger"></i></a>
+                                        <a href="#"><i class="fas  fa-hourglass-half text-danger"></i>
+                                        </a>
                                     @endif
                                 @endif
-
                             </td>
+
+
                             <td class="text-end fw-bold">{{ number_format($c->pcs_awal ?? 0, 0) }}</td>
                             <td class="text-end fw-bold">{{ number_format($c->gr_awal ?? 0, 0) }}</td>
                             <td class="text-end fw-bold">{{ number_format($c->pcs_akhir ?? 0, 0) }}</td>
                             <td class="text-end fw-bold">{{ number_format($c->gr_akhir ?? 0, 0) }}</td>
-                            <td class="text-end fw-bold">{{ number_format($c->susut ?? 0, 0) }}</td>
-                            <td class="text-end fw-bold">{{ number_format($c->eot ?? 0, 0) }}</td>
-                            <td class="text-end fw-bold">{{ number_format($c->gr_flx ?? 0, 0) }}</td>
+                            <td class="text-end fw-bold">{{ number_format($susut_str * 100, 1) }} %</td>
                             @php
-                                $pcs_awal_bk = $c->pcs_bk ?? 0;
-                                $gr_awal_bk = $c->gr_awal_bk ?? 0;
+                                $pcs_awal_bk = $b->pcs_awal ?? 0;
+                                $gr_awal_bk = $b->gr_awal ?? 0;
 
                                 $pcs_awal_cbt = $c->pcs_awal ?? 0;
                                 $gr_awal_cbt = $c->gr_awal ?? 0;
+                                $gr_akhir_cbt = $c->gr_akhir ?? 0;
                             @endphp
                             <td class="text-end text-danger fw-bold">
-                                {{ number_format($pcs_awal_bk - $pcs_awal_cbt, 0) }}</td>
+                                {{ number_format($pcs_awal_bk - $pcs_awal_cbt, 0) }}
+                            </td>
                             <td class="text-end text-danger fw-bold">
                                 {{ number_format($gr_awal_bk - $gr_awal_cbt, 0) }}
                             </td>
 
                             <td class="text-end fw-bold">{{ number_format($c->ttl_rp ?? 0, 0) }}</td>
+
                             <td class="text-end fw-bold">
                                 @if ($g->selesai_1 == 'Y')
                                     {{ number_format($hrga_modal_satuan * $gr_akhir_cbt, 0) }}
                                 @else
                                 @endif
-
-                            </td>
-                            <td class="text-center fw-bold">
-                                @if ($g->selesai_1 == 'Y')
-                                    <a href="#" class="btn btn-primary btn-sm finish" data-bs-toggle="modal"
-                                        data-bs-target="#load_bk_finish" lokasi="{{ $lokasi }}"
-                                        nm_partai="{{ $g->ket2 }}" gudang="{{ $nm_gudang }}">Selesai</a>
-                                @else
-                                @endif
-
                             </td>
 
                         </tr>

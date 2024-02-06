@@ -21,7 +21,14 @@ class SummarySortirController extends Controller
         } else {
             $nmgudang = $r->nm_gudang;
         }
-        $gudang = GudangBkModel::getSummary('wipsortir');
+        if (empty($r->kategori)) {
+            $kat = 'data';
+            $view = 'summarybksortir.index';
+        } else {
+            $kat = 'history';
+            $view = 'summarybksortir.index2';
+        }
+        $gudang = GudangBkModel::getSummary('wipsortir', $kat);
         $data =  [
             'title' => 'Summary Wip Sortir',
             'gudang' => $gudang,
@@ -29,7 +36,7 @@ class SummarySortirController extends Controller
             'linkApi' => $this->linkApi,
             'lokasi' => $r->lokasi,
         ];
-        return view('summarybksortir.index', $data);
+        return view($view, $data);
     }
 
     public function cetak(Request $r)
@@ -39,14 +46,21 @@ class SummarySortirController extends Controller
         } else {
             $nmgudang = $r->nm_gudang;
         }
-        $gudang = GudangBkModel::getSummary('wipcetak');
+        if (empty($r->kategori)) {
+            $kat = 'data';
+            $view = 'summarybksortir.cetak';
+        } else {
+            $kat = 'history';
+            $view = 'summarybksortir.cetak2';
+        }
+        $gudang = GudangBkModel::getSummary('wipcetak', $kat);
         $data =  [
             'title' => 'Summary Wip Cetak',
             'gudang' => $gudang,
             'nm_gudang' => $nmgudang,
             'linkApi' => $this->linkApi,
         ];
-        return view('summarybksortir.cetak', $data);
+        return view($view, $data);
     }
 
     public function susut_wip_cabut(Request $r)
@@ -65,8 +79,13 @@ class SummarySortirController extends Controller
             $kategori = 'sortir';
         }
 
+        if (empty($r->kategori)) {
+            $kat = 'data';
+        } else {
+            $kat = 'history';
+        }
 
-        $gudang = GudangBkModel::getSummary($nmgudang);
+        $gudang = GudangBkModel::getSummary($nmgudang, $kat);
         $listBulan = DB::table('bulan')->get();
         $data =  [
             'title' => 'Susut  ' . $nmgudang,

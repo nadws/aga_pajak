@@ -120,16 +120,29 @@ class GudangBkModel extends Model
         return $result;
     }
 
-    public static function getSummaryWip()
+    public static function getSummaryWip($kat)
     {
-        $result = DB::select("SELECT a.nm_grade,count(a.no_lot) as no_lot1, a.id_buku_campur, a.no_lot, a.ket,a.ket2, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.rupiah * a.gr) as total_rp , a.selesai_1, a.selesai_2, a.ket2, c.pcs as pcs_susut, c.gr as gr_susut, c.selesai
-        FROM buku_campur_approve as a 
-        left join buku_campur as b on b.id_buku_campur = a.id_buku_campur
-        left join table_susut as c on c.ket = a.ket2 and c.gudang = 'wip'
-        WHERE a.gudang = 'wip' and b.gabung = 'T' and a.selesai_2 = 'T'
-        GROUP by a.ket2
-        order by a.ket2 ASC
-        ");
+        if ($kat == 'data') {
+            $result = DB::select("SELECT a.nm_grade,count(a.no_lot) as no_lot1, a.id_buku_campur, a.no_lot, a.ket,a.ket2, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.rupiah * a.gr) as total_rp , a.selesai_1, a.selesai_2, a.ket2, c.pcs as pcs_susut, c.gr as gr_susut, c.selesai
+            FROM buku_campur_approve as a 
+            left join buku_campur as b on b.id_buku_campur = a.id_buku_campur
+            left join table_susut as c on c.ket = a.ket2 and c.gudang = 'wip'
+            WHERE a.gudang = 'wip' and b.gabung = 'T' and a.selesai_2 = 'T'
+            GROUP by a.ket2
+            order by a.ket2 ASC
+            ");
+        } else {
+            $result = DB::select("SELECT a.nm_grade,count(a.no_lot) as no_lot1, a.id_buku_campur, a.no_lot, a.ket,a.ket2, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.rupiah * a.gr) as total_rp , a.selesai_1, a.selesai_2, a.ket2, c.pcs as pcs_susut, c.gr as gr_susut, c.selesai
+            FROM buku_campur_approve as a 
+            left join buku_campur as b on b.id_buku_campur = a.id_buku_campur
+            left join table_susut as c on c.ket = a.ket2 and c.gudang = 'wip'
+            WHERE a.gudang = 'wip' and b.gabung = 'T' and a.selesai_2 = 'Y'
+            GROUP by a.ket2
+            order by a.ket2 ASC
+            ");
+        }
+
+
 
         return $result;
     }
@@ -167,16 +180,27 @@ class GudangBkModel extends Model
     }
 
 
-    public static function getSummary($gudang)
+    public static function getSummary($gudang, $kat)
     {
-        $result = DB::select("SELECT a.nm_grade,count(a.no_lot) as no_lot1, a.id_buku_campur, a.no_lot, a.ket,a.ket2, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.rupiah * a.gr) as total_rp , a.selesai_1, a.selesai_2, a.ket2, c.pcs as pcs_susut, c.gr as gr_susut, c.selesai
-        FROM buku_campur_approve as a 
-        left join buku_campur as b on b.id_buku_campur = a.id_buku_campur
-        left join table_susut as c on c.ket = a.ket2 and c.gudang = ?
-        WHERE a.gudang = ? and b.gabung = 'T'
-        GROUP by a.ket2
-        order by a.ket2 ASC
-        ", [$gudang, $gudang]);
+        if ($kat == 'data') {
+            $result = DB::select("SELECT a.nm_grade,count(a.no_lot) as no_lot1, a.id_buku_campur, a.no_lot, a.ket,a.ket2, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.rupiah * a.gr) as total_rp , a.selesai_1, a.selesai_2, a.ket2, c.pcs as pcs_susut, c.gr as gr_susut, c.selesai
+            FROM buku_campur_approve as a 
+            left join buku_campur as b on b.id_buku_campur = a.id_buku_campur
+            left join table_susut as c on c.ket = a.ket2 and c.gudang = ?
+            WHERE a.gudang = ? and b.gabung = 'T' and a.selesai_2 = 'T'
+            GROUP by a.ket2
+            order by a.ket2 ASC
+            ", [$gudang, $gudang]);
+        } else {
+            $result = DB::select("SELECT a.nm_grade,count(a.no_lot) as no_lot1, a.id_buku_campur, a.no_lot, a.ket,a.ket2, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.rupiah * a.gr) as total_rp , a.selesai_1, a.selesai_2, a.ket2, c.pcs as pcs_susut, c.gr as gr_susut, c.selesai
+            FROM buku_campur_approve as a 
+            left join buku_campur as b on b.id_buku_campur = a.id_buku_campur
+            left join table_susut as c on c.ket = a.ket2 and c.gudang = ?
+            WHERE a.gudang = ? and b.gabung = 'T' and a.selesai_2 = 'Y'
+            GROUP by a.ket2
+            order by a.ket2 ASC
+            ", [$gudang, $gudang]);
+        }
 
         return $result;
     }

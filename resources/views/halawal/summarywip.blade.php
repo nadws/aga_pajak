@@ -145,6 +145,16 @@
             </div>
         </form>
 
+        {{-- History --}}
+        <style>
+            .modal-lg-max-lg {
+                max-width: 1400px;
+            }
+        </style>
+        <x-theme.modal title="History WIP" idModal="load_history" btnSave="T" size="modal-lg-max-lg">
+            <div class="history_wip"></div>
+        </x-theme.modal>
+
 
     </x-slot>
 
@@ -190,10 +200,8 @@
                             lokasi: lokasi,
                         },
                         success: function(response) {
-
                             $('.loadingbk').hide();
                             $('#load_data').html(response);
-
                         }
                     });
                 }
@@ -286,11 +294,11 @@
                         var url = "{{ route('sumsortir.cetak') }}";
                         $('.card-pilihan').hide();
                         $('.loadingbk').show();
-
                     } else {
                         alert('sedang terjadi masalah, masih dalam perbaikan')
                         exit();
                     }
+
                     $('#load_data').html('');
                     $.ajax({
                         type: 'POST',
@@ -486,15 +494,30 @@
                     }
                 });
 
+                $(document).on('click', '.history', function() {
+                    var kategori = 'history';
+                    var lokasi = $(this).attr('lokasi');
+
+                    if (lokasi == 'cabut') {
+                        var url = "{{ route('summarybk.sum_bagi') }}";
+                    } else if (lokasi == 'sortir') {
+                        var url = "{{ route('sumsortir.index') }}";
+                    } else if (lokasi == 'cetak') {
+                        var url = "{{ route('sumsortir.cetak') }}";
+                    }
 
 
-
-
-
-
-
-
-
+                    $.ajax({
+                        type: "get",
+                        url: url,
+                        data: {
+                            kategori: kategori
+                        },
+                        success: function(response) {
+                            $('.history_wip').html(response);
+                        }
+                    });
+                });
             });
         </script>
     @endsection

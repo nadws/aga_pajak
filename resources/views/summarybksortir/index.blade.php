@@ -14,8 +14,19 @@
     </div>
     <div class="col-lg-3">
         <table class="float-end">
-            <td>Search :</td>
-            <td><input type="text" id="pencarian" class="form-control float-end"></td>
+            <tr>
+                <td></td>
+                <td>
+                    <button class="btn float-end btn-primary btn-sm history" lokasi='sortir' data-bs-toggle="modal"
+                        data-bs-target="#load_history"><i class="fas fa-history"></i>
+                        History
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td>Search :</td>
+                <td><input type="text" id="pencarian" class="form-control float-end"></td>
+            </tr>
         </table>
     </div>
 
@@ -67,6 +78,7 @@
                         <th class="bg-danger text-white text-center" colspan="2">Bk Sisa Pgws</th>
                         <th class="dhead" rowspan="2">Ttl Rp Cost</th>
                         <th class="dhead" rowspan="2">Ttl Rp Bk</th>
+                        <th class="dhead" rowspan="2">Selesai</th>
                     </tr>
                     <tr>
                         @if ($nm_gudang == 'summary')
@@ -111,11 +123,17 @@
                     @foreach ($gudang as $no => $g)
                         @php
                             $ket = $g->ket2;
-                            $response = Http::get("$linkApi/bk_sum_sortir", ['nm_partai' => $ket]);
-                            $b = $response->object();
+                            $resSum = Cache::remember('bk_sum_sortir_' . $ket, now()->addHours(8), function () use ($ket, $linkApi) {
+                                return Http::get("$linkApi/bk_sum_sortir", ['nm_partai' => $ket])->object();
+                            });
+                            $b = $resSum;
+                            $g->relatedModel = $b;
 
-                            $resSum = Http::get("$linkApi/datasortirsum", ['nm_partai' => $ket]);
-                            $c = $resSum->object();
+                            $resSum = Cache::remember('datasortirsum_' . $ket, now()->addHours(8), function () use ($ket, $linkApi) {
+                                return Http::get("$linkApi/datasortirsum", ['nm_partai' => $ket])->object();
+                            });
+                            $c = $resSum;
+                            $g->relatedModel = $c;
 
                             $wipPcs = $g->pcs ?? 0;
                             $wipGr = $g->gr ?? 0;
@@ -135,8 +153,6 @@
                             <td>
                                 <a href="#" data-bs-toggle="modal" nm_partai="{{ $g->ket2 }}"
                                     data-bs-target="#load_bk_sortir" class="show_box_sortir">{{ $g->ket2 }}</a>
-
-
                             </td>
                             <td class="text-center fw-bold">
                                 {{ $g->nm_grade }}
@@ -222,12 +238,20 @@
                             </td>
 
                             <td class="text-end fw-bold">{{ number_format($c->ttl_rp ?? 0, 0) }}</td>
+
                             <td class="text-end fw-bold">
                                 @if ($g->selesai_1 == 'Y')
                                     {{ number_format($hrga_modal_satuan * $gr_akhir_cbt, 0) }}
                                 @else
                                 @endif
-
+                            </td>
+                            <td class="fw-bold">
+                                @if ($g->selesai_1 == 'Y')
+                                    <a href="#" class="btn btn-primary btn-sm finish" data-bs-toggle="modal"
+                                        data-bs-target="#load_bk_finish" lokasi="{{ $lokasi }}"
+                                        nm_partai="{{ $g->ket2 }}" gudang="{{ $nm_gudang }}">Selesai</a>
+                                @else
+                                @endif
                             </td>
 
                         </tr>

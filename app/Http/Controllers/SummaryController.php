@@ -28,7 +28,7 @@ class SummaryController extends Controller
             $nmgudang = $r->nm_gudang;
         }
 
-        $gudang = GudangBkModel::getSummaryWip();
+        $gudang = GudangBkModel::getSummaryWip('data');
         $total = GudangBkModel::getPembelianBk('bk');
 
         $ttl_bk = 0;
@@ -160,7 +160,7 @@ class SummaryController extends Controller
         }
 
         $kolom = 2;
-        $gudang = GudangBkModel::getSummaryWip();
+        $gudang = GudangBkModel::getSummaryWip('data');
 
         $pcs_wip = 0;
         $gr_wip = 0;
@@ -356,7 +356,7 @@ class SummaryController extends Controller
         }
 
         $kolom = 2;
-        $gudang = GudangBkModel::getSummaryWip();
+        $gudang = GudangBkModel::getSummaryWip('data');
 
         $pcs_wip = 0;
         $gr_wip = 0;
@@ -713,7 +713,7 @@ class SummaryController extends Controller
             $nmgudang = $r->nm_gudang;
         }
 
-        $gudang = GudangBkModel::getSummaryWip();
+        $gudang = GudangBkModel::getSummaryWip('data');
         $total = GudangBkModel::getPembelianBk('bk');
 
         $ttl_bk = 0;
@@ -815,7 +815,16 @@ class SummaryController extends Controller
             $nmgudang = $r->nm_gudang;
         }
 
-        $gudang = GudangBkModel::getSummaryWip();
+        if (empty($r->kategori)) {
+            $kat = 'data';
+            $view = 'summarybk.bagi';
+        } else {
+            $kat = 'history';
+            $view = 'summarybk.bagi2';
+        }
+
+
+        $gudang = GudangBkModel::getSummaryWip($kat);
         $listBulan = DB::table('bulan')->get();
         $data =  [
             'title' => 'Summary Wip Cabut',
@@ -824,8 +833,9 @@ class SummaryController extends Controller
             'nm_gudang' => $nmgudang,
             'lokasi' => $r->lokasi,
             'linkApi' => $this->linkApi,
+            'kat' => $kat
         ];
-        return view('summarybk.bagi', $data);
+        return view($view, $data);
     }
 
     public function selesai_partai(Request $r)
