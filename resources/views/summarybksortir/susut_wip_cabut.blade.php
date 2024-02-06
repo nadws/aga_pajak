@@ -55,8 +55,11 @@
                         @foreach ($gudang as $no => $g)
                             @php
                                 $ket = $g->ket2;
-                                $response = Http::get("$linkApi/bk_sum_all", ['nm_partai' => $ket, 'kategori' => $kategori]);
-                                $b = $response->object();
+                                $resSum = Cache::remember('bk_sum_all_' . $ket, now()->addHours(8), function () use ($ket, $linkApi) {
+                                    return Http::get("$linkApi/bk_sum_all", ['nm_partai' => $ket])->object();
+                                });
+                                $b = $resSum;
+                                $g->relatedModel = $b;
 
                                 $wipPcs = $g->pcs ?? 0;
                                 $wipGr = $g->gr ?? 0;
