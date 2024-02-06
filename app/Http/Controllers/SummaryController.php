@@ -816,27 +816,14 @@ class SummaryController extends Controller
         }
 
         $gudang = GudangBkModel::getSummaryWip();
-        $total = GudangBkModel::getPembelianBk('bk');
-
-        $ttl_bk = 0;
-        foreach ($total as $t) {
-            $ttl_bk += $t->rupiah * $t->gr;
-        }
-
         $listBulan = DB::table('bulan')->get();
-        $id_user = auth()->user()->id;
         $data =  [
             'title' => 'Summary Wip Cabut',
             'gudang' => $gudang,
             'listbulan' => $listBulan,
             'nm_gudang' => $nmgudang,
             'lokasi' => $r->lokasi,
-            'total_bk' => $ttl_bk,
             'linkApi' => $this->linkApi,
-            'total_invoice' => DB::selectOne("SELECT a.no_nota, b.no_nota, sum(a.total_harga) as ttl_hrga
-            FROM invoice_bk as a left 
-            join grading as b on b.no_nota = a.no_nota 
-            where b.no_nota is null;")
         ];
         return view('summarybk.bagi', $data);
     }

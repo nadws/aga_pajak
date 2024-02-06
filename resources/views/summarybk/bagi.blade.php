@@ -109,22 +109,22 @@
                     @foreach ($gudang as $no => $g)
                         @php
                             $ket = $g->ket2;
-                            $response = Http::get("$linkApi/bk_sum", ['nm_partai' => $ket]);
-                            $b = $response->object();
-
-                            $resSum = Http::get("$linkApi/datacabutsum2", ['nm_partai' => $ket]);
-                            $c = $resSum->object();
+                            $resSum = Cache::remember('datacabutsum2_' . $ket, now()->addHours(8), function () use ($ket, $linkApi) {
+                                return Http::get("$linkApi/datacabutsum2", ['nm_partai' => $ket])->object();
+                            });
+                            $c = $resSum;
+                            $g->relatedModel = $c;
 
                             $wipPcs = $g->pcs ?? 0;
                             $wipGr = $g->gr ?? 0;
                             $wipTllrp = $g->total_rp ?? 0;
-                            $bkPcs = $b->pcs_awal ?? 0;
-                            $bkGr = $b->gr_awal ?? 0;
+                            $bkPcs = $c->pcs_bk ?? 0;
+                            $bkGr = $c->gr_awal_bk ?? 0;
 
                             $gr_susut = $g->gr_susut ?? 0;
                             $WipSisaPcs = $wipPcs - $bkPcs;
                             $WipSisaGr = $wipGr - $bkGr - $gr_susut;
-                            $selesai_bk = $b->selesai ?? 'T';
+                            $selesai_bk = $c->selesai ?? 'T';
                         @endphp
 
                         <tr>
