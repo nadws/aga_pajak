@@ -119,6 +119,33 @@
             </x-theme.modal>
         </form>
 
+        {{-- SELESAI FINISH --}}
+        <form id='selesai_bk'>
+            <div class="modal fade" id="load_bk_finish" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="row">
+                                <h5 class="text-success ms-4 mt-4"><i class="fas fa-check-square"></i> Selesaikan Data
+                                </h5>
+                                <p class=" ms-4 mt-4">Apa anda yakin ingin menyelesaikan data ?</p>
+                                <input type="hidden" class="nm_partai" name="nm_partai">
+                                <input type="hidden" class="lokasi" name="lokasi">
+                                <input type="hidden" class="gudang" name="gudang" value="{{ $nm_gudang }}">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-success"
+                                data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-success">Selesai</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
     </x-slot>
 
     @section('scripts')
@@ -178,6 +205,66 @@
                         $('.loadingbk').hide();
                         $('.card-pilihan').show();
                     }, 500);
+                });
+                $(document).on('click', '.finish', function(e) {
+                    e.preventDefault();
+                    var lokasi = $(this).attr('lokasi');
+                    var nm_partai = $(this).attr('nm_partai');
+
+                    $('.lokasi').val(lokasi);
+                    $('.nm_partai').val(nm_partai);
+
+
+                });
+                $(document).on('submit', '#selesai_bk', function(e) {
+                    e.preventDefault();
+                    var nm_gudang = $('.nm_gudang').val();
+                    var lokasi = $('.lokasi').val();
+                    var nm_partai = $('.nm_partai').val();
+
+                    if (lokasi == 'wip') {
+                        var url = "{{ route('summarybk.sum_bagi') }}";
+                        $('.card-pilihan').hide();
+                        $('.loadingbk').show();
+                    } else if (lokasi == 'wipsortir') {
+                        var url = "{{ route('sumsortir.index') }}";
+                        $('.card-pilihan').hide();
+                        $('.loadingbk').show();
+                    } else if (lokasi == 'wipcetak') {
+                        var url = "{{ route('sumsortir.cetak') }}";
+                        $('.card-pilihan').hide();
+                        $('.loadingbk').show();
+
+                    } else {
+                        alert('sedang terjadi masalah, masih dalam perbaikan')
+                        exit();
+                    }
+                    $('.loadingbk').show();
+                    $('#load_data').html('');
+
+                    $('#load_bk_finish').modal('hide');
+
+                    $.ajax({
+                        type: "get",
+                        url: "{{ route('summarybk.selesai_partai') }}",
+                        data: {
+                            nm_partai: nm_partai
+                        },
+                        success: function(response) {
+                            Toastify({
+                                text: "Data berhasil diselesaikan",
+                                duration: 3000,
+                                style: {
+                                    background: "#EAF7EE",
+                                    color: "#7F8B8B"
+                                },
+                                close: true,
+                                avatar: "https://cdn-icons-png.flaticon.com/512/190/190411.png"
+                            }).showToast();
+                            load_data(url, nm_gudang, lokasi);
+                        }
+                    });
+
                 });
 
                 $(document).on('submit', '#save_selesai  ', function(e) {

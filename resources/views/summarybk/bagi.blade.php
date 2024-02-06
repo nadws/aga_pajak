@@ -54,7 +54,7 @@
 
 
 
-                        <th class="dhead text-center tdhide" colspan="2">Susut Wip - bk</th>
+                        <th class="dhead text-center tdhide" colspan="3">Susut Wip - bk</th>
                         @if ($nm_gudang == 'summary')
                             <th class="text-white text-center bg-danger tdhide" colspan="3">Wip Sisa</th>
                         @else
@@ -66,6 +66,7 @@
                         <th class="bg-danger text-white text-center" colspan="2">Bk Sisa Pgws</th>
                         <th class="dhead" rowspan="2">Ttl Rp Cost</th>
                         <th class="dhead" rowspan="2">Ttl Rp Bk</th>
+                        <th class="dhead" rowspan="2">Selesai</th>
                     </tr>
                     <tr>
                         @if ($nm_gudang == 'summary')
@@ -81,6 +82,7 @@
                             <th class="dhead text-center tdhide">Pcs</th>
                             <th class="dhead text-center tdhide">Gr</th>
                         @endif
+                        <th class="dhead text-center tdhide">Pcs</th>
                         <th class="dhead text-center tdhide">Gr</th>
                         <th class="dhead text-center tdhide">sst(%)</th>
                         @if ($nm_gudang == 'summary')
@@ -122,9 +124,11 @@
                             $bkGr = $c->gr_awal_bk ?? 0;
 
                             $gr_susut = $g->gr_susut ?? 0;
-                            $WipSisaPcs = $wipPcs - $bkPcs;
+                            $pcs_susut = $g->pcs_susut ?? 0;
+                            $WipSisaPcs = $wipPcs - $bkPcs - $pcs_susut;
                             $WipSisaGr = $wipGr - $bkGr - $gr_susut;
                             $selesai_bk = $c->selesai ?? 'T';
+                            $gr_akhir_cbt = $c->gr_akhir ?? 0;
                         @endphp
 
                         <tr>
@@ -154,6 +158,8 @@
                                 <td class="text-end fw-bold tdhide">{{ number_format($bkPcs, 0) }}</td>
                                 <td class="text-end fw-bold tdhide">{{ number_format($bkGr, 0) }}</td>
                             @endif
+                            <td class="text-end fw-bold tdhide">{{ number_format($g->pcs_susut ?? 0, 0) }}
+                            </td>
                             <td class="text-end fw-bold tdhide">{{ number_format($g->gr_susut ?? 0, 0) }}
                             </td>
                             <td class="text-end fw-bold tdhide">
@@ -200,8 +206,8 @@
                             <td class="text-end fw-bold">{{ number_format($c->eot ?? 0, 0) }}</td>
                             <td class="text-end fw-bold">{{ number_format($c->gr_flx ?? 0, 0) }}</td>
                             @php
-                                $pcs_awal_bk = $b->pcs_awal ?? 0;
-                                $gr_awal_bk = $b->gr_awal ?? 0;
+                                $pcs_awal_bk = $c->pcs_bk ?? 0;
+                                $gr_awal_bk = $c->gr_awal_bk ?? 0;
 
                                 $pcs_awal_cbt = $c->pcs_awal ?? 0;
                                 $gr_awal_cbt = $c->gr_awal ?? 0;
@@ -216,6 +222,15 @@
                             <td class="text-end fw-bold">
                                 @if ($g->selesai_1 == 'Y')
                                     {{ number_format($hrga_modal_satuan * $gr_akhir_cbt, 0) }}
+                                @else
+                                @endif
+
+                            </td>
+                            <td class="text-center fw-bold">
+                                @if ($g->selesai_1 == 'Y')
+                                    <a href="#" class="btn btn-primary btn-sm finish" data-bs-toggle="modal"
+                                        data-bs-target="#load_bk_finish" lokasi="{{ $lokasi }}"
+                                        nm_partai="{{ $g->ket2 }}" gudang="{{ $nm_gudang }}">Selesai</a>
                                 @else
                                 @endif
 

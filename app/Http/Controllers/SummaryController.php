@@ -827,4 +827,12 @@ class SummaryController extends Controller
         ];
         return view('summarybk.bagi', $data);
     }
+
+    public function selesai_partai(Request $r)
+    {
+        $data = [
+            'selesai_2' => 'Y'
+        ];
+        DB::table('buku_campur_approve')->where('ket2', $r->nm_partai)->update($data);
+    }
 }
