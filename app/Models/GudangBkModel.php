@@ -105,7 +105,8 @@ class GudangBkModel extends Model
         if(a.approve = 'T',a.rupiah,d.rupiah) as rupiah,
         if(a.approve = 'T',a.ket,d.ket) as ket,
         if(a.approve = 'T',a.lok_tgl,d.lok_tgl) as lok_tgl,
-        if(a.approve = 'T',a.no_produksi,d.no_produksi) as no_produksi,d.pcs_diambil,d.gr_diambil
+        if(a.approve = 'T',a.no_produksi,d.no_produksi) as no_produksi,d.pcs_diambil,d.gr_diambil,
+        d.selesai_1
         FROM buku_campur as a
         left join grade as b on b.id_grade = a.id_grade
         left join grading as c on c.no_nota = a.no_nota
@@ -168,7 +169,7 @@ class GudangBkModel extends Model
 
     public static function getSummary($gudang)
     {
-        $result = DB::select("SELECT a.nm_grade,count(a.no_lot) as no_lot1, a.id_buku_campur, a.no_lot, a.ket,a.ket2, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.rupiah * a.gr) as total_rp , a.selesai_1, a.selesai_2, a.ket2, c.gr as gr_susut, c.selesai
+        $result = DB::select("SELECT a.nm_grade,count(a.no_lot) as no_lot1, a.id_buku_campur, a.no_lot, a.ket,a.ket2, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.rupiah * a.gr) as total_rp , a.selesai_1, a.selesai_2, a.ket2, c.pcs as pcs_susut, c.gr as gr_susut, c.selesai
         FROM buku_campur_approve as a 
         left join buku_campur as b on b.id_buku_campur = a.id_buku_campur
         left join table_susut as c on c.ket = a.ket2 and c.gudang = ?
@@ -176,6 +177,19 @@ class GudangBkModel extends Model
         GROUP by a.ket2
         order by a.ket2 ASC
         ", [$gudang, $gudang]);
+
+        return $result;
+    }
+    public static function getSummarypartai($gudang, $nm_partai)
+    {
+        $result = DB::select("SELECT a.nm_grade,count(a.no_lot) as no_lot1, a.id_buku_campur, a.no_lot, a.ket,a.ket2, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.rupiah * a.gr) as total_rp , a.selesai_1, a.selesai_2, a.ket2, c.gr as gr_susut, c.selesai
+        FROM buku_campur_approve as a 
+        left join buku_campur as b on b.id_buku_campur = a.id_buku_campur
+        left join table_susut as c on c.ket = a.ket2 and c.gudang = ?
+        WHERE a.gudang = ? and b.gabung = 'T' and a.ket2 = ?
+        GROUP by a.ket2
+        order by a.ket2 ASC
+        ", [$gudang, $gudang, $nm_partai]);
 
         return $result;
     }

@@ -64,8 +64,8 @@
 
                         <th class="dhead text-center" colspan="7">Cabut</th>
                         <th class="bg-danger text-white text-center" colspan="2">Bk Sisa Pgws</th>
-                        <th class="dhead" rowspan="2">Ttl Rp</th>
-                        <th class="dhead" rowspan="2">Selesai</th>
+                        <th class="dhead" rowspan="2">Ttl Rp Cost</th>
+                        <th class="dhead" rowspan="2">Ttl Rp Bk</th>
                     </tr>
                     <tr>
                         @if ($nm_gudang == 'summary')
@@ -81,9 +81,6 @@
                             <th class="dhead text-center tdhide">Pcs</th>
                             <th class="dhead text-center tdhide">Gr</th>
                         @endif
-
-
-
                         <th class="dhead text-center tdhide">Gr</th>
                         <th class="dhead text-center tdhide">sst(%)</th>
                         @if ($nm_gudang == 'summary')
@@ -135,15 +132,12 @@
                             <td>
                                 <a href="#" data-bs-toggle="modal" nm_partai="{{ $g->ket2 }}"
                                     data-bs-target="#load_bk_cabut" class="show_box">{{ $g->ket2 }}</a>
-
-
                             </td>
                             <td class="text-center fw-bold">
-
                                 {{ $g->nm_grade }}
                             </td>
                             @php
-                                $hrga_modal_satuan = $wipTllrp / $wipGr;
+                                $hrga_modal_satuan = $wipTllrp / ($wipGr - $gr_susut);
                             @endphp
                             @if ($nm_gudang == 'summary')
                                 <td class="text-end fw-bold tdhide">{{ number_format($wipPcs, 0) }}</td>
@@ -152,7 +146,7 @@
                                 <td class="text-end fw-bold tdhide">{{ number_format($bkPcs, 0) }}</td>
                                 <td class="text-end fw-bold tdhide">{{ number_format($bkGr, 0) }}</td>
                                 <td class="text-end fw-bold tdhide">
-                                    {{ $g->selesai == 'Y' ? number_format(($bkGr + $gr_susut) * $hrga_modal_satuan, 0) : '0' }}
+                                    {{ $g->selesai == 'Y' ? number_format($bkGr * $hrga_modal_satuan, 0) : '0' }}
                                 </td>
                             @else
                                 <td class="text-end fw-bold tdhide">{{ number_format($wipPcs, 0) }}</td>
@@ -160,19 +154,11 @@
                                 <td class="text-end fw-bold tdhide">{{ number_format($bkPcs, 0) }}</td>
                                 <td class="text-end fw-bold tdhide">{{ number_format($bkGr, 0) }}</td>
                             @endif
-
-
-
-
-
-
                             <td class="text-end fw-bold tdhide">{{ number_format($g->gr_susut ?? 0, 0) }}
                             </td>
                             <td class="text-end fw-bold tdhide">
                                 {{ number_format((1 - $bkGr / $wipGr) * 100, 1) }}%
                             </td>
-
-
                             @if ($nm_gudang == 'summary')
                                 <td class="text-end fw-bold text-danger tdhide">
                                     {{ number_format($WipSisaPcs, 0) }}
@@ -192,14 +178,20 @@
                                 </td>
                             @endif
                             <td class="text-center fw-bold">
-                                @if ($g->selesai == 'Y')
-                                    <i class="fas  fa-check text-success"></i>
+                                @if ($g->selesai_1 == 'Y')
+                                    <i class="fas fa-check text-success fa-lg"></i>
                                 @else
-                                    <i class="fas  fa-hourglass-half text-danger"></i>
+                                    @if ($g->selesai == 'Y')
+                                        <a href="#" class="btn btn-sm btn-primary selesai_box"
+                                            data-bs-toggle="modal" data-bs-target="#load_bk_selesai"
+                                            lokasi="{{ $lokasi }}" nm_partai="{{ $g->ket2 }}"
+                                            gudang="{{ $nm_gudang }}">Selesai</a>
+                                    @else
+                                        <a href="#"><i class="fas  fa-hourglass-half text-danger"></i></a>
+                                    @endif
                                 @endif
+
                             </td>
-
-
                             <td class="text-end fw-bold">{{ number_format($c->pcs_awal ?? 0, 0) }}</td>
                             <td class="text-end fw-bold">{{ number_format($c->gr_awal ?? 0, 0) }}</td>
                             <td class="text-end fw-bold">{{ number_format($c->pcs_akhir ?? 0, 0) }}</td>
@@ -221,12 +213,12 @@
                             </td>
 
                             <td class="text-end fw-bold">{{ number_format($c->ttl_rp ?? 0, 0) }}</td>
-                            <td class="text-center fw-bold">
-                                @if ($selesai_bk == 'Y')
-                                    <i class="fas  fa-check text-success"></i>
+                            <td class="text-end fw-bold">
+                                @if ($g->selesai_1 == 'Y')
+                                    {{ number_format($hrga_modal_satuan * $gr_akhir_cbt, 0) }}
                                 @else
-                                    <i class="fas  fa-hourglass-half text-danger"></i>
                                 @endif
+
                             </td>
 
                         </tr>

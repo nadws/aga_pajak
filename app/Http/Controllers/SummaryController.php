@@ -745,6 +745,7 @@ class SummaryController extends Controller
 
             $data = [
                 'ket' => $r->ket[$x],
+                'pcs' => $r->pcs_susut[$x],
                 'gr' => $r->gr_susut[$x],
                 'selesai' => $r->selesai[$x],
                 'admin' => Auth::user()->name,
@@ -829,6 +830,7 @@ class SummaryController extends Controller
             'gudang' => $gudang,
             'listbulan' => $listBulan,
             'nm_gudang' => $nmgudang,
+            'lokasi' => $r->lokasi,
             'total_bk' => $ttl_bk,
             'linkApi' => $this->linkApi,
             'total_invoice' => DB::selectOne("SELECT a.no_nota, b.no_nota, sum(a.total_harga) as ttl_hrga

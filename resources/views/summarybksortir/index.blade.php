@@ -65,7 +65,8 @@
                         <th class="dhead text-center" rowspan="2">Selesai</th>
                         <th class="dhead text-center" colspan="5">Sortir</th>
                         <th class="bg-danger text-white text-center" colspan="2">Bk Sisa Pgws</th>
-                        <th class="dhead" rowspan="2">Ttl Rp</th>
+                        <th class="dhead" rowspan="2">Ttl Rp Cost</th>
+                        <th class="dhead" rowspan="2">Ttl Rp Bk</th>
                     </tr>
                     <tr>
                         @if ($nm_gudang == 'summary')
@@ -141,7 +142,7 @@
                                 {{ $g->nm_grade }}
                             </td>
                             @php
-                                $hrga_modal_satuan = $wipTllrp / $wipGr;
+                                $hrga_modal_satuan = $wipTllrp / ($wipGr - $gr_susut);
                             @endphp
                             @if ($nm_gudang == 'summary')
                                 <td class="text-end fw-bold tdhide">{{ number_format($wipPcs, 0) }}</td>
@@ -150,7 +151,7 @@
                                 <td class="text-end fw-bold tdhide">{{ number_format($bkPcs, 0) }}</td>
                                 <td class="text-end fw-bold tdhide">{{ number_format($bkGr, 0) }}</td>
                                 <td class="text-end fw-bold tdhide">
-                                    {{ $g->selesai == 'Y' ? number_format(($bkGr + $gr_susut) * $hrga_modal_satuan, 0) : '0' }}
+                                    {{ $g->selesai == 'Y' ? number_format($bkGr * $hrga_modal_satuan, 0) : '0' }}
                                 </td>
                             @else
                                 <td class="text-end fw-bold tdhide">{{ number_format($wipPcs, 0) }}</td>
@@ -184,10 +185,18 @@
                                 </td>
                             @endif
                             <td class="text-center">
-                                @if ($g->selesai == 'Y')
-                                    <i class="fas text-end fa-check text-success"></i>
+                                @if ($g->selesai_1 == 'Y')
+                                    <i class="fas fa-check text-success fa-lg"></i>
                                 @else
-                                    <i class="fas text-end fa-hourglass-half text-danger"></i>
+                                    @if ($g->selesai == 'Y')
+                                        <a href="#" class="btn btn-sm btn-primary selesai_box"
+                                            data-bs-toggle="modal" data-bs-target="#load_bk_selesai"
+                                            lokasi="{{ $lokasi }}" nm_partai="{{ $g->ket2 }}"
+                                            gudang="{{ $nm_gudang }}">Selesai</a>
+                                    @else
+                                        <a href="#"><i class="fas  fa-hourglass-half text-danger"></i>
+                                        </a>
+                                    @endif
                                 @endif
                             </td>
 
@@ -203,6 +212,7 @@
 
                                 $pcs_awal_cbt = $c->pcs_awal ?? 0;
                                 $gr_awal_cbt = $c->gr_awal ?? 0;
+                                $gr_akhir_cbt = $c->gr_akhir ?? 0;
                             @endphp
                             <td class="text-end text-danger fw-bold">
                                 {{ number_format($pcs_awal_bk - $pcs_awal_cbt, 0) }}
@@ -212,6 +222,13 @@
                             </td>
 
                             <td class="text-end fw-bold">{{ number_format($c->ttl_rp ?? 0, 0) }}</td>
+                            <td class="text-end fw-bold">
+                                @if ($g->selesai_1 == 'Y')
+                                    {{ number_format($hrga_modal_satuan * $gr_akhir_cbt, 0) }}
+                                @else
+                                @endif
+
+                            </td>
 
                         </tr>
                     @endforeach

@@ -48,7 +48,6 @@
                                     <th class="dhead" rowspan="2">Grade / No Lot
                                         <br>
                                         <center>
-
                                             <a href="#" class="show_td">
                                                 <i class="fas fa-chevron-circle-right text-white "></i>
                                             </a>
@@ -93,9 +92,6 @@
                                         <th class="dhead text-center tdhide">Pcs</th>
                                         <th class="dhead text-center tdhide">Gr</th>
                                     @endif
-
-
-
                                     <th class="dhead text-center tdhide">Gr</th>
                                     <th class="dhead text-center tdhide">sst(%)</th>
                                     @if ($nm_gudang == 'summary')
@@ -179,19 +175,11 @@
                                             <td class="text-end fw-bold tdhide">{{ number_format($bkPcs, 0) }}</td>
                                             <td class="text-end fw-bold tdhide">{{ number_format($bkGr, 0) }}</td>
                                         @endif
-
-
-
-
-
-
                                         <td class="text-end fw-bold tdhide">{{ number_format($g->gr_susut ?? 0, 0) }}
                                         </td>
                                         <td class="text-end fw-bold tdhide">
                                             {{ number_format((1 - $bkGr / $wipGr) * 100, 1) }}%
                                         </td>
-
-
                                         @if ($nm_gudang == 'summary')
                                             <td class="text-end fw-bold text-danger tdhide">
                                                 {{ number_format($WipSisaPcs, 0) }}

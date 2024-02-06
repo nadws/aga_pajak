@@ -35,7 +35,7 @@
                             <th class="dhead" rowspan="2">Grade / No Lot</th>
                             <th class="dhead text-center" colspan="2">Wip</th>
                             <th class="dhead text-center" colspan="2">BK</th>
-                            <th class="dhead text-center" colspan="2">Susut Wip</th>
+                            <th class="dhead text-center" colspan="3">Susut Wip</th>
                             <th class="text-white text-center bg-danger" colspan="2">Wip Sisa</th>
                             <th class="dhead text-center" rowspan="2">Selesai</th>
                         </tr>
@@ -44,6 +44,7 @@
                             <th class="dhead text-center">Gr</th>
                             <th class="dhead text-center">Pcs</th>
                             <th class="dhead text-center">Gr</th>
+                            <th class="dhead text-center">Pcs</th>
                             <th class="dhead text-center">Gr</th>
                             <th class="dhead text-center">Sst(%)</th>
                             <th class="text-white text-center bg-danger">Pcs</th>
@@ -71,6 +72,11 @@
                                 <td class="text-end fw-bold">{{ number_format($wipGr, 0) }}</td>
                                 <td class="text-end fw-bold">{{ number_format($bkPcs, 0) }}</td>
                                 <td class="text-end fw-bold">{{ number_format($bkGr, 0) }}</td>
+                                <td class="text-end fw-bold" width="120px">
+                                    <input type="text" class="form-control" style="width: 100%; font-size: 13px"
+                                        name="pcs_susut[]" value="{{ $g->pcs_susut ?? 0 }}"
+                                        {{ $g->selesai == 'Y' ? 'readonly' : '' }}>
+                                </td>
 
                                 <td class="fw-bold" width="120px">
                                     <input type="text" class="form-control" style="width: 100%; font-size: 13px"

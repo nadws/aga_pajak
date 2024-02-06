@@ -432,5 +432,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/susut_wip_cabut', 'susut_wip_cabut')->name('susut_wip_cabut');
 
             Route::get('/get_no_box_sortir', 'get_no_box_sortir')->name('get_no_box_sortir');
+            Route::get('/load_box_selesai', 'load_box_selesai')->name('load_box_selesai');
+            Route::post('/save_selesai', 'save_selesai')->name('save_selesai');
         });
 });

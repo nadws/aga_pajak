@@ -110,6 +110,15 @@
             <div class="load_box_sortir"></div>
         </x-theme.modal>
 
+        {{-- SELESAI --}}
+        <form id="save_selesai">
+            @csrf
+            <x-theme.modal title="Selesai Bk" idModal="load_bk_selesai" btnSave="Y" size="modal-lg-max">
+
+                <div class="load_seleai_box"></div>
+            </x-theme.modal>
+        </form>
+
     </x-slot>
 
     @section('scripts')
@@ -139,13 +148,19 @@
                         alert('sedang terjadi masalah, masih dalam perbaikan')
                         exit();
                     }
+                    load_data(url, nm_gudang, lokasi);
 
 
+
+                });
+
+                function load_data(url, nm_gudang, lokasi) {
                     $.ajax({
                         type: "get",
                         url: url,
                         data: {
                             nm_gudang: nm_gudang,
+                            lokasi: lokasi,
                         },
                         success: function(response) {
 
@@ -154,8 +169,7 @@
 
                         }
                     });
-
-                });
+                }
                 $(document).on('click', '.kembali', function(e) {
                     e.preventDefault();
                     $('.loadingbk').show();
@@ -164,9 +178,65 @@
                         $('.loadingbk').hide();
                         $('.card-pilihan').show();
                     }, 500);
-
-
                 });
+
+                $(document).on('submit', '#save_selesai  ', function(e) {
+                    e.preventDefault();
+                    var formData = $(this).serialize();
+                    var nm_gudang = $('.nm_gudang').val();
+                    var lokasi = $('.lokasi').val();
+
+
+                    if (lokasi == 'wip') {
+                        var url = "{{ route('summarybk.sum_bagi') }}";
+                        $('.card-pilihan').hide();
+                        $('.loadingbk').show();
+                    } else if (lokasi == 'wipsortir') {
+                        var url = "{{ route('sumsortir.index') }}";
+                        $('.card-pilihan').hide();
+                        $('.loadingbk').show();
+                    } else if (lokasi == 'wipcetak') {
+                        var url = "{{ route('sumsortir.cetak') }}";
+                        $('.card-pilihan').hide();
+                        $('.loadingbk').show();
+
+                    } else {
+                        alert('sedang terjadi masalah, masih dalam perbaikan')
+                        exit();
+                    }
+                    $('#load_data').html('');
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ route('sumsortir.save_selesai') }}", // Replace with your actual backend endpoint
+                        data: formData,
+                        success: function(response) {
+
+                            load_data(url, nm_gudang, lokasi);
+                            $("#load_bk_selesai").modal('hide');
+                            Toastify({
+                                text: "Data berhasil disimpan",
+                                duration: 3000,
+                                style: {
+                                    background: "#EAF7EE",
+                                    color: "#7F8B8B"
+                                },
+                                close: true,
+                                avatar: "https://cdn-icons-png.flaticon.com/512/190/190411.png"
+                            }).showToast();
+                        },
+                        error: function(error) {
+                            // Handle error response, if needed
+                            console.log(error);
+                            load_data(url, nm_gudang, lokasi);
+                            alert('Error submitting form');
+                        },
+                        complete: function() {
+                            // Hide loading spinner or any UI indication if needed
+                        }
+                    });
+                });
+
+
             });
             $(document).ready(function() {
 
@@ -283,6 +353,56 @@
                     $('.show_td').show();
 
                 });
+
+                $(document).on('click', '.selesai_box', function(e) {
+                    e.preventDefault();
+                    var nm_gudang = $(this).attr('gudang');
+                    var lokasi = $(this).attr('lokasi');
+                    var nm_partai = $(this).attr('nm_partai');
+                    $.ajax({
+                        type: "get",
+                        url: "{{ route('sumsortir.load_box_selesai') }}",
+                        data: {
+                            nm_gudang: nm_gudang,
+                            nm_partai: nm_partai,
+                            lokasi: lokasi,
+                        },
+                        success: function(response) {
+                            $(".load_seleai_box").html(response);
+                        }
+                    });
+
+                });
+
+                $(document).on('keyup', '.gram', function() {
+                    var gr = $(this).val();
+                    var rp_satuan = $('.rp_satuan').val()
+
+                    var total = parseFloat(gr) * parseFloat(rp_satuan);
+                    total = Math.floor(total);
+                    var totalRupiah = total.toLocaleString("id-ID", {
+                        style: "currency",
+                        currency: "IDR",
+                        minimumFractionDigits: 0,
+                    });
+
+                    $('.ttlrp').val(totalRupiah);
+                });
+
+
+
+                $(document).on('change', '.pindah', function() {
+                    if ($(this).prop('checked')) {
+                        $('.form-pindah').show();
+                    } else {
+                        $('.form-pindah').hide();
+                    }
+                });
+
+
+
+
+
 
 
 

@@ -27,6 +27,7 @@ class SummarySortirController extends Controller
             'gudang' => $gudang,
             'nm_gudang' => $nmgudang,
             'linkApi' => $this->linkApi,
+            'lokasi' => $r->lokasi,
         ];
         return view('summarybksortir.index', $data);
     }
@@ -94,5 +95,69 @@ class SummarySortirController extends Controller
             'nm_partai' => $r->nm_partai,
         ];
         return view('summarybksortir.get_box_sortir', $data);
+    }
+
+    public function load_box_selesai(Request $r)
+    {
+        if (empty($r->lokasi)) {
+            $lokasi = 'bk';
+        } else {
+            $lokasi = $r->lokasi;
+        }
+
+        if ($lokasi == 'wip') {
+            $kategori = 'cabut';
+        } elseif ($lokasi == 'wipcetak') {
+            $kategori = 'cetak';
+        } else {
+            $kategori = 'sortir';
+        }
+        $gudang = GudangBkModel::getSummarypartai($lokasi, $r->nm_partai);
+        $listBulan = DB::table('bulan')->get();
+        $data =  [
+            'gudang' => $gudang,
+            'listbulan' => $listBulan,
+            'lokasi' => $lokasi,
+            'kategori' => $kategori,
+            'linkApi' => $this->linkApi,
+            'nm_gudang' => $r->nm_gudang
+        ];
+        return view('summarybksortir.selesai', $data);
+    }
+
+    public function save_selesai(Request $r)
+    {
+        if (empty($r->pindah)) {
+            DB::table('buku_campur_approve')->where('ket2', $r->ket_sebelum)->update(['selesai_1' => 'Y']);
+        } else {
+            $buku = DB::table('buku_campur_approve')->where('ket2', $r->partai)->first();
+
+            if (empty($buku->ket2)) {
+                $data = [
+                    'ket2' => $r->partai,
+                    'pcs' => $r->pcs,
+                    'gr' => $r->gr,
+                    'gudang' => $r->lokasi,
+                    'rupiah' => $r->rp_satuan,
+                    'approve' => 'Y'
+                ];
+                $id = DB::table('buku_campur')->insertGetId($data);
+
+                $data = [
+                    'id_buku_campur' => $id,
+                    'tgl' => date('Y-m-d'),
+                    'nm_grade' => $r->grade,
+                    'ket2' => $r->partai,
+                    'pcs' => $r->pcs,
+                    'gr' => $r->gr,
+                    'gudang' => $r->lokasi,
+                    'rupiah' => $r->rp_satuan,
+                    'partai_dari' => $r->ket_sebelum
+                ];
+                DB::table('buku_campur_approve')->insert($data);
+
+                DB::table('buku_campur_approve')->where('ket2', $r->ket_sebelum)->update(['selesai_1' => 'Y', 'partai_ke' => $r->partai]);
+            }
+        }
     }
 }
