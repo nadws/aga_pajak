@@ -441,8 +441,8 @@ class PembelianBahanBakuController extends Controller
             }
         }
 
-        $tgl1 = date('Y-m-01', strtotime($r->tgl));
-        $tgl2 = date('Y-m-t', strtotime($r->tgl));
+        $tgl1 = date('Y-m-01', strtotime($r->tgl_nota));
+        $tgl2 = date('Y-m-t', strtotime($r->tgl_nota));
         return redirect()->route('pembelian_bk', ['period' => 'costume', 'tgl1' => $tgl1, 'tgl2' => $tgl2])->with('sukses', 'Data berhasil ditambahkan');
     }
 

@@ -205,6 +205,7 @@
             @csrf
             <x-theme.modal title="Campur BKIN" size="modal-lg" idModal="grading">
                 <div id="grading_nota2"></div>
+                <input type="hidden" name="tgl_nota" value="{{ $tgl1 }}">
             </x-theme.modal>
         </form>
 
