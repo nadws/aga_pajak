@@ -93,7 +93,8 @@
                                 </td>
                                 @php
                                     $gr_susut = $g->gr_susut ?? 0;
-                                    $WipSisaPcs = $wipPcs - $bkPcs;
+                                    $pcs_susut = $g->pcs_susut ?? 0;
+                                    $WipSisaPcs = $wipPcs - $bkPcs - $pcs_susut;
                                     $WipSisaGr = $wipGr - $bkGr - $gr_susut;
                                 @endphp
                                 <td class="text-end fw-bold text-danger">{{ number_format($WipSisaPcs, 0) }}
