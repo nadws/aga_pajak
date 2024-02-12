@@ -22,7 +22,7 @@ class GudangBkModel extends Model
         if(a.approve = 'T',f.nm_suplier,d.suplier_awal) as suplier_awal, 
         if(a.approve = 'T',a.pcs,d.pcs) as pcs, 
         if(a.approve = 'T',a.gr,d.gr) as gr, 
-        if(a.approve = 'T',a.rupiah,d.rupiah) as rupiah,
+        if(a.approve = 'T',a.rupiah,if(d.rupiah is null , a.rupiah,d.rupiah)) as rupiah,
         if(a.approve = 'T',a.ket,d.ket) as ket,
         if(a.approve = 'T',a.ket2,d.ket2) as ket2,
         if(a.approve = 'T',a.lok_tgl,d.lok_tgl) as lok_tgl,
