@@ -1,18 +1,36 @@
-<form action="{{ route('gudangBk.export_buku_campur_bk') }}" method="post">
+@php
+    if ($nm_gudang == 'wipcetak') {
+        $url = 'gudangBk.export_wip_cetak';
+    } else {
+        $url = 'gudangBk.export_buku_campur_bk';
+    }
+
+@endphp
+
+<form action="{{ route($url) }}" method="post">
     @csrf
     <div class="row">
         <div class="col-lg-3">
             <button class="btn btn-warning kembali">Kembali</button>
         </div>
+        <div class="col-lg-3"></div>
         <div class="col-lg-6">
+            @if ($nm_gudang == 'wipcetak')
+                <x-theme.button modal="Y" idModal="importcetak" icon="fas fa-upload" addClass="float-end"
+                    teks="Import" />
+            @else
+                <x-theme.button modal="Y" idModal="import" icon="fas fa-upload" addClass="float-end"
+                    teks="Import" />
+            @endif
 
         </div>
-        <div class="col-lg-3">
+
+        {{-- <div class="col-lg-3">
             <table class="float-end">
                 <td>Search :</td>
                 <td><input type="text" id="pencarian" class="form-control float-end"></td>
             </table>
-        </div>
+        </div> --}}
         <div class="col-lg-12 mt-2">
 
             <div class="table-container">

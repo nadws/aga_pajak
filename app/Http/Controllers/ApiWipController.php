@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\GudangBkModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ApiWipController extends Controller
 {
@@ -33,5 +34,11 @@ class ApiWipController extends Controller
             ],
         ];
         return response()->json($response);
+    }
+
+    public function bkCetakApi(Request $r)
+    {
+        $result = DB::table('gudang_ctk')->where('gr_timbang_ulang', '!=', '0')->get();
+        return $result;
     }
 }

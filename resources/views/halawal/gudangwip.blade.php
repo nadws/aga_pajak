@@ -6,8 +6,8 @@
                 <h6 class="float-start mt-1">{{ $title }} </h6>
             </div>
             <div class="col-lg-6">
-                <x-theme.button modal="Y" idModal="import" icon="fas fa-upload" addClass="float-end"
-                    teks="Import" />
+                {{-- <x-theme.button modal="Y" idModal="import" icon="fas fa-upload" addClass="float-end"
+                    teks="Import" /> --}}
             </div>
         </div>
     </x-slot>
@@ -104,6 +104,18 @@
                         <label for="">File</label>
                         <input type="file" class="form-control" name="file">
                         <input type="hidden" name="gudang" value="{{ $nm_gudang }}" id="">
+                    </div>
+                </div>
+
+            </x-theme.modal>
+        </form>
+        <form action="{{ route('gudangBk.import_wip_cetak') }}" method="post" enctype="multipart/form-data">
+            @csrf
+            <x-theme.modal title="Gudang Wip Cetak" idModal="importcetak" btnSave="Y">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <label for="">File</label>
+                        <input type="file" class="form-control" name="file">
                     </div>
                 </div>
 

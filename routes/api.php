@@ -24,4 +24,5 @@ Route::controller(ApiWipController::class)
     ->group(function () {
         Route::get('/', 'bk_pilih')->name('index');
         Route::get('/get_sum_wip', 'get_sum_wip')->name('get_sum_wip');
+        Route::get('/bkCetakApi', 'bkCetakApi')->name('bkCetakApi');
     });

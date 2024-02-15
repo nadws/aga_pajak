@@ -102,6 +102,7 @@
             </button>
             <div class="load_box"></div>
         </x-theme.modal>
+
         <x-theme.modal title="Data Bk Cabut" idModal="load_bk_sortir" btnSave="T" size="modal-lg-max">
             <button class="btn btn-primary btn-loading" type="button" disabled="">
                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
