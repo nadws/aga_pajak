@@ -27,7 +27,7 @@ class ApiWipController extends Controller
 
     public function bkCetakApi(Request $r)
     {
-        $result = DB::table('gudang_ctk')->where('gr_timbang_ulang', '!=', '0')->get();
+        $result = DB::table('gudang_ctk')->where('selesai', 'selesai')->get();
         return $result;
     }
 }

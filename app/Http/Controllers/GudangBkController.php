@@ -83,94 +83,7 @@ class GudangBkController extends Controller
         }
     }
 
-    public function export_wip_cetak(Request $r)
-    {
-        $style_atas = array(
-            'font' => [
-                'bold' => true, // Mengatur teks menjadi tebal
-            ],
-            'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
-            ],
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
-                ]
-            ],
-        );
 
-        $style = [
-            'borders' => [
-                'alignment' => [
-                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
-                ],
-                'allBorders' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
-                ],
-            ],
-        ];
-        $spreadsheet = new Spreadsheet();
-
-        $spreadsheet->setActiveSheetIndex(0);
-        $sheet1 = $spreadsheet->getActiveSheet();
-        $sheet1->setTitle('wipcetak');
-
-
-        $sheet1->getStyle("A1:K1")->applyFromArray($style_atas);
-
-        $sheet1->setCellValue('A1', 'ID');
-        $sheet1->setCellValue('B1', 'Partai h');
-        $sheet1->setCellValue('C1', 'No Box');
-        $sheet1->setCellValue('D1', 'Tipe');
-        $sheet1->setCellValue('E1', 'Grade');
-        $sheet1->setCellValue('F1', 'Pcs sdh cabut');
-        $sheet1->setCellValue('G1', 'Gr sdh cabut');
-        $sheet1->setCellValue('H1', 'Ttl Rp');
-        $sheet1->setCellValue('I1', 'Cost Cabut');
-        $sheet1->setCellValue('J1', 'Pcs timbang ulang');
-        $sheet1->setCellValue('K1', 'Gr timbang ulang');
-        $kolom = 2;
-        $response = Http::get("https://sarang.ptagafood.com/api/apibk/cabut_selesai");
-        $cabut = $response->object();
-
-        foreach ($cabut as $d) {
-            $bk = GudangBkModel::getPartaicetak($d->nm_partai);
-            $gdng_ctk = DB::table('gudang_ctk')->where('no_box', $d->no_box)->first();
-
-            if (empty($gdng_ctk->gr_timbang_ulang) || $gdng_ctk->gr_timbang_ulang == 0) {
-            } else {
-                continue;
-            }
-
-            $sheet1->setCellValue('A' . $kolom, $gdng_ctk->id_gudang_ctk ?? '');
-            $sheet1->setCellValue('B' . $kolom, $d->nm_partai);
-            $sheet1->setCellValue('C' . $kolom, $d->no_box);
-            $sheet1->setCellValue('D' . $kolom, $d->tipe);
-            $sheet1->setCellValue('E' . $kolom, $bk->nm_grade);
-            $sheet1->setCellValue('F' . $kolom, $d->pcs_akhir);
-            $sheet1->setCellValue('G' . $kolom, $d->gr_akhir);
-            $sheet1->setCellValue('H' . $kolom, ($bk->total_rp / $bk->gr) * $d->gr_akhir);
-            $sheet1->setCellValue('I' . $kolom, $d->ttl_rp);
-            $sheet1->setCellValue('J' . $kolom, 0);
-            $sheet1->setCellValue('K' . $kolom, 0);
-
-            $kolom++;
-        }
-        $sheet1->getStyle('A2:K' . $kolom - 1)->applyFromArray($style);
-        $namafile = "Wip Cetak.xlsx";
-
-        $writer = new Xlsx($spreadsheet);
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename=' . $namafile);
-        header('Cache-Control: max-age=0');
-
-
-        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
-        $writer->save('php://output');
-        exit();
-    }
 
     private function export_gudang_bk(Request $r)
     {
@@ -968,34 +881,7 @@ class GudangBkController extends Controller
         }
     }
 
-    function wip(Request $r)
-    {
-        $tgl1 =  $this->tgl1;
-        $tgl2 =  $this->tgl2;
 
-
-        if (empty($r->nm_gudang)) {
-            $nmgudang = 'bk';
-        } else {
-            $nmgudang = $r->nm_gudang;
-        }
-
-        $gudang = GudangBkModel::getPembelianBk($nmgudang);
-
-
-        $listBulan = DB::table('bulan')->get();
-        $id_user = auth()->user()->id;
-        $data =  [
-            'title' => 'Gudang BK',
-            'gudang' => $gudang,
-            'listbulan' => $listBulan,
-            'tgl1' => $tgl1,
-            'tgl2' => $tgl2,
-            'presiden' => auth()->user()->posisi_id == 1 ? true : false,
-            'nm_gudang' => $nmgudang
-        ];
-        return view('gudang_bk.wip', $data);
-    }
 
     public function import_wip_cetak(Request $r)
     {
@@ -1020,6 +906,7 @@ class GudangBkController extends Controller
                         'cost_cabut' => $row[8],
                         'pcs_timbang_ulang' => $row[9],
                         'gr_timbang_ulang' => $row[10],
+                        'selesai' => $row[11],
                     ]);
                 } else {
                     DB::table('gudang_ctk')->where('id_gudang_ctk', $row[0])->update([
@@ -1033,6 +920,7 @@ class GudangBkController extends Controller
                         'cost_cabut' => $row[8],
                         'pcs_timbang_ulang' => $row[9],
                         'gr_timbang_ulang' => $row[10],
+                        'selesai' => $row[11],
                     ]);
                 }
             }
@@ -1042,5 +930,135 @@ class GudangBkController extends Controller
             DB::rollBack();
             return redirect()->back()->with('error', $e->getMessage());
         }
+    }
+
+    function wip(Request $r)
+    {
+        $tgl1 =  $this->tgl1;
+        $tgl2 =  $this->tgl2;
+
+
+        if (empty($r->nm_gudang)) {
+            $nmgudang = 'bk';
+        } else {
+            $nmgudang = $r->nm_gudang;
+        }
+
+        $gudang = GudangBkModel::getPembelianBk($nmgudang);
+        if ($nmgudang == 'wipcetak') {
+            $view = 'gudang_bk.wipcetak';
+        } else {
+            $view = 'gudang_bk.wip';
+        }
+
+        $response = Http::get("https://sarang.ptagafood.com/api/apibk/cabut_selesai");
+        $cabut = $response->object();
+
+
+
+        $listBulan = DB::table('bulan')->get();
+        $id_user = auth()->user()->id;
+        $data =  [
+            'title' => 'Gudang BK',
+            'gudang' => $gudang,
+            'listbulan' => $listBulan,
+            'tgl1' => $tgl1,
+            'tgl2' => $tgl2,
+            'presiden' => auth()->user()->posisi_id == 1 ? true : false,
+            'nm_gudang' => $nmgudang,
+            'cabut' => $cabut,
+            'wip_cetak' => DB::table('gudang_ctk')->where('selesai', 'selesai')->get()
+        ];
+        return view($view, $data);
+    }
+
+    public function export_wip_cetak(Request $r)
+    {
+        $style_atas = array(
+            'font' => [
+                'bold' => true, // Mengatur teks menjadi tebal
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ]
+            ],
+        );
+
+        $style = [
+            'borders' => [
+                'alignment' => [
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                ],
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ],
+            ],
+        ];
+        $spreadsheet = new Spreadsheet();
+
+        $spreadsheet->setActiveSheetIndex(0);
+        $sheet1 = $spreadsheet->getActiveSheet();
+        $sheet1->setTitle('wipcetak');
+
+
+        $sheet1->getStyle("A1:L1")->applyFromArray($style_atas);
+
+        $sheet1->setCellValue('A1', 'ID');
+        $sheet1->setCellValue('B1', 'Partai h');
+        $sheet1->setCellValue('C1', 'No Box');
+        $sheet1->setCellValue('D1', 'Tipe');
+        $sheet1->setCellValue('E1', 'Grade');
+        $sheet1->setCellValue('F1', 'Pcs sdh cabut');
+        $sheet1->setCellValue('G1', 'Gr sdh cabut');
+        $sheet1->setCellValue('H1', 'Ttl Rp');
+        $sheet1->setCellValue('I1', 'Cost Cabut');
+        $sheet1->setCellValue('J1', 'Pcs timbang ulang');
+        $sheet1->setCellValue('K1', 'Gr timbang ulang');
+        $sheet1->setCellValue('L1', 'Selesai');
+        $kolom = 2;
+        $response = Http::get("https://sarang.ptagafood.com/api/apibk/cabut_selesai");
+        $cabut = $response->object();
+
+        foreach ($cabut as $d) {
+            $bk = GudangBkModel::getPartaicetak($d->nm_partai);
+            $gdng_ctk = DB::table('gudang_ctk')->where('no_box', $d->no_box)->first();
+
+            if (empty($gdng_ctk->selesai) || $gdng_ctk->selesai == 'proses') {
+            } else {
+                continue;
+            }
+            $sheet1->setCellValue('A' . $kolom, $gdng_ctk->id_gudang_ctk ?? '');
+            $sheet1->setCellValue('B' . $kolom, $d->nm_partai);
+            $sheet1->setCellValue('C' . $kolom, $d->no_box);
+            $sheet1->setCellValue('D' . $kolom, $d->tipe);
+            $sheet1->setCellValue('E' . $kolom, $bk->nm_grade);
+            $sheet1->setCellValue('F' . $kolom, $d->pcs_akhir);
+            $sheet1->setCellValue('G' . $kolom, $d->gr_akhir);
+            $sheet1->setCellValue('H' . $kolom, ($bk->total_rp / $bk->gr) * $d->gr_akhir);
+            $sheet1->setCellValue('I' . $kolom, $d->ttl_rp);
+            $sheet1->setCellValue('J' . $kolom, $gdng_ctk->pcs_timbang_ulang ?? 0);
+            $sheet1->setCellValue('K' . $kolom, $gdng_ctk->gr_timbang_ulang ?? 0);
+            $sheet1->setCellValue('L' . $kolom, 'proses');
+
+            $kolom++;
+        }
+        $sheet1->getStyle('A2:L' . $kolom - 1)->applyFromArray($style);
+        $namafile = "Wip Cetak.xlsx";
+
+        $writer = new Xlsx($spreadsheet);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename=' . $namafile);
+        header('Cache-Control: max-age=0');
+
+
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
+        exit();
     }
 }
