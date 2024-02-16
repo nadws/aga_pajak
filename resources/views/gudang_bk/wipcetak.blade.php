@@ -48,6 +48,7 @@
                             <th class="dhead">Cost Cabut</th>
                             <th class="dhead">Pcs timbang ulang</th>
                             <th class="dhead">Gr timbang ulang</th>
+                            <th class="dhead">Selesai</th>
                             <th class="dhead">
                                 <button type="submit" name="submit" value="export" class="badge bg-success"><i
                                         class="fas fa-file-excel"></i>
@@ -83,6 +84,7 @@
                                 <td align="right">{{ number_format($c->ttl_rp) }}</td>
                                 <td align="right">{{ number_format($gdng_ctk->pcs_timbang_ulang ?? 0) }}</td>
                                 <td align="right">{{ number_format($gdng_ctk->gr_timbang_ulang ?? 0) }}</td>
+                                <td align="right">proses</td>
                                 <td></td>
                             </tr>
                             @php
@@ -103,6 +105,7 @@
                                 <td align="right">{{ number_format($c->cost_cabut) }}</td>
                                 <td align="right">{{ $c->pcs_timbang_ulang }}</td>
                                 <td align="right">{{ $c->gr_timbang_ulang }}</td>
+                                <td align="right">{{ $c->selesai }}</td>
                                 <td></td>
                             </tr>
                             @php
