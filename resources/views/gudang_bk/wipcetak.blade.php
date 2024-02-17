@@ -67,7 +67,7 @@
                                     ->where('no_box', $c->no_box)
                                     ->first();
 
-                                if (empty($gdng_ctk->selesai) || $gdng_ctk->selesai == 'proses') {
+                                if (empty($gdng_ctk->selesai)) {
                                 } else {
                                     continue;
                                 }

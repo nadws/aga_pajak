@@ -967,7 +967,7 @@ class GudangBkController extends Controller
             'presiden' => auth()->user()->posisi_id == 1 ? true : false,
             'nm_gudang' => $nmgudang,
             'cabut' => $cabut,
-            'wip_cetak' => DB::table('gudang_ctk')->where('selesai', 'selesai')->get()
+            'wip_cetak' => DB::table('gudang_ctk')->get()
         ];
         return view($view, $data);
     }
