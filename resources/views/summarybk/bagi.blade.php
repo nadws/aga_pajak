@@ -121,9 +121,9 @@
                 <tbody>
                     @foreach ($gudang as $no => $g)
                         @php
-                            $ket = $g->ket2;
-                            $resSum = Cache::remember('datacabutsum2_' . $ket, now()->addHours(8), function () use ($ket, $linkApi) {
-                                return Http::get("$linkApi/datacabutsum2", ['nm_partai' => $ket])->object();
+                            $nanda = $g->ket2;
+                            $resSum = Cache::remember('datacabutsum2_' . $nanda, now()->addHours(8), function () use ($nanda, $linkApi) {
+                                return Http::get("$linkApi/datacabutsum2", ['nm_partai' => $nanda])->object();
                             });
                             $c = $resSum;
                             $g->relatedModel = $c;
