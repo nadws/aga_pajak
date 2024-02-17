@@ -122,7 +122,7 @@
                     @foreach ($gudang as $no => $g)
                         @php
                             $ket = $g->ket2;
-                            $resSum = Cache::remember('datacabutsum4_' . $ket, now()->addHours(8), function () use ($ket, $linkApi) {
+                            $resSum = Cache::remember('datacabutsum5_' . $ket, now()->addMinutes(5), function () use ($ket, $linkApi) {
                                 return Http::get("$linkApi/datacabutsum2", ['nm_partai' => $ket])->object();
                             });
                             $c = $resSum;
