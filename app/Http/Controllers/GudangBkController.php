@@ -1059,7 +1059,7 @@ class GudangBkController extends Controller
             $sheet1->setCellValue('F' . $kolom, $c->pcs_cabut);
             $sheet1->setCellValue('G' . $kolom, $c->gr_cabut);
             $sheet1->setCellValue('H' . $kolom, $c->ttl_rp);
-            $sheet1->setCellValue('I' . $kolom, $d->cost_cabut);
+            $sheet1->setCellValue('I' . $kolom, $c->cost_cabut);
             $sheet1->setCellValue('J' . $kolom, $c->pcs_timbang_ulang ?? 0);
             $sheet1->setCellValue('K' . $kolom, $c->gr_timbang_ulang ?? 0);
             $sheet1->setCellValue('L' . $kolom, $c->selesai);
