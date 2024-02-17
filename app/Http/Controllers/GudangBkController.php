@@ -1025,6 +1025,8 @@ class GudangBkController extends Controller
         $response = Http::get("https://sarang.ptagafood.com/api/apibk/cabut_selesai");
         $cabut = $response->object();
 
+        $wip_cetak = DB::table('gudang_ctk')->where('selesai', 'selesai')->get();
+
         foreach ($cabut as $d) {
             $bk = GudangBkModel::getPartaicetak($d->nm_partai);
             $gdng_ctk = DB::table('gudang_ctk')->where('no_box', $d->no_box)->first();
@@ -1045,6 +1047,22 @@ class GudangBkController extends Controller
             $sheet1->setCellValue('J' . $kolom, $gdng_ctk->pcs_timbang_ulang ?? 0);
             $sheet1->setCellValue('K' . $kolom, $gdng_ctk->gr_timbang_ulang ?? 0);
             $sheet1->setCellValue('L' . $kolom, 'proses');
+
+            $kolom++;
+        }
+        foreach ($wip_cetak as $c) {
+            $sheet1->setCellValue('A' . $kolom, $c->id_gudang_ctk);
+            $sheet1->setCellValue('B' . $kolom, $c->partai_h);
+            $sheet1->setCellValue('C' . $kolom, $c->no_box);
+            $sheet1->setCellValue('D' . $kolom, $c->tipe);
+            $sheet1->setCellValue('E' . $kolom, $c->grade);
+            $sheet1->setCellValue('F' . $kolom, $c->pcs_cabut);
+            $sheet1->setCellValue('G' . $kolom, $c->gr_cabut);
+            $sheet1->setCellValue('H' . $kolom, $c->ttl_rp);
+            $sheet1->setCellValue('I' . $kolom, $d->cost_cabut);
+            $sheet1->setCellValue('J' . $kolom, $c->pcs_timbang_ulang ?? 0);
+            $sheet1->setCellValue('K' . $kolom, $c->gr_timbang_ulang ?? 0);
+            $sheet1->setCellValue('L' . $kolom, $c->selesai);
 
             $kolom++;
         }
