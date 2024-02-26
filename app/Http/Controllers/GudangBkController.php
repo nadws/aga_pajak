@@ -1025,11 +1025,11 @@ class GudangBkController extends Controller
         $response = Http::get("https://sarang.ptagafood.com/api/apibk/cabut_selesai");
         $cabut = $response->object();
 
-        $wip_cetak = DB::table('gudang_ctk')->get();
+        $wip_cetak = DB::table('gudang_ctk')->where('selesai', 'selesai')->get();
 
         foreach ($cabut as $d) {
             $bk = GudangBkModel::getPartaicetak($d->nm_partai);
-            $gdng_ctk = DB::table('gudang_ctk')->where('no_box', $d->no_box)->first();
+            $gdng_ctk = DB::table('gudang_ctk')->where('no_box', $d->no_box)->where('selesai', 'selesai')->first();
 
             if (empty($gdng_ctk->selesai)) {
             } else {
