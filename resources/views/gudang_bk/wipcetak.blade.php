@@ -65,6 +65,7 @@
                                 $bk = \App\Models\GudangBkModel::getPartaicetak($c->nm_partai);
                                 $gdng_ctk = DB::table('gudang_ctk')
                                     ->where('no_box', $c->no_box)
+                                    ->where('selesai', 'selesai')
                                     ->first();
 
                                 if (empty($gdng_ctk->selesai)) {
