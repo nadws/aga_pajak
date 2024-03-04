@@ -377,6 +377,7 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/wip', 'wip')->name('wip');
+            Route::get('/gudangProduksiGabung', 'gudangProduksiGabung')->name('gudangProduksiGabung');
             Route::post('/export_buku_campur_bk', 'export_buku_campur_bk')->name('export_buku_campur_bk');
             Route::post('/import_buku_campur_bk', 'import_buku_campur_bk')->name('import_buku_campur_bk');
             Route::post('/import_summary_wip', 'import_summary_wip')->name('import_summary_wip');

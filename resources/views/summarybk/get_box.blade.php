@@ -102,7 +102,7 @@
                             {{ number_format($pcs_awal_bk - $pcs_awal_cbt) }}
                         </td>
                         <td class="text-center">
-                            {{ number_format($gr_awal_bk - $gr_awal_cbt) }}
+                            {{ number_format($gr_awal_bk - ($gr_awal_cbt + $gr_eo_awal)) }}
                         </td>
                     </tr>
                 @endforeach

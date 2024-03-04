@@ -467,38 +467,30 @@ class GudangBkController extends Controller
         $sheet1->setTitle('⁠produksi ( ini nama herry)');
 
 
-        $sheet1->getStyle("A1:K1")->applyFromArray($style_atas);
+        $sheet1->getStyle("A1:G1")->applyFromArray($style_atas);
 
-        $sheet1->setCellValue('A1', 'ID');
-        $sheet1->setCellValue('B1', 'Buku');
-        $sheet1->setCellValue('C1', 'Suplier Awal');
-        $sheet1->setCellValue('D1', 'Date');
-        $sheet1->setCellValue('E1', 'Grade');
-        $sheet1->setCellValue('F1', 'Pcs');
-        $sheet1->setCellValue('G1', 'Gram');
-        $sheet1->setCellValue('H1', 'Lot');
-        $sheet1->setCellValue('I1', 'Keterangan/Nama Partai Herry');
-        $sheet1->setCellValue('J1', 'Keterangan/Nama Partai Sinta');
-        $sheet1->setCellValue('K1', 'Lok');
-        $sheet1->setCellValue('O2', 'kl mau import barang baru id kosongkan');
+        $sheet1->setCellValue('A1', 'Grade');
+        $sheet1->setCellValue('B1', 'Pcs');
+        $sheet1->setCellValue('C1', 'Gr');
+        $sheet1->setCellValue('D1', 'Rp/Gr');
+        $sheet1->setCellValue('E1', 'Keterangan / Nama Partai Herry');
+        $sheet1->setCellValue('F1', 'Keterangan / Nama Partai Sinta');
+        $sheet1->setCellValue('G1', 'Total Rp');
+        $sheet1->setCellValue('J2', 'kl mau import barang baru id kosongkan');
         $kolom = 2;
-        $pembelian = GudangBkModel::export_getPembelianBk('produksi');
+        $pembelian = GudangBkModel::getProduksiGabung();
         foreach ($pembelian as $d) {
-            $sheet1->setCellValue('A' . $kolom, $d->id_buku_campur);
-            $sheet1->setCellValue('B' . $kolom, $d->buku);
-            $sheet1->setCellValue('C' . $kolom, $d->suplier_awal);
-            $sheet1->setCellValue('D' . $kolom, $d->tgl);
-            $sheet1->setCellValue('E' . $kolom, $d->nm_grade);
-            $sheet1->setCellValue('F' . $kolom, $d->pcs);
-            $sheet1->setCellValue('G' . $kolom, $d->gr);
-            $sheet1->setCellValue('H' . $kolom, $d->no_lot);
-            $sheet1->setCellValue('I' . $kolom, $d->ket);
-            $sheet1->setCellValue('J' . $kolom, $d->ket2);
-            $sheet1->setCellValue('K' . $kolom, $d->lok_tgl);
+            $sheet1->setCellValue('A' . $kolom, $d->nm_grade);
+            $sheet1->setCellValue('B' . $kolom, $d->pcs);
+            $sheet1->setCellValue('C' . $kolom, $d->gr);
+            $sheet1->setCellValue('D' . $kolom, $d->total_rp / $d->gr);
+            $sheet1->setCellValue('E' . $kolom, $d->ket);
+            $sheet1->setCellValue('F' . $kolom, $d->ket2);
+            $sheet1->setCellValue('G' . $kolom, $d->total_rp);
 
             $kolom++;
         }
-        $sheet1->getStyle('A2:K' . $kolom - 1)->applyFromArray($style);
+        $sheet1->getStyle('A2:G' . $kolom - 1)->applyFromArray($style);
 
 
         $spreadsheet->createSheet();
@@ -538,6 +530,36 @@ class GudangBkController extends Controller
             $kolom++;
         }
         $sheet2->getStyle('A2:K' . $kolom - 1)->applyFromArray($style);
+
+
+        // $spreadsheet->createSheet();
+        // $spreadsheet->setActiveSheetIndex(2);
+        // $sheet3 = $spreadsheet->getActiveSheet();
+        // $sheet3->setTitle('Gudang Produksi Gabung');
+
+        // $sheet3->getStyle("A1:G1")->applyFromArray($style_atas);
+
+        // $sheet3->setCellValue('A1', 'Grade');
+        // $sheet3->setCellValue('B1', 'Pcs');
+        // $sheet3->setCellValue('C1', 'Gr');
+        // $sheet3->setCellValue('D1', 'Rp/Gr');
+        // $sheet3->setCellValue('E1', 'Keterangan / Nama Partai Herry');
+        // $sheet3->setCellValue('F1', 'Keterangan / Nama Partai Sinta');
+        // $sheet3->setCellValue('G1', 'Total Rp');
+        // $sheet3->setCellValue('J2', 'kl mau import barang baru id kosongkan');
+        // $kolom = 2;
+        // $pembelian = GudangBkModel::getProduksiGabung();
+        // foreach ($pembelian as $d) {
+        //     $sheet3->setCellValue('A' . $kolom, $d->nm_grade);
+        //     $sheet3->setCellValue('B' . $kolom, $d->pcs);
+        //     $sheet3->setCellValue('C' . $kolom, $d->gr);
+        //     $sheet3->setCellValue('D' . $kolom, $d->total_rp / $d->gr);
+        //     $sheet3->setCellValue('E' . $kolom, $d->ket);
+        //     $sheet3->setCellValue('F' . $kolom, $d->ket2);
+        //     $sheet3->setCellValue('G' . $kolom, $d->total_rp);
+        //     $kolom++;
+        // }
+        // $sheet3->getStyle('A2:G' . $kolom - 1)->applyFromArray($style);
 
 
         $namafile = "Gudang Produksi.xlsx";
@@ -620,8 +642,8 @@ class GudangBkController extends Controller
                                     'gudang' => $gudang,
 
                                 ]);
-                                $idBukuCampur = DB::getPdo()->lastInsertId();
 
+                                $idBukuCampur = DB::getPdo()->lastInsertId();
                                 $tgl = $rowData[3];
                                 if (is_numeric($tgl)) {
                                     $tanggalExcel = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($tgl);
@@ -653,7 +675,6 @@ class GudangBkController extends Controller
                                 ]);
 
                                 $bk_approve = DB::table('buku_campur_approve')->where('id_buku_campur', $rowData[0])->first();
-
                                 $tgl = $rowData[3];
                                 if (is_numeric($tgl)) {
                                     // Jika nilai berupa angka, konversi ke format tanggal
@@ -663,7 +684,6 @@ class GudangBkController extends Controller
                                     // Jika nilai sudah dalam format tanggal, pastikan formatnya adalah 'Y-m-d'
                                     $tanggalFormatted = date('Y-m-d', strtotime($tgl));
                                 }
-
                                 if (empty($bk_approve)) {
                                     DB::table('buku_campur_approve')->insert([
                                         'id_buku_campur' => $rowData[0],
@@ -1078,5 +1098,22 @@ class GudangBkController extends Controller
         $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
         $writer->save('php://output');
         exit();
+    }
+
+
+    function gudangProduksiGabung(Request $r)
+    {
+        $gudang = GudangBkModel::getProduksiGabung();
+
+        $listBulan = DB::table('bulan')->get();
+        $id_user = auth()->user()->id;
+        $data =  [
+            'title' => 'Gudang BK',
+            'gudang' => $gudang,
+            'listbulan' => $listBulan,
+            'presiden' => auth()->user()->posisi_id == 1 ? true : false,
+            'nm_gudang' => 'summary_produksi'
+        ];
+        return view('gudang_bk.summary_produksi', $data);
     }
 }
