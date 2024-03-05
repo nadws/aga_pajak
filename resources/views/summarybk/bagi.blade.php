@@ -65,9 +65,9 @@
 
 
 
-                        <th class="dhead text-center tdhide" colspan="3">Susut Wip - bk</th>
+                        <th class="dhead text-center tdhide" colspan="3">Susut bk</th>
                         @if ($nm_gudang == 'summary')
-                            <th class="text-white text-center bg-danger tdhide" colspan="3">Wip Sisa</th>
+                            <th class="text-white text-center bg-danger tdhide" colspan="3">BK Sisa</th>
                         @else
                             <th class="text-white text-center bg-danger tdhide" colspan="2">Wip Sisa</th>
                         @endif
