@@ -56,7 +56,7 @@
                         </th>
 
                         @if ($nm_gudang == 'summary')
-                            <th class="dhead text-center tdhide" colspan="3">Wip</th>
+                            <th class="dhead text-center tdhide" colspan="3">BK H</th>
                             <th class="dhead text-center tdhide" colspan="3">BK</th>
                         @else
                             <th class="dhead text-center tdhide" colspan="2">Wip</th>
