@@ -580,7 +580,7 @@ class GudangBkController extends Controller
         if (auth()->user()->posisi_id == 1) {
             $this->import_buku_bk($r);
         } else {
-            $this->import_gudang_produksi($r);
+            $this->import_gudang_produksi_new($r);
         }
 
         // $this->import_gudang_produksi($r);
@@ -733,6 +733,126 @@ class GudangBkController extends Controller
             if ($hasError) {
                 echo 'Pembaruan dibatalkan karena terjadi kesalahan.';
             }
+        }
+    }
+
+    private function import_gudang_produksi_new(Request $r)
+    {
+        $uploadedFile = $r->file('file');
+        $allowedExtensions = ['xlsx'];
+        $extension = $uploadedFile->getClientOriginalExtension();
+
+        if (in_array($extension, $allowedExtensions)) {
+            $spreadsheet = IOFactory::load($uploadedFile->getPathname());
+            $sheet2 = $spreadsheet->getSheetByName('wip ( ini nama sinta)');
+            $data = [];
+
+            foreach ($sheet2->getRowIterator() as $index => $row) {
+                if ($index === 1) {
+                    continue;
+                }
+
+                $rowData = [];
+                foreach ($row->getCellIterator() as $cell) {
+                    $rowData[] = $cell->getValue();
+                }
+                $data[] = $rowData;
+            }
+
+            $importGagal = false;
+
+            DB::beginTransaction(); // Mulai transaksi database
+
+            try {
+                foreach ($data as $rowData) {
+                    if (empty($rowData[0])) {
+                        DB::table('buku_campur')->insert([
+                            'id_grade' => '1',
+                            'pcs' => $rowData[5],
+                            'gr' => $rowData[6],
+                            'no_lot' => $rowData[7],
+                            'ket' => empty($rowData[8]) ? ' ' : $rowData[8],
+                            'ket2' => empty($rowData[9]) ? ' ' : $rowData[9],
+                            'lok_tgl' => empty($rowData[10]) ? ' ' : $rowData[10],
+                            'approve' => 'Y',
+                            'gudang' => 'wip',
+                        ]);
+                        $idBukuCampur = DB::getPdo()->lastInsertId();
+                        $tgl = $rowData[3];
+                        if (is_numeric($tgl)) {
+                            $tanggalExcel = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($tgl);
+                            $tanggalFormatted = $tanggalExcel->format('Y-m-d');
+                        } else {
+                            // Jika nilai sudah dalam format tanggal, pastikan formatnya adalah 'Y-m-d'
+                            $tanggalFormatted = date('Y-m-d', strtotime($tgl));
+                        }
+                        DB::table('buku_campur_approve')->insert([
+                            'id_buku_campur' => $idBukuCampur,
+                            'buku' => empty($rowData[1]) ? ' ' : $rowData[1],
+                            'suplier_awal' => empty($rowData[2]) ? ' ' : $rowData[2],
+                            'tgl' => empty($tanggalFormatted) ? '0000-00-00' : $tanggalFormatted,
+                            'nm_grade' => $rowData[4],
+                            'pcs' => $rowData[5],
+                            'gr' => $rowData[6],
+                            'no_lot' => $rowData[7],
+                            'ket' => empty($rowData[8]) ? ' ' : $rowData[8],
+                            'ket2' => empty($rowData[9]) ? ' ' : $rowData[9],
+                            'lok_tgl' => empty($rowData[10]) ? ' ' : $rowData[10],
+                            'gudang' => 'wip',
+                        ]);
+                    } else {
+                        DB::table('buku_campur')->where('id_buku_campur', $rowData[0])->update([
+                            'id_grade' => '1',
+                            'pcs' => $rowData[5],
+                            'gr' => $rowData[6],
+                            'no_lot' => $rowData[7],
+                            'ket' => empty($rowData[8]) ? ' ' : $rowData[8],
+                            'ket2' => empty($rowData[9]) ? ' ' : $rowData[9],
+                            'lok_tgl' => empty($rowData[10]) ? ' ' : $rowData[10],
+                            'approve' => 'Y',
+                            'gudang' => 'wip',
+                        ]);
+                        $tgl = $rowData[3];
+                        if (is_numeric($tgl)) {
+                            $tanggalExcel = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($tgl);
+                            $tanggalFormatted = $tanggalExcel->format('Y-m-d');
+                        } else {
+                            // Jika nilai sudah dalam format tanggal, pastikan formatnya adalah 'Y-m-d'
+                            $tanggalFormatted = date('Y-m-d', strtotime($tgl));
+                        }
+                        DB::table('buku_campur_approve')->where('id_buku_campur', $rowData[0])->update([
+                            'buku' => empty($rowData[1]) ? ' ' : $rowData[1],
+                            'suplier_awal' => empty($rowData[2]) ? ' ' : $rowData[2],
+                            'tgl' => empty($tanggalFormatted) ? '0000-00-00' : $tanggalFormatted,
+                            'nm_grade' => $rowData[4],
+                            'pcs' => $rowData[5],
+                            'gr' => $rowData[6],
+                            'no_lot' => $rowData[7],
+                            'ket' => empty($rowData[8]) ? ' ' : $rowData[8],
+                            'ket2' => empty($rowData[9]) ? ' ' : $rowData[9],
+                            'lok_tgl' => empty($rowData[10]) ? ' ' : $rowData[10],
+                            'gudang' => 'wip',
+                        ]);
+                    }
+
+                    DB::table('buku_campur_approve')->where('ket', $rowData[8])->update(['ket2' => empty($rowData[9]) ? ' ' : $rowData[9]]);
+                }
+
+
+
+                // if ($importGagal) {
+                //     DB::rollback(); // Batalkan transaksi jika ada kesalahan
+                //     return redirect()->route('gudangBk.index')->with('error', 'Data tidak valid: Kolom M, N, dan O tidak boleh memiliki nilai Y yang sama');
+                // }
+
+                DB::commit(); // Konfirmasi transaksi jika berhasil
+                return redirect()->route('gudangBk.index')->with('sukses', 'Data berhasil import');
+            } catch (\Exception $e) {
+                DB::rollback(); // Batalkan transaksi jika terjadi kesalahan lain
+                return redirect()->route('gudangBk.index')->with('error', 'Terjadi kesalahan saat mengimpor data: ' . $e->getMessage());
+            }
+        } else {
+            return redirect()->route('halawal..index')->with('error', 'File yang diunggah bukan file Excel yang valid');
         }
     }
 

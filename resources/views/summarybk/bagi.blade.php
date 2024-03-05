@@ -143,7 +143,7 @@
                             $WipSisaGr = $wipGr - $bkGr - $gr_susut;
                             $selesai_bk = $c->selesai ?? 'T';
                             $gr_akhir_cbt = $c->gr_akhir ?? 0;
-                            $gr_akhir_eo = $c->gr_awal_eo ?? 0;
+                            $gr_akhir_eo = $c->gr_akhir_eo ?? 0;
                         @endphp
 
                         <tr>
@@ -214,28 +214,32 @@
 
                             </td>
                             <td class="text-end fw-bold">{{ number_format($c->pcs_awal ?? 0, 0) }}</td>
-                            <td class="text-end fw-bold">{{ number_format($c->gr_awal + $c->gr_awal_eo ?? 0, 0) }}
-                            </td>
-                            <td class="text-end fw-bold">{{ number_format($c->pcs_akhir ?? 0, 0) }}</td>
-                            <td class="text-end fw-bold">{{ number_format($c->gr_akhir + $c->gr_eo_akhir ?? 0, 0) }}
-                            </td>
-                            <td class="text-end fw-bold">{{ number_format($c->susut ?? 0, 0) }}</td>
-                            <td class="text-end fw-bold">{{ number_format($c->eot ?? 0, 0) }}</td>
-                            <td class="text-end fw-bold">{{ number_format($c->gr_flx ?? 0, 0) }}</td>
                             @php
                                 $pcs_awal_bk = $c->pcs_bk ?? 0;
                                 $gr_awal_bk = $c->gr_awal_bk ?? 0;
 
                                 $pcs_awal_cbt = $c->pcs_awal ?? 0;
                                 $gr_awal_cbt = $c->gr_awal ?? 0;
+                                $gr_awal_eo = $c->gr_awal_eo ?? 0;
+                                $ttl_rp_cbt = $c->ttl_rp ?? 0;
+                                $ttl_rp_eo = $c->ttl_rp_eo ?? 0;
                             @endphp
+                            <td class="text-end fw-bold">{{ number_format($gr_awal_cbt + $gr_awal_eo, 0) }}
+                            </td>
+                            <td class="text-end fw-bold">{{ number_format($c->pcs_akhir ?? 0, 0) }}</td>
+                            <td class="text-end fw-bold">{{ number_format($gr_akhir_cbt + $gr_akhir_eo, 0) }}
+                            </td>
+                            <td class="text-end fw-bold">{{ number_format($c->susut ?? 0, 0) }}</td>
+                            <td class="text-end fw-bold">{{ number_format($c->eot ?? 0, 0) }}</td>
+                            <td class="text-end fw-bold">{{ number_format($c->gr_flx ?? 0, 0) }}</td>
+
                             <td class="text-end text-danger fw-bold">
                                 {{ number_format($pcs_awal_bk - $pcs_awal_cbt, 0) }}</td>
                             <td class="text-end text-danger fw-bold">
-                                {{ number_format($gr_awal_bk - ($gr_awal_cbt + $c->gr_awal_eo), 0) }}
+                                {{ number_format($gr_awal_bk - ($gr_awal_cbt + $gr_awal_eo), 0) }}
                             </td>
 
-                            <td class="text-end fw-bold">{{ number_format($c->ttl_rp + $c->ttl_rp_eo ?? 0, 0) }}</td>
+                            <td class="text-end fw-bold">{{ number_format($ttl_rp_cbt + $ttl_rp_eo, 0) }}</td>
                             <td class="text-end fw-bold">
                                 @if ($g->selesai_1 == 'Y')
                                     {{ number_format($hrga_modal_satuan * ($gr_akhir_cbt + $gr_akhir_eo), 0) }}
