@@ -47,4 +47,15 @@ class ApiWipController extends Controller
         order by a.ket2 ASC;");
         return response()->json($response);
     }
+
+    public function sumCtk()
+    {
+        $r = DB::selectOne("SELECT sum(pcs_cabut) as pcs,
+         sum(gr_cabut) as gr,
+         sum(ttl_rp) as ttl_rp,
+         sum(cost_cabut) as cost_cabut
+         FROM gudang_ctk WHERE selesai = 'selesai'");
+         
+        return response()->json($r);
+    }
 }
