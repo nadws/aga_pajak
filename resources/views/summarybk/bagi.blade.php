@@ -147,7 +147,7 @@
                         @endphp
 
                         <tr>
-                            <td>{{ $no + 1 }} </td>
+                            <td>{{ $no + 1 }} {{ $gr_akhir_eo }}</td>
                             <td>
                                 <a href="#" data-bs-toggle="modal" nm_partai="{{ $g->ket2 }}"
                                     data-bs-target="#load_bk_cabut" class="show_box">{{ $g->ket2 }}</a>
@@ -159,7 +159,8 @@
                                 $hrga_modal_satuan = $wipTllrp / ($wipGr - $gr_susut);
                             @endphp
                             @if ($nm_gudang == 'summary')
-                                <td class="text-end fw-bold tdhide">{{ number_format($wipPcs, 0) }} {{number_format($gr_susut,0)}}</td>
+                                <td class="text-end fw-bold tdhide">{{ number_format($wipPcs, 0) }}
+                                    {{ number_format($gr_susut, 0) }}</td>
                                 <td class="text-end fw-bold tdhide">{{ number_format($wipGr, 0) }}</td>
                                 <td class="text-end fw-bold tdhide">{{ number_format($wipTllrp, 0) }}</td>
                                 <td class="text-end fw-bold tdhide">{{ number_format($bkPcs, 0) }}</td>

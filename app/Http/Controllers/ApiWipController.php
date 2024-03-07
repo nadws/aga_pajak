@@ -27,7 +27,12 @@ class ApiWipController extends Controller
 
     public function bkCetakApi(Request $r)
     {
-        $result = DB::table('gudang_ctk')->where('selesai', 'selesai')->get();
+        $result = DB::table('gudang_ctk')->where('selesai', 'selesai')->where('gudang', 'cetak')->get();
+        return $result;
+    }
+    public function bkSortirApi(Request $r)
+    {
+        $result = DB::table('gudang_ctk')->where('selesai', 'selesai')->where('gudang', 'sortir')->get();
         return $result;
     }
 
@@ -55,7 +60,7 @@ class ApiWipController extends Controller
          sum(ttl_rp) as ttl_rp,
          sum(cost_cabut) as cost_cabut
          FROM gudang_ctk WHERE selesai = 'selesai'");
-         
+
         return response()->json($r);
     }
 }
