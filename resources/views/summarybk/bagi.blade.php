@@ -160,7 +160,7 @@
                             @endphp
                             @if ($nm_gudang == 'summary')
                                 <td class="text-end fw-bold tdhide">{{ number_format($wipPcs, 0) }}
-                                    {{ number_format($gr_susut, 0) }}</td>
+                                </td>
                                 <td class="text-end fw-bold tdhide">{{ number_format($wipGr, 0) }}</td>
                                 <td class="text-end fw-bold tdhide">{{ number_format($wipTllrp, 0) }}</td>
                                 <td class="text-end fw-bold tdhide">{{ number_format($bkPcs, 0) }}</td>

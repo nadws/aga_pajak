@@ -131,6 +131,7 @@
                             <td class="tdhide text-end">{{ number_format($g->ttl_rp + $g->cost_cabut, 0) }}</td>
                             <td class="text-end fw-bold tdhide">{{ number_format($bkPcs, 0) }}</td>
                             <td class="text-end fw-bold tdhide">{{ number_format($bkGr, 0) }}</td>
+                            <td class="text-end fw-bold tdhide">0</td>
                         </tr>
                     @endforeach
                 </tbody>
