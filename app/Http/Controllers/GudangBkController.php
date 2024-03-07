@@ -1090,12 +1090,8 @@ class GudangBkController extends Controller
         } else {
             $view = 'gudang_bk.wip';
         }
-
         $response = Http::get("https://sarang.ptagafood.com/api/apibk/cabut_selesai");
         $cabut = $response->object();
-
-
-
         $listBulan = DB::table('bulan')->get();
         $id_user = auth()->user()->id;
         $data =  [
@@ -1191,6 +1187,9 @@ class GudangBkController extends Controller
             $kolom++;
         }
         foreach ($wip_cetak as $c) {
+            $bk = GudangBkModel::getPartaicetak($c->partai_h);
+            $ttl_rp = $bk->total_rp ?? 0;
+            $gr = $bk->gr ?? 0;
             $sheet1->setCellValue('A' . $kolom, $c->id_gudang_ctk);
             $sheet1->setCellValue('B' . $kolom, $c->partai_h);
             $sheet1->setCellValue('C' . $kolom, $c->no_box);
@@ -1198,7 +1197,7 @@ class GudangBkController extends Controller
             $sheet1->setCellValue('E' . $kolom, $c->grade);
             $sheet1->setCellValue('F' . $kolom, $c->pcs_cabut);
             $sheet1->setCellValue('G' . $kolom, $c->gr_cabut);
-            $sheet1->setCellValue('H' . $kolom, $c->ttl_rp);
+            $sheet1->setCellValue('H' . $kolom, $c->ttl_rp == 0 ? ($ttl_rp == 0 ? 0 : ($ttl_rp / $gr) * $c->gr_cabut) : 0);
             $sheet1->setCellValue('I' . $kolom, $c->cost_cabut);
             $sheet1->setCellValue('J' . $kolom, $c->pcs_timbang_ulang ?? 0);
             $sheet1->setCellValue('K' . $kolom, $c->gr_timbang_ulang ?? 0);
@@ -1235,5 +1234,53 @@ class GudangBkController extends Controller
             'nm_gudang' => 'summary_produksi'
         ];
         return view('gudang_bk.summary_produksi', $data);
+    }
+
+    function save_bj_baru(Request $r)
+    {
+        DB::beginTransaction();
+
+        try {
+            for ($x = 0; $x < count($r->partai); $x++) {
+                $existingData = DB::table('gudang_ctk')->where('no_box', $r->no_box[$x])->exists();
+                if ($existingData) {
+                    throw new Exception('Data already exists in gudang ctk');
+                }
+                $data = [
+                    'partai_h' => $r->partai[$x],
+                    'no_box' => $r->no_box[$x],
+                    'tipe' => $r->tipe[$x],
+                    'grade' => $r->grade[$x],
+                    'pcs_cabut' => $r->pcs[$x],
+                    'gr_cabut' => $r->gr[$x],
+                    'selesai' => 'selesai',
+                    'ttl_rp' => $r->ttl_rp[$x],
+                    'cost_cabut' => $r->cost_cabut[$x]
+                ];
+                DB::table('gudang_ctk')->insert($data);
+            }
+            DB::commit();
+            return redirect()->route('halawal.index', ['nm_gudang' => 'wip'])->with('sukses', 'Data berhasil import');
+        } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    function pindah_gudang(Request $r)
+    {
+        for ($x = 0; $x < count($r->id_nota); $x++) {
+            $data = [
+                'gudang' => 'sortir'
+            ];
+            DB::table('gudang_ctk')->where('id_gudang_ctk', $r->id_nota[$x])->update($data);
+        }
+
+        for ($i = 0; $i < count($r->id_nota_cetak); $i++) {
+            $data = [
+                'gudang' => 'cetak'
+            ];
+            DB::table('gudang_ctk')->where('id_gudang_ctk', $r->id_nota_cetak[$i])->update($data);
+        }
     }
 }

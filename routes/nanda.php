@@ -383,6 +383,8 @@ Route::middleware('auth')->group(function () {
             Route::post('/import_summary_wip', 'import_summary_wip')->name('import_summary_wip');
             Route::post('/export_wip_cetak', 'export_wip_cetak')->name('export_wip_cetak');
             Route::post('/import_wip_cetak', 'import_wip_cetak')->name('import_wip_cetak');
+            Route::post('/save_bj_baru', 'save_bj_baru')->name('save_bj_baru');
+            Route::post('/pindah_gudang', 'pindah_gudang')->name('pindah_gudang');
         });
     Route::controller(SummaryController::class)
         ->prefix('summarybk')
@@ -426,6 +428,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/summary_wip', 'summary_wip')->name('summary_wip');
             Route::get('/susut', 'susut')->name('susut');
+            Route::get('/load_row_cetak', 'load_row_cetak')->name('load_row_cetak');
         });
     Route::controller(SummarySortirController::class)
         ->prefix('sumsortir')

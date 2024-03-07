@@ -53,7 +53,7 @@ class SummarySortirController extends Controller
             $kat = 'history';
             $view = 'summarybksortir.cetak2';
         }
-        $gudang = GudangBkModel::getSummary('wipcetak', $kat);
+        $gudang = GudangBkModel::getSumWipCetak();
         $data =  [
             'title' => 'Summary Wip Cetak',
             'gudang' => $gudang,

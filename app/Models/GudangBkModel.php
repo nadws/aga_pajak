@@ -244,4 +244,21 @@ class GudangBkModel extends Model
 
         return $result;
     }
+
+    public static function getSumWipCetak()
+    {
+        $result = DB::select("SELECT a.partai_h , a.grade, sum(a.pcs_cabut) as pcs_cabut, sum(a.gr_cabut) as gr_cabut, b.ttl_rp, sum(a.cost_cabut) as cost_cabut
+        FROM gudang_ctk as a 
+        left join (
+            SELECT b.ket2 , sum(b.gr * b.rupiah) as ttl_rp 
+            FROM buku_campur_approve as b 
+            GROUP by b.ket2
+        ) as b on b.ket2 = a.partai_h
+        where a.gudang = 'cetak'
+        GROUP by a.partai_h
+        Order by a.partai_h ASC
+        ");
+
+        return $result;
+    }
 }

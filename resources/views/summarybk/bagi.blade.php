@@ -143,11 +143,11 @@
                             $WipSisaGr = $wipGr - $bkGr - $gr_susut;
                             $selesai_bk = $c->selesai ?? 'T';
                             $gr_akhir_cbt = $c->gr_akhir ?? 0;
-                            $gr_akhir_eo = $c->gr_akhir_eo ?? 0;
+                            $gr_akhir_eo = $c->gr_eo_akhir ?? 0;
                         @endphp
 
                         <tr>
-                            <td>{{ $no + 1 }}</td>
+                            <td>{{ $no + 1 }} </td>
                             <td>
                                 <a href="#" data-bs-toggle="modal" nm_partai="{{ $g->ket2 }}"
                                     data-bs-target="#load_bk_cabut" class="show_box">{{ $g->ket2 }}</a>

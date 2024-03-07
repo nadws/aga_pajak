@@ -33,4 +33,10 @@ class HalawalGudangController extends Controller
         ];
         return view('halawal.susut', $data);
     }
+
+    function load_row_cetak(Request $r)
+    {
+        $data = ['count' => $r->count];
+        return view('halawal.tambah_row', $data);
+    }
 }
