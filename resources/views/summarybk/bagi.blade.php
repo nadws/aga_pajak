@@ -147,7 +147,7 @@
                         @endphp
 
                         <tr>
-                            <td>{{ $no + 1 }} {{ $gr_akhir_eo }}</td>
+                            <td>{{ $no + 1 }} </td>
                             <td>
                                 <a href="#" data-bs-toggle="modal" nm_partai="{{ $g->ket2 }}"
                                     data-bs-target="#load_bk_cabut" class="show_box">{{ $g->ket2 }}</a>
