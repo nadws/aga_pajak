@@ -243,7 +243,8 @@
                             <td class="text-end fw-bold">{{ number_format($ttl_rp_cbt + $ttl_rp_eo, 0) }}</td>
                             <td class="text-end fw-bold">
                                 @if ($g->selesai_1 == 'Y')
-                                    {{ number_format($hrga_modal_satuan * ($gr_akhir_cbt + $gr_akhir_eo), 0) }}
+                                    {{-- {{ number_format($hrga_modal_satuan * ($gr_akhir_cbt + $gr_akhir_eo), 0) }} --}}
+                                    {{ number_format($hrga_modal_satuan * $bkGr, 0) }}
                                 @else
                                 @endif
 
