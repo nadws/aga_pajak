@@ -22,7 +22,7 @@
                     <form action="{{ route('gudangBk.export_gudang_produksi') }}" method="post">
                         @csrf
                         <button class="btn btn-success float-end me-2"><i class="fas fa-file-excel"></i> Export
-                            Sinta</button>
+                        </button>
                     </form>
                 @endif
 
