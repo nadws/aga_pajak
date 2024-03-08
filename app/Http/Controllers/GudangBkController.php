@@ -76,11 +76,11 @@ class GudangBkController extends Controller
 
     public function export_buku_campur_bk(Request $r)
     {
-        if (auth()->user()->posisi_id == 1) {
-            $this->export_gudang_bk($r);
-        } else {
-            $this->export_gudang_produksi($r);
-        }
+        $this->export_gudang_bk($r);
+        // if (auth()->user()->posisi_id == 1) {
+        // } else {
+        //     $this->export_gudang_produksi($r);
+        // }
     }
 
 
@@ -432,7 +432,7 @@ class GudangBkController extends Controller
         $writer->save('php://output');
         exit();
     }
-    private function export_gudang_produksi(Request $r)
+    public function export_gudang_produksi(Request $r)
     {
         $style_atas = array(
             'font' => [
