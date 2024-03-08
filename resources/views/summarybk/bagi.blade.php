@@ -21,10 +21,6 @@
                         data-bs-target="#load_history"><i class="fas fa-history"></i>
                         History
                     </button>
-                    <button class="btn float-end btn-primary btn-sm  me-2" data-bs-toggle="modal"
-                        data-bs-target="#view"><i class="fas fa-calendar-week"></i>
-                        View
-                    </button>
                 </td>
             </tr>
             <tr>
@@ -126,17 +122,12 @@
                     @foreach ($gudang as $no => $g)
                         @php
                             $ket = $g->ket2;
-                            $resSum = Cache::remember(
-                                'datacabutsum5_' . $ket . $tgl1 . $tgl2,
-                                now()->addMinutes(5),
-                                function () use ($ket, $tgl1, $tgl2, $linkApi) {
-                                    return Http::get("$linkApi/datacabutsum2backup", [
-                                        'nm_partai' => $ket,
-                                        'tgl1' => $tgl1,
-                                        'tgl2' => $tgl2,
-                                    ])->object();
-                                },
-                            );
+                            $resSum = Cache::remember('datacabutsum5_' . $ket, now()->addMinutes(5), function () use (
+                                $ket,
+                                $linkApi,
+                            ) {
+                                return Http::get("$linkApi/datacabutsum2", ['nm_partai' => $ket])->object();
+                            });
                             $c = $resSum;
                             $g->relatedModel = $c;
 

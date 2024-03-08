@@ -823,17 +823,6 @@ class SummaryController extends Controller
             $view = 'summarybk.bagi2';
         }
 
-        if (empty($r->tgl1)) {
-            $tgl1 = '2023-01-01';
-            $tgl2 = date('Y-m-t');
-        } else {
-            $tgl1 = $r->tgl1;
-            $tgl2 = $r->tgl2;
-        }
-
-
-
-
         $gudang = GudangBkModel::getSummaryWip($kat);
         $listBulan = DB::table('bulan')->get();
         $data =  [
@@ -844,8 +833,6 @@ class SummaryController extends Controller
             'lokasi' => $r->lokasi,
             'linkApi' => $this->linkApi,
             'kat' => $kat,
-            'tgl1' => $tgl1,
-            'tgl2' => $tgl2
 
         ];
         return view($view, $data);
