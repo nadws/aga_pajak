@@ -21,7 +21,8 @@ class HalawalGudangController extends Controller
     {
         $data = [
             'title' => 'Summary Wip',
-            'nm_gudang' => $r->nm_gudang
+            'nm_gudang' => $r->nm_gudang,
+            'bulan' => DB::table('bulan')->get()
         ];
         return view('halawal.summarywip', $data);
     }

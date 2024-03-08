@@ -58,8 +58,8 @@
                             <th class="dhead">Gr timbang ulang</th>
                             <th class="dhead">Selesai</th>
                             <th class="dhead">Gudang</th>
-                            <th class="dhead"> <button type="submit" class="badge bg-success">bk
-                                    sortir</button></th>
+                            <th class="dhead"> <button type="submit" class="badge bg-success">masuk bk
+                                    grading</button></th>
 
                         </tr>
                     </thead>
