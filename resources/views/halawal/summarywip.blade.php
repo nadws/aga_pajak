@@ -162,7 +162,7 @@
     @section('scripts')
         <script>
             $(document).ready(function() {
-
+                pencarian('pencarian', 'tableSearch')
                 $(document).on('click', '.opencabut', function(e) {
                     e.preventDefault();
                     var nm_gudang = $(this).attr('gudang');

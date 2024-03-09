@@ -122,6 +122,71 @@
             </x-theme.modal>
         </form>
 
+        <form action="{{ route('gudangBk.save_bj_baru') }}" method="post">
+            @csrf
+            <x-theme.modal title="Tambah BJ Cetak" idModal="bkcetakawal" size="modal-lg-max" btnSave="Y">
+                <div class="row">
+                    <div class="col-lg-1">
+                        <label for="">Partai</label>
+                    </div>
+                    <div class="col-lg-1">
+                        <label for="">No Box</label>
+                    </div>
+                    <div class="col-lg-1">
+                        <label for="">Tipe</label>
+                    </div>
+                    <div class="col-lg-1">
+                        <label for="">Grade</label>
+                    </div>
+                    <div class="col-lg-1">
+                        <label for="">Pcs</label>
+                    </div>
+                    <div class="col-lg-1">
+                        <label for="">Gr</label>
+                    </div>
+                    <div class="col-lg-2">
+                        <label for="">Ttl Rp</label>
+                    </div>
+                    <div class="col-lg-2">
+                        <label for="">Cost Cabut</label>
+                    </div>
+                    <div class="col-lg-2">
+                        <label for="">Aksi</label> <br>
+                    </div>
+                    <div class="col-lg-1 mt-2">
+                        <input type="text" class="form-control" name="partai[]">
+                    </div>
+                    <div class="col-lg-1 mt-2">
+                        <input type="text" class="form-control" name="no_box[]">
+                    </div>
+                    <div class="col-lg-1 mt-2">
+                        <input type="text" class="form-control" name="tipe[]">
+                    </div>
+                    <div class="col-lg-1 mt-2">
+                        <input type="text" class="form-control" name="grade[]">
+                    </div>
+                    <div class="col-lg-1 mt-2">
+                        <input type="text" class="form-control" name="pcs[]">
+                    </div>
+                    <div class="col-lg-1 mt-2">
+                        <input type="text" class="form-control" name="gr[]">
+                    </div>
+                    <div class="col-lg-2 mt-2">
+                        <input type="text" class="form-control" name="ttl_rp[]">
+                    </div>
+                    <div class="col-lg-2 mt-2">
+                        <input type="text" class="form-control" name="cost_cabut[]">
+                    </div>
+                    <div class="col-lg-2">
+                        <button class="btn btn-sm btn-primary tambah_row"><i class="fas fa-plus"></i></button>
+                    </div>
+
+                    <div class="load_row_tambah"></div>
+                </div>
+
+            </x-theme.modal>
+        </form>
+
     </x-slot>
 
     @section('scripts')
@@ -133,11 +198,7 @@
                     $('.checkbox-item').prop('checked', $(this).prop('checked'));
                 });
 
-                $('.opencabut').click(function(e) {
-                    e.preventDefault();
-                    var nm_gudang = $(this).attr('gudang');
-                    $('.card-pilihan').hide();
-                    $('.loading').show();
+                function getWip(nm_gudang) {
                     $.ajax({
                         type: "get",
                         url: "{{ route('gudangBk.wip') }}",
@@ -145,7 +206,6 @@
                             nm_gudang: nm_gudang
                         },
                         success: function(response) {
-
                             setTimeout(function() {
                                 $('.loading').hide();
                                 $('#load_data').html(response);
@@ -153,6 +213,14 @@
 
                         }
                     });
+                }
+
+                $('.opencabut').click(function(e) {
+                    e.preventDefault();
+                    var nm_gudang = $(this).attr('gudang');
+                    $('.card-pilihan').hide();
+                    $('.loading').show();
+                    getWip(nm_gudang)
 
                 });
                 $(document).on('click', '.kembali', function(e) {
@@ -165,6 +233,63 @@
                     }, 500);
 
 
+                });
+                var count = 1;
+                $(document).on('click', '.tambah_row', function(e) {
+                    e.preventDefault();
+                    count = count + 1;
+                    $.ajax({
+                        type: "get",
+                        url: "{{ route('halawal.load_row_cetak') }}",
+                        data: {
+                            count: count
+                        },
+                        success: function(response) {
+                            $('.load_row_tambah').append(response);
+                        }
+                    });
+                });
+                $(document).on('click', '.delete_row', function(e) {
+                    e.preventDefault();
+                    var count = $(this).attr('count');
+                    $(".baris" + count).remove();
+                });
+                $(document).on('submit', '#save_pindah_gudang', function(e) {
+                    e.preventDefault();
+                    var idNota = [];
+                    var idNotaCetak = [];
+                    $('.nota-checkbox').each(function() {
+                        if ($(this).is(':checked')) {
+                            idNota.push($(this).val());
+                        } else {
+                            idNotaCetak.push($(this).val());
+                        }
+                    });
+
+
+                    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                    $.ajax({
+                        url: "{{ route('gudangBk.pindah_gudang') }}",
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                        data: {
+                            id_nota: idNota,
+                            id_nota_cetak: idNotaCetak,
+                        },
+                        success: function(response) {
+                            $('.card-pilihan').hide();
+                            $('#load_data').html('');
+                            $('.loading').show();
+                            getWip('wipcetak')
+                            console.log(response);
+                        },
+                        error: function(xhr, status, error) {
+                            // Handle kesalahan jika ada
+                            console.error(xhr.responseText);
+                        }
+                    });
                 });
             });
         </script>

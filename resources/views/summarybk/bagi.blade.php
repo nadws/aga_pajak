@@ -143,11 +143,11 @@
                             $WipSisaGr = $wipGr - $bkGr - $gr_susut;
                             $selesai_bk = $c->selesai ?? 'T';
                             $gr_akhir_cbt = $c->gr_akhir ?? 0;
-                            $gr_akhir_eo = $c->gr_akhir_eo ?? 0;
+                            $gr_akhir_eo = $c->gr_eo_akhir ?? 0;
                         @endphp
 
                         <tr>
-                            <td>{{ $no + 1 }}</td>
+                            <td>{{ $no + 1 }} </td>
                             <td>
                                 <a href="#" data-bs-toggle="modal" nm_partai="{{ $g->ket2 }}"
                                     data-bs-target="#load_bk_cabut" class="show_box">{{ $g->ket2 }}</a>
@@ -159,7 +159,8 @@
                                 $hrga_modal_satuan = $wipTllrp / ($wipGr - $gr_susut);
                             @endphp
                             @if ($nm_gudang == 'summary')
-                                <td class="text-end fw-bold tdhide">{{ number_format($wipPcs, 0) }} {{number_format($gr_susut,0)}}</td>
+                                <td class="text-end fw-bold tdhide">{{ number_format($wipPcs, 0) }}
+                                </td>
                                 <td class="text-end fw-bold tdhide">{{ number_format($wipGr, 0) }}</td>
                                 <td class="text-end fw-bold tdhide">{{ number_format($wipTllrp, 0) }}</td>
                                 <td class="text-end fw-bold tdhide">{{ number_format($bkPcs, 0) }}</td>
@@ -242,7 +243,8 @@
                             <td class="text-end fw-bold">{{ number_format($ttl_rp_cbt + $ttl_rp_eo, 0) }}</td>
                             <td class="text-end fw-bold">
                                 @if ($g->selesai_1 == 'Y')
-                                    {{ number_format($hrga_modal_satuan * ($gr_akhir_cbt + $gr_akhir_eo), 0) }}
+                                    {{-- {{ number_format($hrga_modal_satuan * ($gr_akhir_cbt + $gr_akhir_eo), 0) }} --}}
+                                    {{ number_format($hrga_modal_satuan * $bkGr, 0) }}
                                 @else
                                 @endif
 

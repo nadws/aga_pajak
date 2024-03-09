@@ -823,7 +823,6 @@ class SummaryController extends Controller
             $view = 'summarybk.bagi2';
         }
 
-
         $gudang = GudangBkModel::getSummaryWip($kat);
         $listBulan = DB::table('bulan')->get();
         $data =  [
@@ -833,7 +832,8 @@ class SummaryController extends Controller
             'nm_gudang' => $nmgudang,
             'lokasi' => $r->lokasi,
             'linkApi' => $this->linkApi,
-            'kat' => $kat
+            'kat' => $kat,
+
         ];
         return view($view, $data);
     }

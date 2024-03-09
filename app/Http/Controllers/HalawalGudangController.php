@@ -21,7 +21,8 @@ class HalawalGudangController extends Controller
     {
         $data = [
             'title' => 'Summary Wip',
-            'nm_gudang' => $r->nm_gudang
+            'nm_gudang' => $r->nm_gudang,
+            'bulan' => DB::table('bulan')->get()
         ];
         return view('halawal.summarywip', $data);
     }
@@ -32,5 +33,11 @@ class HalawalGudangController extends Controller
             'nm_gudang' => $r->nm_gudang
         ];
         return view('halawal.susut', $data);
+    }
+
+    function load_row_cetak(Request $r)
+    {
+        $data = ['count' => $r->count];
+        return view('halawal.tambah_row', $data);
     }
 }

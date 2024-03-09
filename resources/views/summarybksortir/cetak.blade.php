@@ -46,8 +46,8 @@
                         </th>
 
                         @if ($nm_gudang == 'summary')
-                            <th class="dhead text-center tdhide" colspan="3">Wip</th>
                             <th class="dhead text-center tdhide" colspan="3">BK</th>
+                            <th class="dhead text-center tdhide" colspan="3">BK TIMBANG ULANG</th>
                         @else
                             <th class="dhead text-center tdhide" colspan="2">Wip</th>
                             <th class="dhead text-center tdhide" colspan="2">BK</th>
@@ -109,114 +109,31 @@
                 <tbody>
                     @foreach ($gudang as $no => $g)
                         @php
-                            $ket = $g->ket2;
-                            $response = Http::get("$linkApi/bk_sum_cetak", ['nm_partai' => $ket]);
-                            $b = $response->object();
+                            $ket = $g->partai_h;
+                            $resSum = Cache::remember('bk_sum_cetak' . $ket, now()->addHours(1), function () use (
+                                $ket,
+                                $linkApi,
+                            ) {
+                                return Http::get("$linkApi/bk_sum_cetak", ['nm_partai' => $ket])->object();
+                            });
+                            $b = $resSum;
+                            $g->relatedModel = $b;
 
-                            $resSum = Http::get("$linkApi/datacetak", ['nm_partai' => $ket]);
-                            $c = $resSum->object();
-
-                            $wipPcs = $g->pcs ?? 0;
-                            $wipGr = $g->gr ?? 0;
-                            $wipTllrp = $g->total_rp ?? 0;
                             $bkPcs = $b->pcs_awal ?? 0;
                             $bkGr = $b->gr_awal ?? 0;
-
-                            $gr_susut = $g->gr_susut ?? 0;
-                            $WipSisaPcs = $wipPcs - $bkPcs;
-                            $WipSisaGr = $wipGr - $bkGr - $gr_susut;
-
-                            $susut_str = $c->susut ?? 0;
                         @endphp
-
                         <tr>
                             <td>{{ $no + 1 }}</td>
-                            <td>
-                                <a href="#" data-bs-toggle="modal" nm_partai="{{ $g->ket2 }}"
-                                    data-bs-target="#load_bk_cabut" class="show_box">{{ $g->ket2 }}</a>
-
-                            </td>
-                            <td class="text-center fw-bold">
-                                {{ $g->nm_grade }}
-                            </td>
-                            @php
-                                $hrga_modal_satuan = $wipTllrp / $wipGr;
-                            @endphp
-                            @if ($nm_gudang == 'summary')
-                                <td class="text-end fw-bold tdhide">{{ number_format($wipPcs, 0) }}</td>
-                                <td class="text-end fw-bold tdhide">{{ number_format($wipGr, 0) }}</td>
-                                <td class="text-end fw-bold tdhide">{{ number_format($wipTllrp, 0) }}</td>
-                                <td class="text-end fw-bold tdhide">{{ number_format($bkPcs, 0) }}</td>
-                                <td class="text-end fw-bold tdhide">{{ number_format($bkGr, 0) }}</td>
-                                <td class="text-end fw-bold tdhide">
-                                    {{ $g->selesai == 'Y' ? number_format(($bkGr + $gr_susut) * $hrga_modal_satuan, 0) : '0' }}
-                                </td>
-                            @else
-                                <td class="text-end fw-bold tdhide">{{ number_format($wipPcs, 0) }}</td>
-                                <td class="text-end fw-bold tdhide">{{ number_format($wipGr, 0) }}</td>
-                                <td class="text-end fw-bold tdhide">{{ number_format($bkPcs, 0) }}</td>
-                                <td class="text-end fw-bold tdhide">{{ number_format($bkGr, 0) }}</td>
-                            @endif
-
-
-                            <td class="text-end fw-bold tdhide">{{ number_format($g->gr_susut ?? 0, 0) }}
-                            </td>
-                            <td class="text-end fw-bold tdhide">
-                                {{ number_format((1 - $bkGr / $wipGr) * 100, 1) }}%
-                            </td>
-                            @if ($nm_gudang == 'summary')
-                                <td class="text-end fw-bold text-danger tdhide">
-                                    {{ number_format($WipSisaPcs, 0) }}
-                                </td>
-                                <td class="text-end fw-bold text-danger tdhide">
-                                    {{ number_format($WipSisaGr, 0) }}
-                                </td>
-                                <td class="text-end fw-bold text-danger tdhide">
-                                    {{ number_format($hrga_modal_satuan * $WipSisaGr, 0) }}
-                                </td>
-                            @else
-                                <td class="text-end fw-bold text-danger tdhide">
-                                    {{ number_format($WipSisaPcs, 0) }}
-                                </td>
-                                <td class="text-end fw-bold text-danger tdhide">
-                                    {{ number_format($WipSisaGr, 0) }}
-                                </td>
-                            @endif
-                            <td class="text-center fw-bold">
-                                @if ($g->selesai == 'Y')
-                                    <i class="fas text-end fa-check text-success"></i>
-                                @else
-                                    <i class="fas text-end fa-hourglass-half text-danger"></i>
-                                @endif
-                            </td>
-
-
-                            <td class="text-end fw-bold">{{ number_format($c->pcs_awal ?? 0, 0) }}</td>
-                            <td class="text-end fw-bold">{{ number_format($c->gr_awal ?? 0, 0) }}</td>
-                            <td class="text-end fw-bold">{{ number_format($c->pcs_akhir ?? 0, 0) }}</td>
-                            <td class="text-end fw-bold">{{ number_format($c->gr_akhir ?? 0, 0) }}</td>
-                            <td class="text-end fw-bold">{{ number_format($susut_str * 100, 1) }} %</td>
-                            @php
-                                $pcs_awal_bk = $b->pcs_awal ?? 0;
-                                $gr_awal_bk = $b->gr_awal ?? 0;
-
-                                $pcs_awal_cbt = $c->pcs_awal ?? 0;
-                                $gr_awal_cbt = $c->gr_awal ?? 0;
-                            @endphp
-                            <td class="text-end text-danger fw-bold">
-                                {{ number_format($pcs_awal_bk - $pcs_awal_cbt, 0) }}
-                            </td>
-                            <td class="text-end text-danger fw-bold">
-                                {{ number_format($gr_awal_bk - $gr_awal_cbt, 0) }}
-                            </td>
-
-                            <td class="text-end fw-bold">{{ number_format($c->ttl_rp ?? 0, 0) }}</td>
-
+                            <td>{{ $g->partai_h }}</td>
+                            <td class="text-center fw-bold">{{ $g->grade }}</td>
+                            <td class="tdhide text-end">{{ number_format($g->pcs_cabut, 0) }}</td>
+                            <td class="tdhide text-end">{{ number_format($g->gr_cabut, 0) }}</td>
+                            <td class="tdhide text-end">{{ number_format($g->ttl_rp + $g->cost_cabut, 0) }}</td>
+                            <td class="text-end fw-bold tdhide">{{ number_format($bkPcs, 0) }}</td>
+                            <td class="text-end fw-bold tdhide">{{ number_format($bkGr, 0) }}</td>
+                            <td class="text-end fw-bold tdhide">0</td>
                         </tr>
                     @endforeach
-
-
-
                 </tbody>
             </table>
         </div>
