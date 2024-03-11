@@ -167,25 +167,31 @@ class NavbarController extends Controller
                 'img' => 'warehouse3.png',
                 'deskripsi' => 'membuat pengajuan pembelian ke pemasok',
             ],
+            [
+                'judul' => 'Pembayaran BK',
+                'route' => 'pembayaranbk',
+                'img' => 'paid-search.png',
+                'deskripsi' => 'membuat pengajuan pembelian ke pemasok',
+            ],
 
         ];
         $title = 'Pembelian';
         return view('navbar.data_master', compact(['data', 'title']));
     }
-    public function pembayaran()
-    {
-        $data = [
-            [
-                'judul' => 'Pembayaran',
-                'route' => 'pembayaranbk',
-                'img' => 'finance.png',
-                'deskripsi' => 'membuat pengajuan pembelian ke pemasok',
-            ],
+    // public function pembayaran()
+    // {
+    //     $data = [
+    //         [
+    //             'judul' => 'Pembayaran',
+    //             'route' => 'pembayaranbk',
+    //             'img' => 'finance.png',
+    //             'deskripsi' => 'membuat pengajuan pembelian ke pemasok',
+    //         ],
 
-        ];
-        $title = 'Pembayaran';
-        return view('navbar.data_master', compact(['data', 'title']));
-    }
+    //     ];
+    //     $title = 'Pembayaran';
+    //     return view('navbar.data_master', compact(['data', 'title']));
+    // }
     public function penjualan_umum()
     {
         $data = [
