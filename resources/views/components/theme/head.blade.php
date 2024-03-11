@@ -61,6 +61,13 @@
             z-index: 1010;
         }
 
+        #tableSearch tfoot {
+            position: sticky;
+            bottom: 0;
+            background-color: #fff;
+            z-index: 1010;
+        }
+
 
         .table-container::-webkit-scrollbar {
             width: 6px;

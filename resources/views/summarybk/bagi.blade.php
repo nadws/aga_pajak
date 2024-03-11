@@ -119,6 +119,29 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                        $ttlwippcs = 0;
+                        $ttlwipgr = 0;
+                        $ttlwiprupiah = 0;
+                        $ttlbtupcs = 0;
+                        $ttlbtugr = 0;
+                        $ttlbtuttlrp = 0;
+                        $ttlsstbk = 0;
+                        $ttlsstbkgr = 0;
+                        $ttlbksisapcs = 0;
+                        $ttlbksisagr = 0;
+                        $ttlbksisattlrp = 0;
+                        $ttlcbtawalpcs = 0;
+                        $ttlcbtawalgr = 0;
+                        $ttlcbtakhirpcs = 0;
+                        $ttlcbtakhirgr = 0;
+                        $ttlcbteot = 0;
+                        $ttlcbtflx = 0;
+                        $ttlbksisapgwspcs = 0;
+                        $ttlbksisapgwsgr = 0;
+                        $ttlrpcost = 0;
+                        $ttlrpbk = 0;
+                    @endphp
                     @foreach ($gudang as $no => $g)
                         @php
                             $ket = $g->ket2;
@@ -144,7 +167,41 @@
                             $selesai_bk = $c->selesai ?? 'T';
                             $gr_akhir_cbt = $c->gr_akhir ?? 0;
                             $gr_akhir_eo = $c->gr_eo_akhir ?? 0;
+
+                            $hrga_modal_satuan = $wipTllrp / ($wipGr - $gr_susut);
+                            $pcs_awal_bk = $c->pcs_bk ?? 0;
+                            $gr_awal_bk = $c->gr_awal_bk ?? 0;
+
+                            $pcs_awal_cbt = $c->pcs_awal ?? 0;
+                            $gr_awal_cbt = $c->gr_awal ?? 0;
+                            $gr_awal_eo = $c->gr_awal_eo ?? 0;
+                            $ttl_rp_cbt = $c->ttl_rp ?? 0;
+                            $ttl_rp_eo = $c->ttl_rp_eo ?? 0;
                         @endphp
+                        @php
+                            $ttlwippcs += $wipPcs;
+                            $ttlwipgr += $wipGr;
+                            $ttlwiprupiah += $wipTllrp;
+                            $ttlbtupcs += $bkPcs;
+                            $ttlbtugr += $bkGr;
+                            $ttlbtuttlrp += $g->selesai == 'Y' ? $bkGr * $hrga_modal_satuan : 0;
+                            $ttlsstbk += $g->pcs_susut ?? 0;
+                            $ttlsstbkgr += $g->gr_susut ?? 0;
+                            $ttlbksisapcs += $WipSisaPcs;
+                            $ttlbksisagr += $WipSisaGr;
+                            $ttlbksisattlrp += $hrga_modal_satuan * $WipSisaGr;
+                            $ttlcbtawalpcs += $c->pcs_awal ?? 0;
+                            $ttlcbtawalgr += $gr_awal_cbt + $gr_awal_eo;
+                            $ttlcbtakhirpcs += $c->pcs_akhir ?? 0;
+                            $ttlcbtakhirgr += $gr_akhir_cbt + $gr_akhir_eo;
+                            $ttlcbteot += $c->eot ?? 0;
+                            $ttlcbtflx += $c->gr_flx ?? 0;
+                            $ttlbksisapgwspcs += $pcs_awal_bk - $pcs_awal_cbt;
+                            $ttlbksisapgwsgr += $gr_awal_bk - ($gr_awal_cbt + $gr_awal_eo);
+                            $ttlrpcost += $ttl_rp_cbt + $ttl_rp_eo;
+                            $ttlrpbk += $g->selesai_1 == 'Y' ? $hrga_modal_satuan * $bkGr : 0;
+                        @endphp
+
 
                         <tr>
                             <td>{{ $no + 1 }} </td>
@@ -155,9 +212,7 @@
                             <td class="text-center fw-bold">
                                 {{ $g->nm_grade }}
                             </td>
-                            @php
-                                $hrga_modal_satuan = $wipTllrp / ($wipGr - $gr_susut);
-                            @endphp
+
                             @if ($nm_gudang == 'summary')
                                 <td class="text-end fw-bold tdhide">{{ number_format($wipPcs, 0) }}
                                 </td>
@@ -215,16 +270,7 @@
 
                             </td>
                             <td class="text-end fw-bold">{{ number_format($c->pcs_awal ?? 0, 0) }}</td>
-                            @php
-                                $pcs_awal_bk = $c->pcs_bk ?? 0;
-                                $gr_awal_bk = $c->gr_awal_bk ?? 0;
 
-                                $pcs_awal_cbt = $c->pcs_awal ?? 0;
-                                $gr_awal_cbt = $c->gr_awal ?? 0;
-                                $gr_awal_eo = $c->gr_awal_eo ?? 0;
-                                $ttl_rp_cbt = $c->ttl_rp ?? 0;
-                                $ttl_rp_eo = $c->ttl_rp_eo ?? 0;
-                            @endphp
                             <td class="text-end fw-bold">{{ number_format($gr_awal_cbt + $gr_awal_eo, 0) }}
                             </td>
                             <td class="text-end fw-bold">{{ number_format($c->pcs_akhir ?? 0, 0) }}</td>
@@ -265,7 +311,66 @@
 
 
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td class="dhead" colspan="3">Total</td>
+                        @if ($nm_gudang == 'summary')
+                            <td class="text-end dhead fw-bold tdhide">{{ number_format($ttlwippcs, 0) }}</td>
+                            <td class="text-end dhead fw-bold tdhide">{{ number_format($ttlwipgr, 0) }}</td>
+                            <td class="text-end dhead fw-bold tdhide">{{ number_format($ttlwiprupiah, 0) }}</td>
+                            <td class="text-end dhead fw-bold tdhide">{{ number_format($ttlbtupcs, 0) }}</td>
+                            <td class="text-end dhead fw-bold tdhide">{{ number_format($ttlbtugr, 0) }}</td>
+                            <td class="text-end dhead fw-bold tdhide">{{ number_format($ttlbtuttlrp, 0) }}</td>
+                        @else
+                            <td class="text-end dhead fw-bold tdhide">{{ number_format($ttlwippcs, 0) }}</td>
+                            <td class="text-end dhead fw-bold tdhide">{{ number_format($ttlwipgr, 0) }}</td>
+                            <td class="text-end dhead fw-bold tdhide">{{ number_format($ttlbtupcs, 0) }}</td>
+                            <td class="text-end dhead fw-bold tdhide">{{ number_format($ttlbtugr, 0) }}</td>
+                        @endif
+                        <td class="text-end dhead fw-bold tdhide">{{ number_format($ttlsstbk, 0) }}</td>
+                        <td class="text-end dhead fw-bold tdhide">{{ number_format($ttlsstbkgr, 0) }}</td>
+                        <td class="text-end dhead fw-bold tdhide">-</td>
+                        @if ($nm_gudang == 'summary')
+                            <td class="text-end bg-danger text-white fw-bold  tdhide">
+                                {{ number_format($ttlbksisapcs, 0) }}
+                            </td>
+                            <td class="text-end bg-danger text-white fw-bold  tdhide">
+                                {{ number_format($ttlbksisagr, 0) }}
+                            </td>
+                            <td class="text-end fw-bold  bg-danger text-white tdhide">
+                                {{ number_format($ttlbksisattlrp, 0) }}
+                            </td>
+                        @else
+                            <td class="text-end bg-danger text-white fw-bold  tdhide">
+                                {{ number_format($ttlbksisapcs, 0) }}
+                            </td>
+                            <td class="text-end bg-danger text-white fw-bold  tdhide">
+                                {{ number_format($ttlbksisagr, 0) }}
+                            </td>
+                        @endif
+                        <td class="text-center dhead fw-bold">-</td>
+                        <td class="text-end dhead fw-bold">{{ number_format($ttlcbtawalpcs, 0) }}</td>
+                        <td class="text-end dhead fw-bold">{{ number_format($ttlcbtawalgr, 0) }}</td>
+                        <td class="text-end dhead fw-bold">{{ number_format($ttlcbtakhirpcs, 0) }}</td>
+                        <td class="text-end dhead fw-bold">{{ number_format($ttlcbtakhirgr, 0) }}</td>
+                        <td class="text-end fw-bold dhead">-</td>
+                        <td class="text-end fw-bold dhead">{{ number_format($ttlcbteot, 0) }}</td>
+                        <td class="text-end fw-bold dhead">{{ number_format($ttlcbtflx, 0) }}</td>
+
+                        <td class="text-end bg-danger text-white fw-bold">{{ number_format($ttlbksisapgwspcs, 0) }}
+                        </td>
+                        <td class="text-end bg-danger text-white fw-bold">{{ number_format($ttlbksisapgwsgr, 0) }}
+                        </td>
+
+                        <td class="text-end fw-bold dhead">{{ number_format($ttlrpcost, 0) }}</td>
+                        <td class="text-end fw-bold dhead">{{ number_format($ttlrpbk, 0) }}</td>
+                        <td class="text-center fw-bold dhead"></td>
+
+                    </tr>
+                </tfoot>
+
             </table>
         </div>
+
     </div>
 </div>
