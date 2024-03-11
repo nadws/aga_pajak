@@ -6,9 +6,11 @@
                 <h6 class="float-start mt-1">{{ $title }} </h6>
             </div>
             <div class="col-lg-6">
-                <x-theme.button modal="Y" idModal="import" icon="fas fa-upload" addClass="float-end"
-                    teks="Import" />
                 @if (auth()->user()->posisi_id == '1')
+                    <x-theme.button modal="Y" idModal="import" icon="fas fa-upload" addClass="float-end"
+                        teks="Import" />
+                    <x-theme.button modal="Y" idModal="import2" icon="fas fa-upload" addClass="float-end"
+                        teks="Import G Gabung" />
                     <form action="{{ route('gudangBk.export_buku_campur_bk') }}" method="post">
                         @csrf
                         <button class="btn btn-success float-end me-2"><i class="fas fa-file-excel"></i> Export</button>
@@ -19,6 +21,8 @@
                             G Gabung</button>
                     </form>
                 @else
+                    <x-theme.button modal="Y" idModal="import2" icon="fas fa-upload" addClass="float-end"
+                        teks="Import" />
                     <form action="{{ route('gudangBk.export_gudang_produksi') }}" method="post">
                         @csrf
                         <button class="btn btn-success float-end me-2"><i class="fas fa-file-excel"></i> Export
@@ -134,6 +138,19 @@
         <form action="{{ route('gudangBk.import_buku_campur_bk') }}" method="post" enctype="multipart/form-data">
             @csrf
             <x-theme.modal title="Gudang Bk" idModal="import" btnSave="Y">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <label for="">File</label>
+                        <input type="file" class="form-control" name="file">
+                        <input type="hidden" name="gudang" value="{{ $nm_gudang }}" id="">
+                    </div>
+                </div>
+
+            </x-theme.modal>
+        </form>
+        <form action="{{ route('gudangBk.import_gudang_produksi_new') }}" method="post" enctype="multipart/form-data">
+            @csrf
+            <x-theme.modal title="Gudang Gabung" idModal="import2" btnSave="Y">
                 <div class="row">
                     <div class="col-lg-12">
                         <label for="">File</label>

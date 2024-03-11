@@ -63,9 +63,9 @@
                         @endif
 
                         <th class="dhead text-center" rowspan="2">Selesai</th>
-                        <th class="dhead text-center" colspan="5">Cetak</th>
+                        <th class="dhead text-center" colspan="7">Cetak</th>
                         <th class="bg-danger text-white text-center" colspan="2">Bk Sisa Pgws</th>
-                        <th class="dhead" rowspan="2">Ttl Rp</th>
+                        <th class="dhead" rowspan="2">Cost Cetak</th>
                     </tr>
                     <tr>
                         @if ($nm_gudang == 'summary')
@@ -81,9 +81,6 @@
                             <th class="dhead text-center tdhide">Pcs</th>
                             <th class="dhead text-center tdhide">Gr</th>
                         @endif
-
-
-
                         <th class="dhead text-center tdhide">Gr</th>
                         <th class="dhead text-center tdhide">sst(%)</th>
                         @if ($nm_gudang == 'summary')
@@ -94,10 +91,10 @@
                             <th class="text-white text-center bg-danger tdhide">Pcs</th>
                             <th class="text-white text-center bg-danger tdhide">Gr</th>
                         @endif
-
-
                         <th class="dhead text-center">Pcs Awal</th>
                         <th class="dhead text-center">Gr Awal</th>
+                        <th class="dhead text-center">Pcs Cu</th>
+                        <th class="dhead text-center">Gr Cu</th>
                         <th class="dhead text-center">Pcs Akhir</th>
                         <th class="dhead text-center">Gr Akhir</th>
                         <th class="dhead text-center">Susut</th>
@@ -110,28 +107,55 @@
                     @foreach ($gudang as $no => $g)
                         @php
                             $ket = $g->partai_h;
-                            $resSum = Cache::remember('bk_sum_cetak' . $ket, now()->addHours(1), function () use (
+                            $resSum = Cache::remember('datacetak' . $ket, now()->addMinutes(5), function () use (
                                 $ket,
                                 $linkApi,
                             ) {
-                                return Http::get("$linkApi/bk_sum_cetak", ['nm_partai' => $ket])->object();
+                                return Http::get("$linkApi/datacetak", ['nm_partai' => $ket])->object();
                             });
                             $b = $resSum;
                             $g->relatedModel = $b;
 
                             $bkPcs = $b->pcs_awal ?? 0;
                             $bkGr = $b->gr_awal ?? 0;
+                            $rp_satuan = ($g->ttl_rp + $g->cost_cabut) / ($g->gr_cabut + $bkGr);
                         @endphp
                         <tr>
                             <td>{{ $no + 1 }}</td>
                             <td>{{ $g->partai_h }}</td>
                             <td class="text-center fw-bold">{{ $g->grade }}</td>
-                            <td class="tdhide text-end">{{ number_format($g->pcs_cabut, 0) }}</td>
-                            <td class="tdhide text-end">{{ number_format($g->gr_cabut, 0) }}</td>
-                            <td class="tdhide text-end">{{ number_format($g->ttl_rp + $g->cost_cabut, 0) }}</td>
+                            <td class="tdhide fw-bold text-end">{{ number_format($g->pcs_cabut, 0) }}</td>
+                            <td class="tdhide fw-bold text-end">{{ number_format($g->gr_cabut, 0) }}</td>
+                            <td class="tdhide fw-bold text-end">{{ number_format($g->ttl_rp + $g->cost_cabut, 0) }}</td>
                             <td class="text-end fw-bold tdhide">{{ number_format($bkPcs, 0) }}</td>
                             <td class="text-end fw-bold tdhide">{{ number_format($bkGr, 0) }}</td>
                             <td class="text-end fw-bold tdhide">0</td>
+                            <td class="text-end fw-bold tdhide">{{ $g->pcs_susut ?? 0 }}</td>
+                            <td class="text-end fw-bold tdhide">{{ $g->gr_susut ?? 0 }}</td>
+                            @php
+                                $pcs_sisa = $g->pcs_cabut - $bkPcs - $g->pcs_susut;
+                                $gr_sisa = $g->gr_cabut - $bkGr - $g->gr_susut;
+                            @endphp
+                            <td class="text-end fw-bold tdhide">{{ number_format($pcs_sisa, 0) }}</td>
+                            <td class="text-end fw-bold tdhide">{{ number_format($gr_sisa, 0) }}</td>
+                            <td class="text-end fw-bold tdhide">0</td>
+                            <td class="text-center fw-bold">
+                                <a href="#"><i class="fas  fa-hourglass-half text-danger"></i></a>
+                            </td>
+                            <td class="text-end fw-bold ">{{ number_format($b->pcs_awal_ctk ?? 0, 0) }}</td>
+                            <td class="text-end fw-bold ">{{ number_format($b->gr_awal_ctk ?? 0, 0) }}</td>
+                            <td class="text-end fw-bold ">{{ number_format($b->pcs_cu ?? 0, 0) }}</td>
+                            <td class="text-end fw-bold ">{{ number_format($b->gr_cu ?? 0, 0) }}</td>
+                            <td class="text-end fw-bold ">{{ number_format($b->pcs_akhir_ctk ?? 0, 0) }}</td>
+                            <td class="text-end fw-bold ">{{ number_format($b->gr_akhir_ctk ?? 0, 0) }}</td>
+                            <td class="text-end fw-bold ">0</td>
+                            @php
+                                $pcs_awal_ctk = $b->pcs_awal_ctk ?? 0;
+                                $gr_awal_ctk = $b->gr_awal_ctk ?? 0;
+                            @endphp
+                            <td class="text-end fw-bold ">{{ number_format($bkPcs - $pcs_awal_ctk, 0) }}</td>
+                            <td class="text-end fw-bold ">{{ number_format($bkGr - $gr_awal_ctk, 0) }}</td>
+                            <td class="text-end fw-bold ">{{ number_format($b->ttl_rp_cetak ?? 0, 0) }}</td>
                         </tr>
                     @endforeach
                 </tbody>

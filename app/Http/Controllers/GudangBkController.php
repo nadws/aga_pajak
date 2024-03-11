@@ -333,91 +333,91 @@ class GudangBkController extends Controller
 
         $sheet5->getStyle('A2:M' . $kolom - 1)->applyFromArray($style);
 
-        $spreadsheet->createSheet();
-        $spreadsheet->setActiveSheetIndex(5);
-        $sheet6 = $spreadsheet->getActiveSheet();
-        $sheet6->setTitle('wip cetak');
+        // $spreadsheet->createSheet();
+        // $spreadsheet->setActiveSheetIndex(5);
+        // $sheet6 = $spreadsheet->getActiveSheet();
+        // $sheet6->setTitle('wip cetak');
 
-        $sheet6->getStyle("A1:M1")->applyFromArray($style_atas);
-        $sheet6->setCellValue('A1', 'ID');
-        $sheet6->setCellValue('B1', 'Buku');
-        $sheet6->setCellValue('C1', 'Suplier Awal');
-        $sheet6->setCellValue('D1', 'Date');
-        $sheet6->setCellValue('E1', 'Grade');
-        $sheet6->setCellValue('F1', 'Pcs');
-        $sheet6->setCellValue('G1', 'Gram');
-        $sheet6->setCellValue('H1', 'Rp/Gr');
-        $sheet6->setCellValue('I1', 'Lot');
-        $sheet6->setCellValue('J1', 'Keterangan/Nama Partai Herry');
-        $sheet6->setCellValue('K1', 'Keterangan/Nama Partai Sinta');
-        $sheet6->setCellValue('L1', 'Ttl Rp');
-        $sheet6->setCellValue('M1', 'Lok');
+        // $sheet6->getStyle("A1:M1")->applyFromArray($style_atas);
+        // $sheet6->setCellValue('A1', 'ID');
+        // $sheet6->setCellValue('B1', 'Buku');
+        // $sheet6->setCellValue('C1', 'Suplier Awal');
+        // $sheet6->setCellValue('D1', 'Date');
+        // $sheet6->setCellValue('E1', 'Grade');
+        // $sheet6->setCellValue('F1', 'Pcs');
+        // $sheet6->setCellValue('G1', 'Gram');
+        // $sheet6->setCellValue('H1', 'Rp/Gr');
+        // $sheet6->setCellValue('I1', 'Lot');
+        // $sheet6->setCellValue('J1', 'Keterangan/Nama Partai Herry');
+        // $sheet6->setCellValue('K1', 'Keterangan/Nama Partai Sinta');
+        // $sheet6->setCellValue('L1', 'Ttl Rp');
+        // $sheet6->setCellValue('M1', 'Lok');
 
-        $sheet6->setCellValue('O2', 'kl mau import barang baru id kosongkan');
-        $kolom = 2;
-        $pembelian = GudangBkModel::export_getPembelianBk('wipcetak');
-        foreach ($pembelian as $d) {
-            $sheet6->setCellValue('A' . $kolom, $d->id_buku_campur);
-            $sheet6->setCellValue('B' . $kolom, $d->buku);
-            $sheet6->setCellValue('C' . $kolom, $d->suplier_awal);
-            $sheet6->setCellValue('D' . $kolom, $d->tgl);
-            $sheet6->setCellValue('E' . $kolom, $d->nm_grade);
-            $sheet6->setCellValue('F' . $kolom, $d->pcs);
-            $sheet6->setCellValue('G' . $kolom, $d->gr);
-            $sheet6->setCellValue('H' . $kolom, $d->rupiah);
-            $sheet6->setCellValue('I' . $kolom, $d->no_lot);
-            $sheet6->setCellValue('J' . $kolom, $d->ket);
-            $sheet6->setCellValue('K' . $kolom, $d->ket2);
-            $sheet6->setCellValue('L' . $kolom, $d->rupiah * $d->gr);
-            $sheet6->setCellValue('M' . $kolom, $d->lok_tgl);
+        // $sheet6->setCellValue('O2', 'kl mau import barang baru id kosongkan');
+        // $kolom = 2;
+        // $pembelian = GudangBkModel::export_getPembelianBk('wipcetak');
+        // foreach ($pembelian as $d) {
+        //     $sheet6->setCellValue('A' . $kolom, $d->id_buku_campur);
+        //     $sheet6->setCellValue('B' . $kolom, $d->buku);
+        //     $sheet6->setCellValue('C' . $kolom, $d->suplier_awal);
+        //     $sheet6->setCellValue('D' . $kolom, $d->tgl);
+        //     $sheet6->setCellValue('E' . $kolom, $d->nm_grade);
+        //     $sheet6->setCellValue('F' . $kolom, $d->pcs);
+        //     $sheet6->setCellValue('G' . $kolom, $d->gr);
+        //     $sheet6->setCellValue('H' . $kolom, $d->rupiah);
+        //     $sheet6->setCellValue('I' . $kolom, $d->no_lot);
+        //     $sheet6->setCellValue('J' . $kolom, $d->ket);
+        //     $sheet6->setCellValue('K' . $kolom, $d->ket2);
+        //     $sheet6->setCellValue('L' . $kolom, $d->rupiah * $d->gr);
+        //     $sheet6->setCellValue('M' . $kolom, $d->lok_tgl);
 
-            $kolom++;
-        }
+        //     $kolom++;
+        // }
 
-        $sheet6->getStyle('A2:M' . $kolom - 1)->applyFromArray($style);
+        // $sheet6->getStyle('A2:M' . $kolom - 1)->applyFromArray($style);
 
-        $spreadsheet->createSheet();
-        $spreadsheet->setActiveSheetIndex(6);
-        $sheet7 = $spreadsheet->getActiveSheet();
-        $sheet7->setTitle('wip sortir');
+        // $spreadsheet->createSheet();
+        // $spreadsheet->setActiveSheetIndex(6);
+        // $sheet7 = $spreadsheet->getActiveSheet();
+        // $sheet7->setTitle('wip sortir');
 
-        $sheet7->getStyle("A1:M1")->applyFromArray($style_atas);
-        $sheet7->setCellValue('A1', 'ID');
-        $sheet7->setCellValue('B1', 'Buku');
-        $sheet7->setCellValue('C1', 'Suplier Awal');
-        $sheet7->setCellValue('D1', 'Date');
-        $sheet7->setCellValue('E1', 'Grade');
-        $sheet7->setCellValue('F1', 'Pcs');
-        $sheet7->setCellValue('G1', 'Gram');
-        $sheet7->setCellValue('H1', 'Rp/Gr');
-        $sheet7->setCellValue('I1', 'Lot');
-        $sheet7->setCellValue('J1', 'Keterangan/Nama Partai Herry');
-        $sheet7->setCellValue('K1', 'Keterangan/Nama Partai Sinta');
-        $sheet7->setCellValue('L1', 'Ttl Rp');
-        $sheet7->setCellValue('M1', 'Lok');
+        // $sheet7->getStyle("A1:M1")->applyFromArray($style_atas);
+        // $sheet7->setCellValue('A1', 'ID');
+        // $sheet7->setCellValue('B1', 'Buku');
+        // $sheet7->setCellValue('C1', 'Suplier Awal');
+        // $sheet7->setCellValue('D1', 'Date');
+        // $sheet7->setCellValue('E1', 'Grade');
+        // $sheet7->setCellValue('F1', 'Pcs');
+        // $sheet7->setCellValue('G1', 'Gram');
+        // $sheet7->setCellValue('H1', 'Rp/Gr');
+        // $sheet7->setCellValue('I1', 'Lot');
+        // $sheet7->setCellValue('J1', 'Keterangan/Nama Partai Herry');
+        // $sheet7->setCellValue('K1', 'Keterangan/Nama Partai Sinta');
+        // $sheet7->setCellValue('L1', 'Ttl Rp');
+        // $sheet7->setCellValue('M1', 'Lok');
 
-        $sheet7->setCellValue('O2', 'kl mau import barang baru id kosongkan');
-        $kolom = 2;
-        $pembelian = GudangBkModel::export_getPembelianBk('wipsortir');
-        foreach ($pembelian as $d) {
-            $sheet7->setCellValue('A' . $kolom, $d->id_buku_campur);
-            $sheet7->setCellValue('B' . $kolom, $d->buku);
-            $sheet7->setCellValue('C' . $kolom, $d->suplier_awal);
-            $sheet7->setCellValue('D' . $kolom, $d->tgl);
-            $sheet7->setCellValue('E' . $kolom, $d->nm_grade);
-            $sheet7->setCellValue('F' . $kolom, $d->pcs);
-            $sheet7->setCellValue('G' . $kolom, $d->gr);
-            $sheet7->setCellValue('H' . $kolom, $d->rupiah);
-            $sheet7->setCellValue('I' . $kolom, $d->no_lot);
-            $sheet7->setCellValue('J' . $kolom, $d->ket);
-            $sheet7->setCellValue('K' . $kolom, $d->ket2);
-            $sheet7->setCellValue('L' . $kolom, $d->rupiah * $d->gr);
-            $sheet7->setCellValue('M' . $kolom, $d->lok_tgl);
+        // $sheet7->setCellValue('O2', 'kl mau import barang baru id kosongkan');
+        // $kolom = 2;
+        // $pembelian = GudangBkModel::export_getPembelianBk('wipsortir');
+        // foreach ($pembelian as $d) {
+        //     $sheet7->setCellValue('A' . $kolom, $d->id_buku_campur);
+        //     $sheet7->setCellValue('B' . $kolom, $d->buku);
+        //     $sheet7->setCellValue('C' . $kolom, $d->suplier_awal);
+        //     $sheet7->setCellValue('D' . $kolom, $d->tgl);
+        //     $sheet7->setCellValue('E' . $kolom, $d->nm_grade);
+        //     $sheet7->setCellValue('F' . $kolom, $d->pcs);
+        //     $sheet7->setCellValue('G' . $kolom, $d->gr);
+        //     $sheet7->setCellValue('H' . $kolom, $d->rupiah);
+        //     $sheet7->setCellValue('I' . $kolom, $d->no_lot);
+        //     $sheet7->setCellValue('J' . $kolom, $d->ket);
+        //     $sheet7->setCellValue('K' . $kolom, $d->ket2);
+        //     $sheet7->setCellValue('L' . $kolom, $d->rupiah * $d->gr);
+        //     $sheet7->setCellValue('M' . $kolom, $d->lok_tgl);
 
-            $kolom++;
-        }
+        //     $kolom++;
+        // }
 
-        $sheet7->getStyle('A2:M' . $kolom - 1)->applyFromArray($style);
+        // $sheet7->getStyle('A2:M' . $kolom - 1)->applyFromArray($style);
 
 
         $namafile = "Gudang Bahan baku.xlsx";
@@ -617,13 +617,7 @@ class GudangBkController extends Controller
 
     public function import_buku_campur_bk(Request $r)
     {
-        if (auth()->user()->posisi_id == 1) {
-            $this->import_buku_bk($r);
-        } else {
-            $this->import_gudang_produksi_new($r);
-        }
-
-        // $this->import_gudang_produksi($r);
+        $this->import_buku_bk($r);
 
         return redirect()->route('gudangBk.index')->with('sukses', 'Data berhasil import');;
     }
@@ -776,7 +770,7 @@ class GudangBkController extends Controller
         }
     }
 
-    private function import_gudang_produksi_new(Request $r)
+    public function import_gudang_produksi_new(Request $r)
     {
         $uploadedFile = $r->file('file');
         $allowedExtensions = ['xlsx'];

@@ -247,9 +247,9 @@ class GudangBkModel extends Model
 
     public static function getSumWipCetak()
     {
-        $result = DB::select("SELECT a.partai_h , a.grade, sum(a.pcs_cabut) as pcs_cabut, sum(a.gr_cabut) as gr_cabut, sum(a.ttl_rp) as ttl_rp, sum(a.cost_cabut) as cost_cabut
+        $result = DB::select("SELECT a.partai_h , a.grade, sum(a.pcs_cabut) as pcs_cabut, sum(a.gr_cabut) as gr_cabut, sum(a.ttl_rp) as ttl_rp, sum(a.cost_cabut) as cost_cabut, b.pcs as pcs_susut, b.gr as gr_susut, a.selesai2, b.selesai as selesai_1
         FROM gudang_ctk as a 
-        left join susut
+        left join table_susut as b on b.ket = a.partai_h and b.gudang = 'cetak'
         where a.gudang = 'cetak'
         GROUP by a.partai_h
         Order by a.partai_h ASC

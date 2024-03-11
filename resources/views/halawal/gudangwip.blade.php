@@ -80,7 +80,7 @@
                     </div>
                 </a>
             </div>
-            <div class="col-lg-4 mt-4 card-pilihan">
+            {{-- <div class="col-lg-4 mt-4 card-pilihan">
                 <a href="#" class="opencabut" gudang='wipsortir'>
                     <div class="card kartu" style="border: 1px solid blue; ">
                         <div class="card-body">
@@ -93,7 +93,7 @@
                         </div>
                     </div>
                 </a>
-            </div>
+            </div> --}}
         </div>
 
         <form action="{{ route('gudangBk.import_buku_campur_bk') }}" method="post" enctype="multipart/form-data">
