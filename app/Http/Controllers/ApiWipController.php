@@ -88,6 +88,9 @@ class ApiWipController extends Controller
         $gr = 0;
         $ttl_rp = 0;
 
+        $pcs_susut = 0;
+        $gr_susut = 0;
+
         $pcs_sisa = 0;
         $gr_sisa = 0;
         $ttl_rp_sisa = 0;
@@ -106,6 +109,9 @@ class ApiWipController extends Controller
             $gr += $grAwalBk + $d->gr_susut;
             $ttl_rp += $modal;
 
+            $pcs_susut += $d->pcs_susut;
+            $gr_susut += $d->gr_susut;
+
             $pcs_sisa += $d->pcs - ($pcsAwalBk + $d->pcs_susut);
             $gr_sisa += $wipGr - ($grAwalBk + $d->gr_susut);
             $ttl_rp_sisa += $ttlrpSisa;
@@ -115,6 +121,9 @@ class ApiWipController extends Controller
             'pcs' => $pcs,
             'gr' => $gr,
             'ttl_rp' => $ttl_rp,
+
+            'pcs_susut' => $pcs_susut,
+            'gr_susut' => $gr_susut,
 
             'pcs_sisa' => $pcs_sisa,
             'gr_sisa' => $gr_sisa,
