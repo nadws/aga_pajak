@@ -94,7 +94,6 @@ class ApiWipController extends Controller
         $pcs_sisa = 0;
         $gr_sisa = 0;
         $ttl_rp_sisa = 0;
-        $arr = [];
         foreach ($que as $d) {
             $api = Http::get("$linkApi/datacabutsum2", ['nm_partai' => $d->ket2])->object();
             $wipGr = $d->gr ?? 0;
@@ -104,11 +103,7 @@ class ApiWipController extends Controller
             $modal = $d->selesai == 'Y' ? $grAwalBk * $modal_satuan : '0';
             $WipSisaGr = $wipGr - $grAwalBk - $d->gr_susut;
             $ttlrpSisa = empty($d->gr) ? 0 : $modal_satuan * $WipSisaGr;
-            $arr[] = [
-                'partai' => $api->nm_partai ?? 'kosong',
-                'pcsAwalBk' => $pcsAwalBk,
-                'grAwalBk' => $grAwalBk,
-            ];
+            
             $pcs += $pcsAwalBk;
             $gr += $grAwalBk;
             $ttl_rp += $modal;
@@ -120,7 +115,6 @@ class ApiWipController extends Controller
             $gr_sisa += $wipGr - ($grAwalBk + $d->gr_susut);
             $ttl_rp_sisa += $ttlrpSisa;
         }
-        return response()->json($arr);
         return response()->json([
             'pcs' => $pcs,
             'gr' => $gr,
