@@ -120,7 +120,7 @@ class ApiWipController extends Controller
             $gr_sisa += $wipGr - ($grAwalBk + $d->gr_susut);
             $ttl_rp_sisa += $ttlrpSisa;
         }
-        dd(response()->json($arr));
+        return response()->json($arr);
         return response()->json([
             'pcs' => $pcs,
             'gr' => $gr,
