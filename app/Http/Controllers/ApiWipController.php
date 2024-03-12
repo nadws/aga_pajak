@@ -106,6 +106,7 @@ class ApiWipController extends Controller
             $WipSisaGr = $wipGr - $grAwalBk - $d->gr_susut;
             $ttlrpSisa = empty($d->gr) ? 0 : $modal_satuan * $WipSisaGr;
             $arr[] = [
+                'partai' => $api->nm_partai,
                 'pcsAwalBk' => $pcsAwalBk,
                 'grAwalBk' => $grAwalBk,
             ];
