@@ -97,9 +97,9 @@ class ApiWipController extends Controller
         foreach ($que as $d) {
             $api = Http::get("$linkApi/datacabutsum2", ['nm_partai' => $d->ket2])->object();
 
-            $wipGr = $d->gr ;
-            $grAwalBk = $api->gr_awal_bk ;
-            $pcsAwalBk = $api->pcs_bk ;
+            $wipGr =  empty($d->gr) ? 0 :  $d->gr;;
+            $grAwalBk = empty($api->gr_awal_bk) ? 0 :   $api->gr_awal_bk ;
+            $pcsAwalBk = empty($api->pcs_bk) ? 0 :  $api->pcs_bk;
             $modal_satuan = $d->total_rp / ($wipGr - $d->gr_susut);
             $modal = $d->selesai == 'Y' ? $grAwalBk * $modal_satuan : '0';
             $WipSisaGr = $wipGr - $grAwalBk - $d->gr_susut;
