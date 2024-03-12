@@ -97,7 +97,7 @@ class ApiWipController extends Controller
         $arr = [];
         foreach ($que as $d) {
             $api = Http::get("$linkApi/datacabutsum2", ['nm_partai' => $d->ket2])->object();
-            
+            dd($api);
             $wipGr = $d->gr ?? 0;
             $grAwalBk = $api->gr_awal_bk ?? 0;
             $pcsAwalBk = $api->pcs_bk ?? 0;
