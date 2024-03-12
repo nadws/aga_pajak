@@ -94,16 +94,21 @@ class ApiWipController extends Controller
         $pcs_sisa = 0;
         $gr_sisa = 0;
         $ttl_rp_sisa = 0;
+        $ttl_rp_selesai = 0;
         foreach ($que as $d) {
             $api = Http::get("$linkApi/datacabutsum2", ['nm_partai' => $d->ket2])->object();
             $wipGr = $d->gr ?? 0;
             $grAwalBk = $api->gr_awal_bk ?? 0;
             $pcsAwalBk = $api->pcs_bk ?? 0;
+
+            $ttl_rp_cbt = $api->ttl_rp ?? 0;
+            $ttl_rp_eo = $api->ttl_rp_eo ?? 0;
+
             $modal_satuan = $d->total_rp / ($wipGr - $d->gr_susut);
             $modal = $d->selesai == 'Y' ? $grAwalBk * $modal_satuan : '0';
             $WipSisaGr = $wipGr - $grAwalBk - $d->gr_susut;
             $ttlrpSisa = empty($d->gr) ? 0 : $modal_satuan * $WipSisaGr;
-            
+
             $pcs += $pcsAwalBk;
             $gr += $grAwalBk;
             $ttl_rp += $modal;
@@ -114,6 +119,8 @@ class ApiWipController extends Controller
             $pcs_sisa += $d->pcs - ($pcsAwalBk + $d->pcs_susut);
             $gr_sisa += $wipGr - ($grAwalBk + $d->gr_susut);
             $ttl_rp_sisa += $ttlrpSisa;
+
+            $ttl_rp_selesai += $ttl_rp_cbt + $ttl_rp_eo;
         }
         return response()->json([
             'pcs' => $pcs,
@@ -126,6 +133,8 @@ class ApiWipController extends Controller
             'pcs_sisa' => $pcs_sisa,
             'gr_sisa' => $gr_sisa,
             'ttl_rp_sisa' => $ttl_rp_sisa,
+
+            'ttl_rp_elesai' => $ttl_rp_selesai,
         ]);
     }
 
