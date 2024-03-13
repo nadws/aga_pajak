@@ -146,7 +146,12 @@
                             <td class="text-end fw-bold tdhide">{{ number_format($gr_sisa, 0) }}</td>
                             <td class="text-end fw-bold tdhide">0</td>
                             <td class="text-center fw-bold">
-                                <a href="#"><i class="fas  fa-hourglass-half text-danger"></i></a>
+                                @if ($g->selesai_1 == 'Y')
+                                    <i class="fas fa-check text-success fa-lg"></i>
+                                @else
+                                    <a href="#"><i class="fas  fa-hourglass-half text-danger"></i></a>
+                                @endif
+
                             </td>
                             <td class="text-end fw-bold ">{{ number_format($b->pcs_awal_ctk ?? 0, 0) }}</td>
                             <td class="text-end fw-bold ">{{ number_format($b->gr_awal_ctk ?? 0, 0) }}</td>
