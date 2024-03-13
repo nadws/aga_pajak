@@ -88,37 +88,63 @@ class ApiWipController extends Controller
         $gr = 0;
         $ttl_rp = 0;
 
+        $pcs_susut = 0;
+        $gr_susut = 0;
+
+        $ttl_gr_selesai = 0;
+
         $pcs_sisa = 0;
         $gr_sisa = 0;
         $ttl_rp_sisa = 0;
+        $ttl_rp_selesai = 0;
+
         foreach ($que as $d) {
             $api = Http::get("$linkApi/datacabutsum2", ['nm_partai' => $d->ket2])->object();
+            $wipGr = $d->gr ?? 0;
+            $grAwalBk = $api->gr_awal_bk ?? 0;
+            $pcsAwalBk = $api->pcs_bk ?? 0;
 
-            $wipGr = $d->gr;
-            $grAwalBk = $api->gr_awal_bk;
-            $pcsAwalBk = $api->pcs_bk;
+            $ttl_rp_cbt = $api->ttl_rp ?? 0;
+            $ttl_rp_eo = $api->ttl_rp_eo ?? 0;
+
+            $gr_akhir_cbt = $api->gr_akhir ?? 0;
+            $gr_akhir_eo = $api->gr_eo_akhir ?? 0;
+
             $modal_satuan = $d->total_rp / ($wipGr - $d->gr_susut);
             $modal = $d->selesai == 'Y' ? $grAwalBk * $modal_satuan : '0';
             $WipSisaGr = $wipGr - $grAwalBk - $d->gr_susut;
             $ttlrpSisa = empty($d->gr) ? 0 : $modal_satuan * $WipSisaGr;
 
-            $pcs += $pcsAwalBk + $d->pcs_susut;
-            $gr += $grAwalBk + $d->gr_susut;
+            $pcs += $pcsAwalBk;
+            $gr += $grAwalBk;
             $ttl_rp += $modal;
+
+            $ttl_gr_selesai += $gr_akhir_cbt + $gr_akhir_eo;
+
+            $pcs_susut += $d->pcs_susut;
+            $gr_susut += $d->gr_susut;
 
             $pcs_sisa += $d->pcs - ($pcsAwalBk + $d->pcs_susut);
             $gr_sisa += $wipGr - ($grAwalBk + $d->gr_susut);
             $ttl_rp_sisa += $ttlrpSisa;
-        }
 
+            $ttl_rp_selesai += $ttl_rp_cbt + $ttl_rp_eo;
+        }
         return response()->json([
             'pcs' => $pcs,
             'gr' => $gr,
             'ttl_rp' => $ttl_rp,
 
+            'pcs_susut' => $pcs_susut,
+            'gr_susut' => $gr_susut,
+            
+            'ttl_gr_selesai' => $ttl_gr_selesai ,
+
             'pcs_sisa' => $pcs_sisa,
             'gr_sisa' => $gr_sisa,
             'ttl_rp_sisa' => $ttl_rp_sisa,
+
+            'ttl_rp_elesai' => $ttl_rp_selesai,
         ]);
     }
 
