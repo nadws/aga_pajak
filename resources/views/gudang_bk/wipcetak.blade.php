@@ -11,6 +11,11 @@
 
 <div class="row">
     <div class="col-lg-3">
+        <h5>Wip Cetak</h5>
+    </div>
+    <div class="col-lg-9"></div>
+    <div class="col-lg-3">
+
         <button class="btn btn-warning kembali">Kembali</button>
     </div>
     <div class="col-lg-3"></div>
