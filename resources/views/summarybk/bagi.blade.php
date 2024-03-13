@@ -201,8 +201,6 @@
                             $ttlrpcost += $ttl_rp_cbt + $ttl_rp_eo;
                             $ttlrpbk += $g->selesai_1 == 'Y' ? $hrga_modal_satuan * $bkGr : 0;
                         @endphp
-
-
                         <tr>
                             <td>{{ $no + 1 }} </td>
                             <td>
