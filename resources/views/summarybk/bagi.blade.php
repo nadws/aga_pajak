@@ -274,7 +274,9 @@
                             <td class="text-end fw-bold">{{ number_format($c->pcs_akhir ?? 0, 0) }}</td>
                             <td class="text-end fw-bold">{{ number_format($gr_akhir_cbt + $gr_akhir_eo, 0) }}
                             </td>
-                            <td class="text-end fw-bold">{{ number_format($c->susut ?? 0, 0) }}</td>
+                            <td class="text-end fw-bold">
+                                {{ $gr_awal_cbt + $gr_awal_eo == 0 ? 0 : number_format((1 - ($gr_akhir_cbt + $gr_akhir_eo) / ($gr_awal_cbt + $gr_awal_eo)) * 100, 1) }}%
+                            </td>
                             <td class="text-end fw-bold">{{ number_format($c->eot ?? 0, 0) }}</td>
                             <td class="text-end fw-bold">{{ number_format($c->gr_flx ?? 0, 0) }}</td>
 
