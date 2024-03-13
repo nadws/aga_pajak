@@ -11,6 +11,12 @@
     @csrf
     <div class="row">
         <div class="col-lg-3">
+            {{ $nm_gudang }}
+        </div>
+        <div class="col-lg-9">
+
+        </div>
+        <div class="col-lg-3">
             <button class="btn btn-warning kembali">Kembali</button>
         </div>
         <div class="col-lg-3"></div>

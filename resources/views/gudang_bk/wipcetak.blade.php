@@ -6,9 +6,6 @@
     }
 
 @endphp
-
-
-
 <div class="row">
     <div class="col-lg-3">
         <h5>Wip Cetak</h5>
