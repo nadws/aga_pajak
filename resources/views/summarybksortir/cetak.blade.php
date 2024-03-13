@@ -55,7 +55,7 @@
 
 
 
-                        <th class="dhead text-center tdhide" colspan="2">Susut Wip - bk</th>
+                        <th class="dhead text-center tdhide" colspan="3">Susut Wip - bk</th>
                         @if ($nm_gudang == 'summary')
                             <th class="text-white text-center bg-danger tdhide" colspan="3">Wip Sisa</th>
                         @else
@@ -71,7 +71,7 @@
                         @if ($nm_gudang == 'summary')
                             <th class="dhead text-center tdhide">Pcs</th>
                             <th class="dhead text-center tdhide">Gr</th>
-                            <th class="dhead text-center tdhide">Ttl Rp</th>
+                            <th class="dhead text-center tdhide">Bk Cost</th>
                             <th class="dhead text-center tdhide">Pcs</th>
                             <th class="dhead text-center tdhide">Gr</th>
                             <th class="dhead text-center tdhide">Ttl Rp</th>
@@ -81,6 +81,7 @@
                             <th class="dhead text-center tdhide">Pcs</th>
                             <th class="dhead text-center tdhide">Gr</th>
                         @endif
+                        <th class="dhead text-center tdhide">Pcs</th>
                         <th class="dhead text-center tdhide">Gr</th>
                         <th class="dhead text-center tdhide">sst(%)</th>
                         @if ($nm_gudang == 'summary')
@@ -118,7 +119,7 @@
 
                             $bkPcs = $b->pcs_awal ?? 0;
                             $bkGr = $b->gr_awal ?? 0;
-                            $rp_satuan = ($g->ttl_rp + $g->cost_cabut) / ($g->gr_cabut + $bkGr);
+                            $rp_satuan = ($g->ttl_rp + $g->cost_cabut) / ($g->gr_cabut - $g->gr_susut);
                         @endphp
                         <tr>
                             <td>{{ $no + 1 }}</td>
@@ -129,9 +130,14 @@
                             <td class="tdhide fw-bold text-end">{{ number_format($g->ttl_rp + $g->cost_cabut, 0) }}</td>
                             <td class="text-end fw-bold tdhide">{{ number_format($bkPcs, 0) }}</td>
                             <td class="text-end fw-bold tdhide">{{ number_format($bkGr, 0) }}</td>
-                            <td class="text-end fw-bold tdhide">0</td>
+                            <td class="text-end fw-bold tdhide">
+                                {{ $g->selesai_1 == 'Y' ? number_format($rp_satuan * $bkGr) : 0 }}
+                            </td>
                             <td class="text-end fw-bold tdhide">{{ $g->pcs_susut ?? 0 }}</td>
                             <td class="text-end fw-bold tdhide">{{ $g->gr_susut ?? 0 }}</td>
+                            <td class="text-end fw-bold tdhide">
+                                {{ number_format((1 - $bkGr / $g->gr_cabut) * 100, 0) }}%
+                            </td>
                             @php
                                 $pcs_sisa = $g->pcs_cabut - $bkPcs - $g->pcs_susut;
                                 $gr_sisa = $g->gr_cabut - $bkGr - $g->gr_susut;
