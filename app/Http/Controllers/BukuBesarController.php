@@ -131,7 +131,8 @@ class BukuBesarController extends Controller
         $spreadsheet = new Spreadsheet();
         foreach ($akun as $i => $r) {
 
-            $detail = DB::select("SELECT d.nm_post, d.no_cfm, d.ket as ket2, a.ket, a.tgl,a.id_akun, d.nm_akun, a.no_nota, a.debit, a.kredit, a.saldo FROM `jurnal` as a
+            $detail = DB::select("SELECT d.nm_post, d.no_cfm, d.ket as ket2, a.ket, a.tgl,a.id_akun, d.nm_akun, a.no_nota, a.debit, a.kredit, a.saldo,e.suplier_akhir
+            FROM `jurnal` as a
                     LEFT JOIN (
                         SELECT c.nm_post,j.no_nota, j.id_akun,  GROUP_CONCAT(DISTINCT j.ket SEPARATOR ', ') as ket, GROUP_CONCAT(DISTINCT j.no_urut SEPARATOR ', ') as no_cfm, GROUP_CONCAT(DISTINCT b.nm_akun SEPARATOR ', ') as nm_akun 
                         FROM jurnal as j
@@ -140,6 +141,7 @@ class BukuBesarController extends Controller
                         WHERE j.id_akun != '$r->id_akun'
                         GROUP BY j.no_nota
                     ) d ON a.no_nota = d.no_nota AND d.id_akun != a.id_akun
+                    left join invoice_bk as e on e.no_nota = SUBSTRING_INDEX(d.ket, ' ', -1)
                     WHERE a.id_akun = '$r->id_akun' and a.tgl between '$tgl1' and '$tgl2'
                     order by a.saldo DESC, a.tgl ASC");
 
@@ -192,7 +194,7 @@ class BukuBesarController extends Controller
                         ->setCellValue("D$kolom", $d->tgl)
                         ->setCellValue("E$kolom", $d->saldo == 'Y' ? 'Saldo Awal' : ucwords(strtolower($d->nm_akun)))
                         ->setCellValue("F$kolom", ucwords($d->nm_post))
-                        ->setCellValue("G$kolom", ucwords($d->ket))
+                        ->setCellValue("G$kolom", ucwords($d->ket) . ' ' . $d->suplier_akhir)
                         ->setCellValue("H$kolom", $d->debit)
                         ->setCellValue("I$kolom", $d->kredit)
                         ->setCellValue("J$kolom", $saldo);

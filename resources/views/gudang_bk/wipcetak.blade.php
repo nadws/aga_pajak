@@ -18,7 +18,7 @@
     <div class="col-lg-3"></div>
     <div class="col-lg-6">
         <x-theme.button modal="Y" idModal="bkcetakawal" icon="fas fa-plus" addClass="float-end"
-            teks="Tambah Bk Cetak" />
+            teks="Tambah BJ Cetak" />
         @if ($nm_gudang == 'wipcetak')
             <x-theme.button modal="Y" idModal="importcetak" icon="fas fa-upload" addClass="float-end"
                 teks="Import" />

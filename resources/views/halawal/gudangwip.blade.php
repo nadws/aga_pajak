@@ -126,7 +126,7 @@
             @csrf
             <x-theme.modal title="Tambah BJ Cetak" idModal="bkcetakawal" size="modal-lg-max" btnSave="Y">
                 <div class="row">
-                    <div class="col-lg-1">
+                    <div class="col-lg-2">
                         <label for="">Partai</label>
                     </div>
                     <div class="col-lg-1">
