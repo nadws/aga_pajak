@@ -29,5 +29,6 @@ Route::controller(ApiWipController::class)
         Route::get('/detailSumWip', 'detailSumWip')->name('detailSumWip');
         Route::get('/bkCbtAwal', 'bkCbtAwal')->name('bkCbtAwal');
         Route::get('/sumCtk', 'sumCtk')->name('sumCtk');
+        Route::get('/detailOpname/{no}', 'detailOpname')->name('detailOpname');
         Route::get('/bkSortirApi', 'bkSortirApi')->name('bkSortirApi');
     });
