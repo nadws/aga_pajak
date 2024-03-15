@@ -1103,7 +1103,7 @@ class GudangBkController extends Controller
                 }
             }
             DB::commit();
-            return redirect()->route('halawal.index', ['nm_gudang', 'wip'])->with('sukses', 'Data berhasil import');
+            return redirect()->route('halawal.index', ['nm_gudang' => 'wip'])->with('sukses', 'Data berhasil import');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', $e->getMessage());
@@ -1293,7 +1293,8 @@ class GudangBkController extends Controller
                     'gr_cabut' => $r->gr[$x],
                     'selesai' => 'selesai',
                     'ttl_rp' => $r->ttl_rp[$x],
-                    'cost_cabut' => $r->cost_cabut[$x]
+                    'cost_cabut' => $r->cost_cabut[$x],
+                    'suntikan' => 'Y'
                 ];
                 DB::table('gudang_ctk')->insert($data);
             }

@@ -55,7 +55,10 @@
                         @foreach ($gudang as $no => $g)
                             @php
                                 $ket = $g->ket2;
-                                $response = Http::get("$linkApi/bk_sum_all", ['nm_partai' => $ket, 'kategori' => $kategori]);
+                                $response = Http::get("$linkApi/bk_sum_all", [
+                                    'nm_partai' => $ket,
+                                    'kategori' => $kategori,
+                                ]);
                                 $b = $response->object();
 
                                 $wipPcs = $g->pcs ?? 0;

@@ -74,22 +74,28 @@ class SummarySortirController extends Controller
         } else {
             $nmgudang = $r->nm_gudang;
         }
-
-        if ($nmgudang == 'wip') {
-            $kategori = 'cabut';
-        } elseif ($nmgudang == 'wipcetak') {
-            $kategori = 'cetak';
-        } else {
-            $kategori = 'sortir';
-        }
-
         if (empty($r->kategori)) {
             $kat = 'data';
         } else {
             $kat = 'history';
         }
+        if ($nmgudang == 'wip') {
+            $kategori = 'cabut';
+            $gudang = GudangBkModel::getSummary($nmgudang, $kat);
+            $view = 'summarybksortir.susut_wip_cabut';
+        } elseif ($nmgudang == 'wipcetak') {
+            $kategori = 'cetak';
+            $gudang = GudangBkModel::getSumWipCetak();
+            $view = 'summarybksortir.susut_wip_cetak';
+        } else {
+            $kategori = 'sortir';
+            $gudang = GudangBkModel::getSummary($nmgudang, $kat);
+            $view = 'summarybksortir.susut_wip_cabut';
+        }
 
-        $gudang = GudangBkModel::getSummary($nmgudang, $kat);
+
+
+
         $listBulan = DB::table('bulan')->get();
         $data =  [
             'title' => 'Susut  ' . $nmgudang,
@@ -99,7 +105,7 @@ class SummarySortirController extends Controller
             'kategori' => $kategori,
             'linkApi' => $this->linkApi,
         ];
-        return view('summarybksortir.susut_wip_cabut', $data);
+        return view($view, $data);
     }
 
     function get_no_box_sortir(Request $r)

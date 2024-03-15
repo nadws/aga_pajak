@@ -6,17 +6,19 @@
     }
 
 @endphp
-
-
-
 <div class="row">
     <div class="col-lg-3">
+        <h5>Wip Cetak</h5>
+    </div>
+    <div class="col-lg-9"></div>
+    <div class="col-lg-3">
+
         <button class="btn btn-warning kembali">Kembali</button>
     </div>
     <div class="col-lg-3"></div>
     <div class="col-lg-6">
         <x-theme.button modal="Y" idModal="bkcetakawal" icon="fas fa-plus" addClass="float-end"
-            teks="Tambah Bk Cetak" />
+            teks="Tambah BJ Cetak" />
         @if ($nm_gudang == 'wipcetak')
             <x-theme.button modal="Y" idModal="importcetak" icon="fas fa-upload" addClass="float-end"
                 teks="Import" />
@@ -52,7 +54,7 @@
                             <th class="dhead">Grade</th>
                             <th class="dhead">Pcs sdh cabut</th>
                             <th class="dhead">Gr sdh cabut</th>
-                            <th class="dhead">Ttl Rp</th>
+                            <th class="dhead">Cost Bk</th>
                             <th class="dhead">Cost Cabut</th>
                             <th class="dhead">Pcs timbang ulang</th>
                             <th class="dhead">Gr timbang ulang</th>
@@ -73,6 +75,7 @@
 
                                 $total_rp = $bk->total_rp ?? 0;
                                 $gr = $bk->gr ?? 0;
+                                $gr_susut = $bk->gr_susut ?? 0;
                             @endphp
                             <tr>
                                 <td>{{ $rowNumber }}</td>
@@ -83,7 +86,7 @@
                                 <td align="right">{{ $c->pcs_cabut }}</td>
                                 <td align="right">{{ $c->gr_cabut }}</td>
                                 <td align="right">
-                                    {{ $total_rp == 0 ? '0' : number_format(($total_rp / $gr) * $c->gr_cabut, 0) }}
+                                    {{ $total_rp == 0 ? '0' : number_format(($total_rp / ($gr - $gr_susut)) * $c->gr_cabut, 0) }}
                                 </td>
                                 <td align="right">{{ number_format($c->cost_cabut) }}</td>
                                 <td align="right">{{ $c->pcs_timbang_ulang }}</td>
