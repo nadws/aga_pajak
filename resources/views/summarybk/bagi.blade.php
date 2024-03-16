@@ -269,7 +269,7 @@
                             </td>
                             <td class="text-end fw-bold">{{ number_format($c->pcs_awal ?? 0, 0) }}</td>
 
-                            <td class="text-end fw-bold">{{ number_format($gr_awal_cbt + $gr_awal_eo, 0) }}
+                            <td class="text-end fw-bold">{{ number_format($gr_awal_eo, 0) }}
                             </td>
                             <td class="text-end fw-bold">{{ number_format($c->pcs_akhir ?? 0, 0) }}</td>
                             <td class="text-end fw-bold">{{ number_format($gr_akhir_cbt + $gr_akhir_eo, 0) }}
