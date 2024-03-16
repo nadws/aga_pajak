@@ -65,6 +65,7 @@
                         <th class="dhead text-center" rowspan="2">Selesai</th>
                         <th class="dhead text-center" colspan="7">Cetak</th>
                         <th class="bg-danger text-white text-center" colspan="2">Bk Sisa Pgws</th>
+                        <th class="dhead" rowspan="2">Cost Bk</th>
                         <th class="dhead" rowspan="2">Cost Cetak</th>
                     </tr>
                     <tr>
@@ -166,6 +167,9 @@
                             @endphp
                             <td class="text-end fw-bold ">{{ number_format($bkPcs - $pcs_awal_ctk, 0) }}</td>
                             <td class="text-end fw-bold ">{{ number_format($bkGr - $gr_awal_ctk, 0) }}</td>
+                            <td class="text-end fw-bold tdhide">
+                                {{ $g->selesai_1 == 'Y' ? number_format($rp_satuan * $bkGr) : 0 }}
+                            </td>
                             <td class="text-end fw-bold ">{{ number_format($b->ttl_rp_cetak ?? 0, 0) }}</td>
                         </tr>
                     @endforeach
