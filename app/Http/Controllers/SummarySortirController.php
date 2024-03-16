@@ -29,10 +29,14 @@ class SummarySortirController extends Controller
             $view = 'summarybksortir.index2';
         }
         $gudang = GudangBkModel::getSummary('wipsortir', $kat);
+
+        $wipSortir = Http::get('https://sarang.ptagafood.com/api/apibk/wipSortir')->object();
+
         $data =  [
             'title' => 'Summary Wip Sortir',
             'gudang' => $gudang,
             'nm_gudang' => $nmgudang,
+            'wipSortir' => $wipSortir,
             'linkApi' => $this->linkApi,
             'lokasi' => $r->lokasi,
         ];
