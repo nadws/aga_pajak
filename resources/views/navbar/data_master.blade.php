@@ -2,7 +2,7 @@
     <x-slot name="slot">
         <div class="row">
             @foreach ($data as $d)
-                <div class="col-lg-3">
+                <div class="col-lg-3 col-6">
                     <a href="{{ route($d['route']) }}">
                         <div style="cursor:pointer;background-color: #8ca3f3" class="card border card-hover text-white">
                             <div class="card-front">
