@@ -229,6 +229,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/load_grade', 'load_grade')->name('load_grade');
         Route::get('/save_grade', 'save_grade')->name('save_grade');
         Route::get('/add_new_bk', 'add_new')->name('add_new_bk');
+        Route::get('/get_print', 'get_print')->name('get_print');
     });
 
     Route::controller(BukuCampurController::class)->group(function () {

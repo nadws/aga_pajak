@@ -88,7 +88,15 @@
                                 <td class="text-center">{{ $p->no_lot }}</td>
                                 <td class="text-center">{{ ucwords(strtolower($p->nm_suplier)) }}</td>
                                 <td class="text-center">{{ ucwords(strtolower($p->suplier_akhir)) }}</td>
-                                <td align="right">Rp. {{ number_format($p->total_harga, 0) }}</td>
+                                <td align="right">
+                                    {{-- <a href="javascript:void(0);" class="get_print" no_nota="{{ $p->no_nota }}">
+
+                                    </a> --}}
+                                    <a href="#" class="get_detail" no_nota="{{ $p->no_nota }}"
+                                        data-bs-toggle="modal" data-bs-target="#viewdetail">Rp.
+                                        {{ number_format($p->total_harga, 0) }}</a>
+
+                                </td>
 
                                 <td align="center">
                                     <span
@@ -212,6 +220,10 @@
 
         <x-theme.modal title="Campur BKIN" size="modal-lg" idModal="viewgrading" btnSave="T">
             <div id="grading_nota"></div>
+
+        </x-theme.modal>
+        <x-theme.modal title="Detail Nota" size="modal-lg" idModal="viewdetail" btnSave="T">
+            <div id="load_detail"></div>
 
         </x-theme.modal>
 
@@ -426,6 +438,24 @@
                         success: function(response) {
                             // Pindah ke URL baru tanpa refresh
                             window.location.href = response.url;
+                        },
+                        error: function(error) {
+                            console.log(error);
+                        }
+                    });
+                });
+                $('.get_detail').on('click', function(event) {
+                    event.preventDefault(); // Mencegah perilaku default (misalnya, submit form)
+                    var no_nota = $(this).attr('no_nota');
+
+                    $.ajax({
+                        url: "{{ route('get_print') }}",
+                        data: {
+                            no_nota: no_nota
+                        },
+                        type: 'GET',
+                        success: function(response) {
+                            $('#load_detail').html(response);
                         },
                         error: function(error) {
                             console.log(error);

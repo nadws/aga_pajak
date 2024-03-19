@@ -279,9 +279,6 @@ class PembelianBahanBakuController extends Controller
         where a.no_nota = '$r->no_nota' and a.id_akun = '35'
         group by a.id_bayar_bk;");
 
-
-
-
         $data =  [
             'title' => 'Print Bahan Baku',
             'pembelian' => $pembelian,
@@ -817,5 +814,34 @@ class PembelianBahanBakuController extends Controller
             'nm_grade' => $r->nm_grade
         ];
         DB::table('grade')->insert($data);
+    }
+
+    public function get_print(Request $r)
+    {
+        $pembelian = DB::selectOne("SELECT a.tgl, a.no_nota,b.nm_suplier, a.suplier_akhir, a.total_harga, a.lunas
+        FROM invoice_bk as a 
+        left join tb_suplier as b on b.id_suplier = a.id_suplier
+        where a.no_nota = '$r->no_nota'
+        ");
+
+        $produk = DB::select("SELECT * FROM pembelian as a 
+        left join tb_produk as b on b.id_produk = a.id_produk 
+        left join tb_satuan as c on c.id_satuan = b.satuan_id
+        WHERE a.no_nota ='$r->no_nota'");
+
+        $bayar = DB::selectOne("SELECT a.tgl, c.nm_suplier, b.suplier_akhir, a.kredit, d.nm_akun, a.ket, a.debit
+        FROM bayar_bk as a
+        left join invoice_bk as b on b.no_nota = a.no_nota
+        left join tb_suplier as c on c.id_suplier = b.id_suplier 
+        left join akun as d on d.id_akun = a.id_akun
+        where a.no_nota = '$r->no_nota' and a.id_akun = '35'
+        group by a.id_bayar_bk;");
+
+        $data = [
+            'pembelian' => $pembelian,
+            'produk' => $produk,
+            'bayar' => $bayar
+        ];
+        return view('pembelian_bk.get_print', $data);
     }
 }
