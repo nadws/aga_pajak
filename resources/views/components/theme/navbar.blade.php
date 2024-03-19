@@ -10,8 +10,9 @@
     @php
         $navbar = DB::table('navbar')->orderBy('urutan', 'ASC')->get();
     @endphp
-    <nav class="main-navbar " style="display: block;">
+    <nav class="main-navbar " style=" {{ request()->path() == 'dashboard' ? 'display: block;' : '' }}">
         <div class="container font-bold">
+
             <ul>
                 <li class="menu-item">
                     <a href="dashboard"
