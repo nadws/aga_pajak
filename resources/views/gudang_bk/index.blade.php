@@ -22,7 +22,7 @@
                     </form>
                 @else
                     <x-theme.button modal="Y" idModal="import2" icon="fas fa-upload" addClass="float-end"
-                        teks="Import" />
+                        teks="Import G Gabung" />
                     <form action="{{ route('gudangBk.export_gudang_produksi') }}" method="post">
                         @csrf
                         <button class="btn btn-success float-end me-2"><i class="fas fa-file-excel"></i> Export
