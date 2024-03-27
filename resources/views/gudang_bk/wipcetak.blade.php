@@ -124,7 +124,8 @@
                                 <td>{{ $bk->nm_grade ?? ' ' }}</td>
                                 <td align="right">{{ $c->pcs_akhir }}</td>
                                 <td align="right">{{ $c->gr_akhir }}</td>
-                                <td align="right">{{ number_format(($bk->total_rp / $bk->gr) * $c->gr_akhir, 0) }}
+                                <td align="right">
+                                    {{ empty($bk->total_rp) ? 0 : number_format(($bk->total_rp / $bk->gr) * $c->gr_akhir, 0) }}
                                 </td>
                                 <td align="right">{{ number_format($c->ttl_rp) }}</td>
                                 <td align="right">{{ number_format($gdng_ctk->pcs_timbang_ulang ?? 0) }}</td>
