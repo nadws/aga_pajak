@@ -121,7 +121,7 @@
                                 <td>{{ $c->nm_partai }}</td>
                                 <td>{{ $c->no_box }}</td>
                                 <td>{{ $c->tipe }}</td>
-                                <td>{{ $bk->nm_grade }}</td>
+                                <td>{{ $bk->nm_grade ?? ' ' }}</td>
                                 <td align="right">{{ $c->pcs_akhir }}</td>
                                 <td align="right">{{ $c->gr_akhir }}</td>
                                 <td align="right">{{ number_format(($bk->total_rp / $bk->gr) * $c->gr_akhir, 0) }}
