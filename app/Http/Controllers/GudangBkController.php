@@ -1213,10 +1213,10 @@ class GudangBkController extends Controller
             $sheet1->setCellValue('B' . $kolom, $d->nm_partai);
             $sheet1->setCellValue('C' . $kolom, $d->no_box);
             $sheet1->setCellValue('D' . $kolom, $d->tipe);
-            $sheet1->setCellValue('E' . $kolom, $bk->nm_grade);
+            $sheet1->setCellValue('E' . $kolom, $bk->nm_grade ?? '');
             $sheet1->setCellValue('F' . $kolom, $d->pcs_akhir);
             $sheet1->setCellValue('G' . $kolom, $d->gr_akhir);
-            $sheet1->setCellValue('H' . $kolom, ($bk->total_rp / $bk->gr) * $d->gr_akhir);
+            $sheet1->setCellValue('H' . $kolom, empty($bk->total_rp) ? '0' : ($bk->total_rp / $bk->gr) * $d->gr_akhir);
             $sheet1->setCellValue('I' . $kolom, $d->ttl_rp);
             $sheet1->setCellValue('J' . $kolom, $gdng_ctk->pcs_timbang_ulang ?? 0);
             $sheet1->setCellValue('K' . $kolom, $gdng_ctk->gr_timbang_ulang ?? 0);
