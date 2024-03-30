@@ -618,7 +618,6 @@ class GudangBkController extends Controller
     public function import_buku_campur_bk(Request $r)
     {
         $this->import_buku_bk($r);
-
         return redirect()->route('gudangBk.index')->with('sukses', 'Data berhasil import');;
     }
 
@@ -779,6 +778,9 @@ class GudangBkController extends Controller
         if (in_array($extension, $allowedExtensions)) {
             $spreadsheet = IOFactory::load($uploadedFile->getPathname());
             $sheet2 = $spreadsheet->getSheetByName('wip ( ini nama sinta)');
+            if (!$sheet2) {
+                return redirect()->route('gudangBk.index')->with('error', 'Sheet dengan nama yang diharapkan tidak ditemukan dalam file Excel');
+            }
             $data = [];
 
             foreach ($sheet2->getRowIterator() as $index => $row) {
@@ -875,14 +877,6 @@ class GudangBkController extends Controller
 
                     DB::table('buku_campur_approve')->where('ket', $rowData[8])->update(['ket2' => empty($rowData[10]) ? ' ' : $rowData[10]]);
                 }
-
-
-
-                // if ($importGagal) {
-                //     DB::rollback(); // Batalkan transaksi jika ada kesalahan
-                //     return redirect()->route('gudangBk.index')->with('error', 'Data tidak valid: Kolom M, N, dan O tidak boleh memiliki nilai Y yang sama');
-                // }
-
                 DB::commit(); // Konfirmasi transaksi jika berhasil
                 return redirect()->route('gudangBk.index')->with('sukses', 'Data berhasil import');
             } catch (\Exception $e) {
