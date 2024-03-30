@@ -896,7 +896,7 @@ class GudangBkController extends Controller
 
     private function import_buku_bk(Request $r)
     {
-        DB::table('buku_campur')->update(['gabung' => 'Y']);
+
         $hasError = false; // Variabel flag untuk melacak apakah ada kesalahan
         if ($r->hasFile('file')) {
             $file = $r->file('file');
@@ -911,19 +911,17 @@ class GudangBkController extends Controller
                     $title = $currentSheet->getTitle();
 
                     if ($title === 'baku dari bahan sdh grade') {
+                        DB::table('buku_campur')->where('gudang', 'bk')->update(['gabung' => 'Y']);
                         $gudang = 'bk';
                     } elseif ($title === 'Produksi (ini nama herry)') {
+                        DB::table('buku_campur')->where('gudang', 'produksi')->update(['gabung' => 'Y']);
                         $gudang = 'produksi';
                     } elseif ($title === 'Reject') {
+                        DB::table('buku_campur')->where('gudang', 'reject')->update(['gabung' => 'Y']);
                         $gudang = 'reject';
                     } elseif ($title === 'wip cabut ( ini nama sinta)') {
+                        DB::table('buku_campur')->where('gudang', 'wip')->update(['gabung' => 'Y']);
                         $gudang = 'wip';
-                    } elseif ($title === 'wip cetak') {
-                        $gudang = 'wipcetak';
-                    } elseif ($title === 'wip sortir') {
-                        $gudang = 'wipsortir';
-                    } elseif ($title === '⁠penggabungan grd sama') {
-                        $gudang = 'gabung';
                     } else {
                         $hasError = true;
                     }
