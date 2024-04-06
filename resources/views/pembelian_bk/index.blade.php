@@ -280,6 +280,7 @@
                     "stateSave": false,
                     "autoWidth": false,
                     "paging": false,
+                    "info": false
                 });
                 pencarian('pencarian', 'tableSearch')
 
