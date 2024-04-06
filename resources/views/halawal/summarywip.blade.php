@@ -45,6 +45,33 @@
             <div class="col-lg-9">
                 @include('gudang_bk.nav')
             </div>
+            <div class="col-lg-12 punya_cetak" style="display: none">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                        <hr>
+                    </div>
+                    <div class="col-lg-3">
+
+                    </div>
+                    <div class="col-lg-9 mb-2">
+                        <a href="{{ route('sumsortir.export_opname_cetak') }}" class="btn btn-success float-end"><i
+                                class="fas fa-file-excel"></i> Export</a>
+                    </div>
+                    <div class="col-lg-3">
+                        <button class="btn btn-warning kembali">Kembali</button>
+                    </div>
+                    <div class="col-lg-6">
+                        <h5 class="text-center">{{ $title }}</h5>
+                    </div>
+                    <div class="col-lg-3">
+                        <table class="float-end">
+                            <td>Search :</td>
+                            <td><input type="text" class="form-control float-end pencarian_cetak"></td>
+                        </table>
+                    </div>
+                </div>
+            </div>
             <div class="col-lg-12">
                 <div id="load_data"></div>
                 <div class="loadingbk" style="display: none">
@@ -178,9 +205,11 @@
                         $('.card-pilihan').hide();
                         $('.loadingbk').show();
                     } else if (lokasi == 'wipcetak') {
-                        var url = "{{ route('sumsortir.cetak') }}";
+
+                        var url = "{{ route('sumsortir.cetak2') }}";
                         $('.card-pilihan').hide();
                         $('.loadingbk').show();
+                        $('.punya_cetak').show();
 
                     } else {
                         alert('sedang terjadi masalah, masih dalam perbaikan')
@@ -209,6 +238,7 @@
                 $(document).on('click', '.kembali', function(e) {
                     e.preventDefault();
                     $('.loadingbk').show();
+                    $('.punya_cetak').hide();
                     $('#load_data').html('');
                     setTimeout(function() {
                         $('.loadingbk').hide();
@@ -519,6 +549,34 @@
                         }
                     });
                 });
+
+                $("body").on("click", ".pagination a", function(e) {
+                    e.preventDefault();
+
+                    var page = $(this).attr("href").split("page=")[1];
+                    search = $('.pencarian_cetak');
+                    load_cetak(page, search);
+                });
+
+                $(document).on("keyup", ".pencarian_cetak", function() {
+                    search = $(this).val();
+                    var page = (1);
+                    load_cetak(page, search);
+                });
+
+                function load_cetak(page, search) {
+                    $.ajax({
+                        type: "get",
+                        url: "{{ route('sumsortir.cetak2') }}",
+                        data: {
+                            page: page,
+                            search: search,
+                        },
+                        success: function(response) {
+                            $('#load_data').html(response);
+                        }
+                    });
+                }
             });
         </script>
     @endsection

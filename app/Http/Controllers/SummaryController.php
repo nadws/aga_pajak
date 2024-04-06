@@ -771,7 +771,7 @@ class SummaryController extends Controller
         DB::table('table_susut')->where('ket', $r->ket)->where('gudang', $r->nm_gudang)->update($data);
     }
 
-    function get_no_box(Request $r)
+    public function get_no_box(Request $r)
     {
         $response = Http::get(
             "$this->linkApi/show_box",
