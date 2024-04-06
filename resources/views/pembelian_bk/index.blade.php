@@ -44,7 +44,7 @@
                     </table>
 
                 </div>
-                <table class="table table-hover " id="tbl_nanda" width="100%">
+                <table class="table table-hover " id="tableSearch" width="100%">
                     <thead>
                         <tr>
                             <th class="dhead text-center" rowspan="2" width="5">#</th>
@@ -272,16 +272,16 @@
     @section('scripts')
         <script>
             $(document).ready(function() {
-                // new DataTable('#tableSearch', {
-                //     "searching": false,
-                //     scrollY: '400px',
-                //     scrollX: false,
-                //     scrollCollapse: false,
-                //     "stateSave": true,
-                //     "autoWidth": true,
-                //     "paging": false,
-                // });
-                pencarian('pencarian', 'tbl_nanda')
+                new DataTable('#tableSearch', {
+                    "searching": false,
+                    scrollY: '400px',
+                    scrollX: false,
+                    scrollCollapse: false,
+                    "stateSave": false,
+                    "autoWidth": false,
+                    "paging": false,
+                });
+                pencarian('pencarian', 'tableSearch')
 
                 $(document).on('click', '.delete_nota', function() {
                     var no_nota = $(this).attr('no_nota');
