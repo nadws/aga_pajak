@@ -19,6 +19,8 @@
     <div class="col-lg-6">
         <x-theme.button modal="Y" idModal="bkcetakawal" icon="fas fa-plus" addClass="float-end"
             teks="Tambah BJ Cetak" />
+        <x-theme.button modal="Y" idModal="historycetak" icon="fas fa-plus" addClass="float-end"
+            teks="Tambah BJ Cetak" />
         @if ($nm_gudang == 'wipcetak')
             <x-theme.button modal="Y" idModal="importcetak" icon="fas fa-upload" addClass="float-end"
                 teks="Import" />
@@ -62,6 +64,10 @@
                             <th class="dhead">Gudang</th>
                             <th class="dhead"> <button type="submit" class="badge bg-success">masuk bk
                                     grading</button></th>
+                            @if (auth()->user()->posisi_id == 1)
+                            @else
+                            @endif
+                            <th class="dhead"> <button type="submit" class="badge bg-success">hapus</button></th>
 
                         </tr>
                     </thead>
@@ -69,7 +75,7 @@
                         @php
                             $rowNumber = 1;
                         @endphp
-                        @foreach ($wip_cetak as $c)
+                        {{-- @foreach ($wip_cetak as $c)
                             @php
                                 $bk = \App\Models\GudangBkModel::getPartaicetak($c->partai_h);
 
@@ -102,7 +108,7 @@
                             @php
                                 $rowNumber++;
                             @endphp
-                        @endforeach
+                        @endforeach --}}
                         @foreach ($cabut as $no => $c)
                             @php
                                 $bk = \App\Models\GudangBkModel::getPartaicetak($c->nm_partai);

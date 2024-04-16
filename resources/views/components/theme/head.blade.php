@@ -81,17 +81,19 @@
 
         /* Warna scrollbar itu sendiri */
         .table-container::-webkit-scrollbar-thumb {
-            background: #667dcf;
+            background: #257687;
         }
 
         /* Warna scrollbar saat dihover */
         .table-container::-webkit-scrollbar-thumb:hover {
-            background: #667dcf;
+            background: #257687;
         }
 
         .dhead {
-            background-color: #435EBE !important;
+            background-color: #257687 !important;
             color: white;
+            font-weight: normal;
+            font-size: 14px;
         }
 
         #image-preview img {
@@ -224,8 +226,25 @@
         }
 
         th {
-            background-color: #435EBE;
+            background-color: #257687;
 
+        }
+
+        table.dataTable thead>tr>th.sorting,
+        table.dataTable thead>tr>th.sorting_asc,
+        table.dataTable thead>tr>th.sorting_desc,
+        table.dataTable thead>tr>th.sorting_asc_disabled,
+        table.dataTable thead>tr>th.sorting_desc_disabled,
+        table.dataTable thead>tr>td.sorting,
+        table.dataTable thead>tr>td.sorting_asc,
+        table.dataTable thead>tr>td.sorting_desc,
+        table.dataTable thead>tr>td.sorting_asc_disabled,
+        table.dataTable thead>tr>td.sorting_desc_disabled {
+            cursor: pointer;
+            position: relative;
+            padding-right: 26px;
+            background-color: #257687;
+            color: white;
         }
     </style>
     @yield('styles')

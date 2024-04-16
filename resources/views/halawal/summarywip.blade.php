@@ -554,12 +554,13 @@
                     e.preventDefault();
 
                     var page = $(this).attr("href").split("page=")[1];
-                    search = $('.pencarian_cetak');
+
+                    var search = $('.pencarian_cetak').val();
                     load_cetak(page, search);
                 });
 
                 $(document).on("keyup", ".pencarian_cetak", function() {
-                    search = $(this).val();
+                    var search = $(this).val();
                     var page = (1);
                     load_cetak(page, search);
                 });

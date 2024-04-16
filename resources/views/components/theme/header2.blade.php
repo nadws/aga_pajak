@@ -7,7 +7,7 @@
             }
 
             .layout-horizontal .main-navbar {
-                background-color: #435ebe;
+                background-color: #257687;
                 padding: 4px;
             }
 
@@ -23,10 +23,15 @@
                 height: 25px;
                 width: 25px;
             }
+
+            .font-testing {
+                font-weight: normal;
+                font-size: 16px;
+            }
         </style>
         <div class="logo">
             <a href="dashboard"><img src="/assets/login/img/empat.svg" alt="Logo" width="90px"></a>
-            <p class="fw-bold text-center">KAS AGA</->
+            <p class="fw-bold text-center font-testing">KAS AGA</p>
         </div>
         <div class="header-top-right">
 

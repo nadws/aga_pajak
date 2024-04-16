@@ -298,69 +298,76 @@ class SummarySortirController extends Controller
         $sheet1->setTitle('wipcetak');
 
 
-        $sheet1->getStyle("A1:L1")->applyFromArray($style_atas);
+        $sheet1->getStyle("A1:Y1")->applyFromArray($style_atas);
 
-        $sheet1->setCellValue('A1', 'ID');
-        $sheet1->setCellValue('B1', 'Partai h');
-        $sheet1->setCellValue('C1', 'No Box');
-        $sheet1->setCellValue('D1', 'Tipe');
-        $sheet1->setCellValue('E1', 'Grade');
-        $sheet1->setCellValue('F1', 'Pcs sdh cabut');
-        $sheet1->setCellValue('G1', 'Gr sdh cabut');
-        $sheet1->setCellValue('H1', 'Ttl Rp');
-        $sheet1->setCellValue('I1', 'Cost Cabut');
-        $sheet1->setCellValue('J1', 'Pcs timbang ulang');
-        $sheet1->setCellValue('K1', 'Gr timbang ulang');
-        $sheet1->setCellValue('L1', 'Selesai');
+        $sheet1->setCellValue('A1', 'no box');
+        $sheet1->setCellValue('B1', 'tipe');
+        $sheet1->setCellValue('C1', 'grade');
+        $sheet1->setCellValue('D1', 'partai');
+        $sheet1->setCellValue('E1', 'pcs bk');
+        $sheet1->setCellValue('F1', 'gr bk');
+        $sheet1->setCellValue('G1', 'cost bk');
+
+        $sheet1->setCellValue('H1', 'pcs timbang ulang');
+        $sheet1->setCellValue('I1', 'gr timbang ulang');
+        $sheet1->setCellValue('J1', 'cost timbang ulang');
+
+        $sheet1->setCellValue('K1', 'pcs sst');
+        $sheet1->setCellValue('L1', 'gr sst');
+        $sheet1->setCellValue('M1', 'sst %');
+
+        $sheet1->setCellValue('N1', 'pcs awal box');
+        $sheet1->setCellValue('O1', 'gr awal box');
+        $sheet1->setCellValue('P1', 'pcs tdk ctk');
+        $sheet1->setCellValue('Q1', 'gr tdk ctk');
+        $sheet1->setCellValue('R1', 'pcs awal ctk');
+        $sheet1->setCellValue('S1', 'gr awal ctk');
+        $sheet1->setCellValue('T1', 'pcs cu');
+        $sheet1->setCellValue('U1', 'gr cu');
+        $sheet1->setCellValue('V1', 'pcs ctk akhir');
+        $sheet1->setCellValue('W1', 'gr ctk akhir');
+        $sheet1->setCellValue('X1', 'sst ctk');
+        $sheet1->setCellValue('Y1', 'rp ctk');
+
+        $cetak =  GudangBkModel::export_cetak();
         $kolom = 2;
-        $response = Http::get("https://sarang.ptagafood.com/api/apibk/cabut_selesai");
-        $cabut = $response->object();
 
-        $wip_cetak = DB::table('gudang_ctk')->where('selesai', 'selesai')->get();
+        foreach ($cetak as $c) {
+            $sheet1->setCellValue('A' . $kolom, $c->no_box);
+            $sheet1->setCellValue('B' . $kolom, $c->tipe);
+            $sheet1->setCellValue('C' . $kolom, $c->grade);
+            $sheet1->setCellValue('D' . $kolom, $c->partai_h);
+            $sheet1->setCellValue('E' . $kolom, $c->pcs_cabut);
+            $sheet1->setCellValue('F' . $kolom, $c->gr_cabut);
+            $sheet1->setCellValue('G' . $kolom, $c->ttl_rp + $c->cost_cabut);
 
-        foreach ($cabut as $d) {
-            $bk = GudangBkModel::getPartaicetak($d->nm_partai);
-            $gdng_ctk = DB::table('gudang_ctk')->where('no_box', $d->no_box)->where('selesai', 'selesai')->first();
+            $sheet1->setCellValue('H' . $kolom, $c->pcs_timbang_ulang);
+            $sheet1->setCellValue('I' . $kolom, $c->gr_timbang_ulang);
+            $sheet1->setCellValue('J' . $kolom, $c->ttl_rp + $c->cost_cabut);
 
-            if (empty($gdng_ctk->selesai)) {
-            } else {
-                continue;
-            }
-            $sheet1->setCellValue('A' . $kolom, $gdng_ctk->id_gudang_ctk ?? '');
-            $sheet1->setCellValue('B' . $kolom, $d->nm_partai);
-            $sheet1->setCellValue('C' . $kolom, $d->no_box);
-            $sheet1->setCellValue('D' . $kolom, $d->tipe);
-            $sheet1->setCellValue('E' . $kolom, $bk->nm_grade ?? '');
-            $sheet1->setCellValue('F' . $kolom, $d->pcs_akhir);
-            $sheet1->setCellValue('G' . $kolom, $d->gr_akhir);
-            $sheet1->setCellValue('H' . $kolom, empty($bk->total_rp) ? '0' : ($bk->total_rp / $bk->gr) * $d->gr_akhir);
-            $sheet1->setCellValue('I' . $kolom, $d->ttl_rp);
-            $sheet1->setCellValue('J' . $kolom, $gdng_ctk->pcs_timbang_ulang ?? 0);
-            $sheet1->setCellValue('K' . $kolom, $gdng_ctk->gr_timbang_ulang ?? 0);
-            $sheet1->setCellValue('L' . $kolom, 'proses');
+            $sheet1->setCellValue('K' . $kolom, $c->pcs_cabut - $c->pcs_timbang_ulang);
+            $sheet1->setCellValue('L' . $kolom, $c->gr_cabut - $c->gr_timbang_ulang);
+            $sheet1->setCellValue('M' . $kolom, round((1 - ($c->gr_timbang_ulang / $c->gr_cabut)) * 100, 0) . ' %');
 
-            $kolom++;
-        }
-        foreach ($wip_cetak as $c) {
-            $bk = GudangBkModel::getPartaicetak($c->partai_h);
-            $ttl_rp = $bk->total_rp ?? 0;
-            $gr = $bk->gr ?? 0;
-            $sheet1->setCellValue('A' . $kolom, $c->id_gudang_ctk);
-            $sheet1->setCellValue('B' . $kolom, $c->partai_h);
-            $sheet1->setCellValue('C' . $kolom, $c->no_box);
-            $sheet1->setCellValue('D' . $kolom, $c->tipe);
-            $sheet1->setCellValue('E' . $kolom, $c->grade);
-            $sheet1->setCellValue('F' . $kolom, $c->pcs_cabut);
-            $sheet1->setCellValue('G' . $kolom, $c->gr_cabut);
-            $sheet1->setCellValue('H' . $kolom, $c->ttl_rp == 0 ? ($ttl_rp == 0 ? 0 : ($ttl_rp / $gr) * $c->gr_cabut) : 0);
-            $sheet1->setCellValue('I' . $kolom, $c->cost_cabut);
-            $sheet1->setCellValue('J' . $kolom, $c->pcs_timbang_ulang ?? 0);
-            $sheet1->setCellValue('K' . $kolom, $c->gr_timbang_ulang ?? 0);
-            $sheet1->setCellValue('L' . $kolom, $c->selesai);
+            $sheet1->setCellValue('N' . $kolom, $c->pcs_awal);
+            $sheet1->setCellValue('O' . $kolom, $c->gr_awal);
+            $sheet1->setCellValue('P' . $kolom, $c->pcs_tidak_ctk);
+            $sheet1->setCellValue('Q' . $kolom, $c->gr_tidak_ctk);
+            $sheet1->setCellValue('R' . $kolom, $c->pcs_awal_ctk);
+            $sheet1->setCellValue('S' . $kolom, $c->gr_awal_ctk);
+            $sheet1->setCellValue('T' . $kolom, $c->pcs_cu);
+            $sheet1->setCellValue('U' . $kolom, $c->gr_cu);
+            $sheet1->setCellValue('V' . $kolom, $c->pcs_akhir);
+            $sheet1->setCellValue('W' . $kolom, $c->gr_akhir);
+            $sheet1->setCellValue('X' . $kolom, empty($c->gr_akhir) ? '0%' : round((1 - (($c->gr_akhir + $c->gr_cu) / $c->gr_awal_ctk)) * 100, 0) . '%');
+            $sheet1->setCellValue('Y' . $kolom, $c->rp_ctk);
+
 
             $kolom++;
         }
-        $sheet1->getStyle('A2:L' . $kolom - 1)->applyFromArray($style);
+
+
+        $sheet1->getStyle('A2:Y' . $kolom - 1)->applyFromArray($style);
         $namafile = "Wip Cetak.xlsx";
 
         $writer = new Xlsx($spreadsheet);

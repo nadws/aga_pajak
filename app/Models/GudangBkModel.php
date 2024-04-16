@@ -270,4 +270,20 @@ class GudangBkModel extends Model
 
         return $result;
     }
+    public static function export_cetak()
+    {
+        $result = DB::select("SELECT a.no_box, a.tipe, a.grade, a.partai_h, a.pcs_cabut, a.gr_cabut, a.ttl_rp, a.cost_cabut,a.pcs_timbang_ulang, a.gr_timbang_ulang,
+
+        b.pcs_awal, b.gr_awal, b.pcs_tidak_ctk, b.gr_tidak_ctk, b.pcs_awal_ctk, b.gr_awal_ctk, b.pcs_cu, b.gr_cu, b.pcs_akhir, b.gr_akhir, b.rp_ctk
+        From gudang_ctk as a
+        left join (
+            SELECT b.no_box, sum(b.pcs_awal) as pcs_awal, sum(b.gr_awal) as gr_awal, sum(b.pcs_tidak_ctk) as pcs_tidak_ctk, sum(b.gr_tidak_ctk) as gr_tidak_ctk, sum(b.pcs_awal_ctk) as pcs_awal_ctk, sum(b.gr_awal_ctk) as gr_awal_ctk, sum(b.pcs_cu) as pcs_cu, sum(b.gr_cu) as gr_cu, sum(b.pcs_akhir) as pcs_akhir, sum(b.gr_akhir) as gr_akhir, sum(b.pcs_akhir * b.rp_pcs) as rp_ctk
+            FROM cetak as b 
+            group by b.no_box
+        ) as b on b.no_box = a.no_box
+        WHERE a.selesai = 'selesai' and a.gudang = 'cetak'
+        ");
+
+        return $result;
+    }
 }

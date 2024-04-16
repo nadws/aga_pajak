@@ -17,7 +17,7 @@
                 <li class="menu-item">
                     <a href="dashboard"
                         class='menu-link {{ request()->route()->getName() == 'dashboard' ? 'active_navbar_new' : '' }}'>
-                        <span>Dashboard</span>
+                        <span class="font-testing">Dashboard</span>
                     </a>
                 </li>
 
@@ -31,7 +31,7 @@
                         <a href="{{ route($d->route) }}"
                             class='menu-link 
                     {{ in_array(request()->route()->getName(), $array) ? 'active_navbar_new' : '' }}'>
-                            <span>{{ ucwords($d->nama) }}</span>
+                            <span class="font-testing">{{ ucwords($d->nama) }}</span>
                         </a>
                     </li>
                 @endforeach

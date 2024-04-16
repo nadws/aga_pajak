@@ -54,21 +54,27 @@ class PembelianBahanBakuController extends Controller
     {
         $tgl1 =  $this->tgl1;
         $tgl2 =  $this->tgl2;
-        $pembelian = DB::select("SELECT a.id_invoice_bk, a.no_lot, a.tgl, a.no_nota,b.nm_suplier, a.suplier_akhir, a.total_harga, a.lunas, c.kredit, c.debit, a.approve, d.no_nota as nota_grading,e.rupiah, e.no_nota as nota_bk_campur
-            FROM invoice_bk as a 
-            left join tb_suplier as b on b.id_suplier = a.id_suplier
-            left join (
-            SELECT c.no_nota , sum(c.debit) as debit, sum(c.kredit) as kredit  FROM bayar_bk as c
-            group by c.no_nota
-            ) as c on c.no_nota = a.no_nota
-            left join grading as d on d.no_nota = a.no_nota
-            left join (
-                SELECT e.no_nota, sum(e.rupiah) as rupiah
-                FROM buku_campur as e
-                group by e.no_nota
-            ) as e on e.no_nota = a.no_nota
-            where a.tgl between '$tgl1' and '$tgl2'
-            order by a.no_nota DESC");
+        $pembelian = DB::select("SELECT a.id_invoice_bk, a.no_lot, a.tgl, a.no_nota,b.nm_suplier, a.suplier_akhir, a.total_harga, a.lunas, c.kredit, c.debit, a.approve, d.no_nota as nota_grading, if(e.approve = 'Y',f.rupiah_approve,e.rupiah) as rupiah , e.no_nota as nota_bk_campur, e.approve, f.rupiah_approve
+        FROM invoice_bk as a 
+        left join tb_suplier as b on b.id_suplier = a.id_suplier
+        left join (
+        SELECT c.no_nota , sum(c.debit) as debit, sum(c.kredit) as kredit  FROM bayar_bk as c
+        group by c.no_nota
+        ) as c on c.no_nota = a.no_nota
+        left join grading as d on d.no_nota = a.no_nota
+        left join (
+            SELECT e.no_nota, sum(e.rupiah) as rupiah, e.approve
+            FROM buku_campur as e
+            group by e.no_nota
+        ) as e on e.no_nota = a.no_nota
+        
+        left join (
+            SELECT e.no_lot, sum(e.rupiah) as rupiah_approve
+            FROM buku_campur_approve as e
+            group by e.no_lot
+        ) as f on f.no_lot = a.no_lot
+        where a.tgl between '$tgl1' and '$tgl2'
+        order by a.no_nota DESC;");
 
         $listBulan = DB::table('bulan')->get();
         $id_user = auth()->user()->id;
