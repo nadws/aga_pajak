@@ -714,9 +714,10 @@ class PembelianBahanBakuController extends Controller
             where a.no_nota = '$r->no_nota'
             group by a.no_nota;"),
             'invoice' => DB::table('invoice_bk')->where('no_nota', $r->no_nota)->first(),
-            'buku_campur' => DB::select("SELECT b.nm_grade, a.pcs, a.gr, a.rupiah
+            'buku_campur' => DB::select("SELECT b.nm_grade, if(a.approve = 'Y', c.pcs, a.pcs) as pcs, if(a.approve = 'Y',c.gr,a.gr) as gr , if(a.approve = 'Y',c.rupiah, a.rupiah) as rupiah
             FROM buku_campur as a
             left join grade as b on b.id_grade = a.id_grade
+            left join buku_campur_approve as c on c.id_buku_campur = a.id_buku_campur
             where a.no_nota = '$r->no_nota'
              ")
         ];
