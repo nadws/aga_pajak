@@ -281,6 +281,25 @@ class NavbarController extends Controller
         $title = 'Penjualan';
         return view('navbar.data_master', compact(['data', 'title']));
     }
+    public function gudang_new()
+    {
+        $data = [
+            [
+                'judul' => 'Gudang Sarang',
+                'route' => 'gudangnew.index',
+                'img' => 'warehouse3.png',
+                'deskripsi' => 'Mencatat berbagai transaksi keuangan dengan menetapkan langsung rekening di sisi debit dan kredit.',
+            ],
+            [
+                'judul' => 'Lap P Produksi',
+                'route' => 'gudangnew.laporan_produksi',
+                'img' => 'conveyor-belt.png',
+                'deskripsi' => 'Mencatat berbagai transaksi keuangan dengan menetapkan langsung rekening di sisi debit dan kredit.',
+            ],
+        ];
+        $title = 'Gudang';
+        return view('navbar.data_master', compact(['data', 'title']));
+    }
     public function asset()
     {
         $data = [

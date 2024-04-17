@@ -11,6 +11,7 @@ use App\Http\Controllers\CrudPermissionController;
 use App\Http\Controllers\FakturPenjualanController;
 use App\Http\Controllers\GudangBkController;
 use App\Http\Controllers\GudangController;
+use App\Http\Controllers\GudangNewController;
 use App\Http\Controllers\HalawalGudangController;
 use App\Http\Controllers\JurnalController;
 use App\Http\Controllers\JurnalPenyesuaianController;
@@ -71,6 +72,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/testing', 'testing')->name('testing');
         Route::get('/penjualan_agl', 'penjualan_agl')->name('penjualan_agl');
         Route::get('/kandang', 'kandang')->name('kandang');
+        Route::get('/gudang_new', 'gudang_new')->name('gudang_new');
     });
 
 
@@ -447,5 +449,12 @@ Route::middleware('auth')->group(function () {
             Route::get('/load_box_selesai', 'load_box_selesai')->name('load_box_selesai');
             Route::post('/save_selesai', 'save_selesai')->name('save_selesai');
             Route::get('/export_opname_cetak', 'export_opname_cetak')->name('export_opname_cetak');
+        });
+    Route::controller(GudangNewController::class)
+        ->prefix('gudangnew')
+        ->name('gudangnew.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/laporan_produksi', 'laporan_produksi')->name('laporan_produksi');
         });
 });

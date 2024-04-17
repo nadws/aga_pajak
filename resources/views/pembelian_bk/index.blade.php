@@ -156,17 +156,16 @@
                                                 $emptyKondisi = [$edit, $delete, $print, $grading];
                                             @endphp
                                             <x-theme.dropdown_kosong :emptyKondisi="$emptyKondisi" />
-
+                                            @if (!empty($edit))
+                                                <li>
+                                                    <a class="dropdown-item text-primary edit_akun"
+                                                        href="{{ route('edit_pembelian_bk', ['nota' => $p->no_nota]) }}">
+                                                        <i class="me-2 fas fa-pen"></i> Edit
+                                                    </a>
+                                                </li>
+                                            @endif
                                             @if ($p->approve == 'Y')
                                             @else
-                                                @if (!empty($edit))
-                                                    <li>
-                                                        <a class="dropdown-item text-primary edit_akun"
-                                                            href="{{ route('edit_pembelian_bk', ['nota' => $p->no_nota]) }}">
-                                                            <i class="me-2 fas fa-pen"></i> Edit
-                                                        </a>
-                                                    </li>
-                                                @endif
                                                 @if (!empty($delete))
                                                     <li>
                                                         <a class="dropdown-item  text-danger delete_nota"
