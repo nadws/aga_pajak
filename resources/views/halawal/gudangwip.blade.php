@@ -153,7 +153,7 @@
                     <div class="col-lg-2">
                         <label for="">Aksi</label> <br>
                     </div>
-                    <div class="col-lg-1 mt-2">
+                    <div class="col-lg-2 mt-2">
                         <input type="text" class="form-control" name="partai[]">
                     </div>
                     <div class="col-lg-1 mt-2">

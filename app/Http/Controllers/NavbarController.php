@@ -286,12 +286,55 @@ class NavbarController extends Controller
         $data = [
             [
                 'judul' => 'Gudang Sarang',
-                'route' => 'gudangnew.index',
+                'route' => 'kelompok_gudang',
                 'img' => 'warehouse3.png',
                 'deskripsi' => 'Mencatat berbagai transaksi keuangan dengan menetapkan langsung rekening di sisi debit dan kredit.',
             ],
             [
                 'judul' => 'Lap P Produksi',
+                'route' => 'gudangnew.laporan_produksi',
+                'img' => 'conveyor-belt.png',
+                'deskripsi' => 'Mencatat berbagai transaksi keuangan dengan menetapkan langsung rekening di sisi debit dan kredit.',
+            ],
+        ];
+        $title = 'Gudang';
+        return view('navbar.data_master', compact(['data', 'title']));
+    }
+    public function kelompok_gudang()
+    {
+        $data = [
+            [
+                'judul' => 'Gudang BK',
+                'route' => 'gudangnew.index',
+                'img' => 'warehouse3.png',
+                'deskripsi' => 'Mencatat berbagai transaksi keuangan dengan menetapkan langsung rekening di sisi debit dan kredit.',
+            ],
+            [
+                'judul' => 'Gudang Partai Kerja',
+                'route' => 'gudangnew.laporan_produksi',
+                'img' => 'conveyor-belt.png',
+                'deskripsi' => 'Mencatat berbagai transaksi keuangan dengan menetapkan langsung rekening di sisi debit dan kredit.',
+            ],
+            [
+                'judul' => 'Gudang Cabut',
+                'route' => 'gudangnew.laporan_produksi',
+                'img' => 'conveyor-belt.png',
+                'deskripsi' => 'Mencatat berbagai transaksi keuangan dengan menetapkan langsung rekening di sisi debit dan kredit.',
+            ],
+            [
+                'judul' => 'Gudang Cetak',
+                'route' => 'gudangnew.laporan_produksi',
+                'img' => 'conveyor-belt.png',
+                'deskripsi' => 'Mencatat berbagai transaksi keuangan dengan menetapkan langsung rekening di sisi debit dan kredit.',
+            ],
+            [
+                'judul' => 'Gudang Grading',
+                'route' => 'gudangnew.laporan_produksi',
+                'img' => 'conveyor-belt.png',
+                'deskripsi' => 'Mencatat berbagai transaksi keuangan dengan menetapkan langsung rekening di sisi debit dan kredit.',
+            ],
+            [
+                'judul' => 'Gudang Cetak Ulang',
                 'route' => 'gudangnew.laporan_produksi',
                 'img' => 'conveyor-belt.png',
                 'deskripsi' => 'Mencatat berbagai transaksi keuangan dengan menetapkan langsung rekening di sisi debit dan kredit.',

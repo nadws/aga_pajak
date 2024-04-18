@@ -73,6 +73,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/penjualan_agl', 'penjualan_agl')->name('penjualan_agl');
         Route::get('/kandang', 'kandang')->name('kandang');
         Route::get('/gudang_new', 'gudang_new')->name('gudang_new');
+        Route::get('/kelompok_gudang', 'kelompok_gudang')->name('kelompok_gudang');
     });
 
 
@@ -456,5 +457,6 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/laporan_produksi', 'laporan_produksi')->name('laporan_produksi');
+            Route::get('/gudang_p_kerja', 'gudang_p_kerja')->name('gudang_p_kerja');
         });
 });

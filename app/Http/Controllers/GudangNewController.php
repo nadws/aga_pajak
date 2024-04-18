@@ -6,6 +6,7 @@ use App\Models\GudangBkModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
+use Illuminate\Support\Facades\Http;
 
 class GudangNewController extends Controller
 {
@@ -81,9 +82,14 @@ class GudangNewController extends Controller
         return view('laporan_produksi.index', $data);
     }
 
-    // public function box_produksi(Request $r)
-    // {
-    //     $response = Http::get("https://sarang.ptagafood.com/api/apibk/cabut_selesai");
-    //     $cabut = $response->object();
-    // }
+    public function gudang_p_kerja(Request $r)
+    {
+        $response = Http::get("https://sarang.ptagafood.com/api/apibk/bikin_box");
+        $cabut = $response->object();
+        $data =  [
+            'title' => 'Gudang Partai Kerja',
+            'cabut' => $cabut,
+        ];
+        return view('gudangnew.p_kerja', $data);
+    }
 }

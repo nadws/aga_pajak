@@ -6,31 +6,15 @@
                 <h6 class="float-start mt-1">{{ $title }} </h6>
             </div>
             <div class="col-lg-6">
-                @if (auth()->user()->posisi_id == '1')
-                    <x-theme.button modal="Y" idModal="import" icon="fas fa-upload" addClass="float-end"
-                        teks="Import" />
-                    <x-theme.button modal="Y" idModal="import2" icon="fas fa-upload" addClass="float-end"
-                        teks="Import G Gabung" />
-                    <form action="{{ route('gudangBk.export_buku_campur_bk') }}" method="post">
-                        @csrf
-                        <button class="btn btn-success float-end me-2"><i class="fas fa-file-excel"></i> Export</button>
-                    </form>
-                    <form action="{{ route('gudangBk.export_gudang_produksi') }}" method="post">
-                        @csrf
-                        <button class="btn btn-success float-end me-2"><i class="fas fa-file-excel"></i> Export
-                            G Gabung</button>
-                    </form>
-                @else
-                    <x-theme.button modal="Y" idModal="import2" icon="fas fa-upload" addClass="float-end"
-                        teks="Import G Gabung" />
-                    <form action="{{ route('gudangBk.export_gudang_produksi') }}" method="post">
-                        @csrf
-                        <button class="btn btn-success float-end me-2"><i class="fas fa-file-excel"></i> Export
-                        </button>
-                    </form>
-                @endif
 
-
+                <x-theme.button modal="Y" idModal="import" icon="fas fa-upload" addClass="float-end"
+                    teks="Import" />
+                <form action="{{ route('gudangBk.export_buku_campur_bk') }}" method="post">
+                    @csrf
+                    <button class="btn btn-success float-end me-2"><i class="fas fa-file-excel"></i> Export</button>
+                </form>
+                <x-theme.button modal="Y" idModal="tambah" icon="fas fa-plus" addClass="float-end"
+                    teks="Tambah BK" />
             </div>
         </div>
     </x-slot>
@@ -156,6 +140,51 @@
                         <label for="">File</label>
                         <input type="file" class="form-control" name="file">
                         <input type="hidden" name="gudang" value="{{ $nm_gudang }}" id="">
+                    </div>
+                </div>
+
+            </x-theme.modal>
+        </form>
+        <form action="" method="post" enctype="multipart/form-data">
+            @csrf
+            <x-theme.modal title="Tambah Bk Awal" size="modal-lg-max" idModal="tambah" btnSave="Y">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label for="">Suplier Awal</label>
+                        <input type="text" class="form-control" name="suplier_awal">
+                    </div>
+                    <div class="col-lg-4">
+                        <label for="">Date</label>
+                        <input type="text" class="form-control" name="suplier_awal">
+                    </div>
+                    <div class="col-lg-4">
+                        <label for="">Grade</label>
+                        <input type="text" class="form-control" name="suplier_awal">
+                    </div>
+                    <div class="col-lg-4">
+                        <label for="">Pcs</label>
+                        <input type="text" class="form-control" name="suplier_awal">
+                    </div>
+                    <div class="col-lg-4">
+                        <label for="">Gr</label>
+                        <input type="text" class="form-control" name="suplier_awal">
+                    </div>
+                    <div class="col-lg-4">
+                        <label for="">Rp/Gr</label>
+                        <input type="text" class="form-control" name="suplier_awal">
+                    </div>
+                    <div class="col-lg-4">
+                        <label for="">Lot</label>
+                        <input type="text" class="form-control" name="suplier_awal">
+                    </div>
+                    <div class="col-lg-4">
+                        <label for="">Keterangan/Nama Partai Herry
+                        </label>
+                        <input type="text" class="form-control" name="suplier_awal">
+                    </div>
+                    <div class="col-lg-4">
+                        <label for="">Keterangan/Nama Partai Sinta</label>
+                        <input type="text" class="form-control" name="suplier_awal">
                     </div>
                 </div>
 
