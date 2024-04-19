@@ -75,7 +75,7 @@
                             @endif
                             <td align="right">{{ number_format($a->debit, 2) }}</td>
                             <td align="right">{{ number_format($a->kredit, 2) }}</td>
-                            <td>{{ strtoupper($a->admin) }}</td>
+                            <td>{{ ucwords($a->admin) }}</td>
                             <td>
                                 <div class="btn-group" role="group">
                                     <span class="btn btn-sm" data-bs-toggle="dropdown">
@@ -134,28 +134,30 @@
             </x-theme.modal>
         </form>
 
-
-        <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <div class="row">
-                            <h5 class="text-danger ms-4 mt-4"><i class="fas fa-trash"></i> Hapus Data</h5>
-                            <p class=" ms-4 mt-4">Apa anda yakin ingin menghapus ?</p>
-                            <input type="hidden" class="no_nota" name="no_nota">
-                            <input type="hidden" name="tgl1" value="{{ $tgl1 }}">
-                            <input type="hidden" name="tgl2" value="{{ $tgl2 }}">
-                            <input type="hidden" name="id_proyek" value="{{ $id_proyek }}">
+        <form action="{{ route('jurnal-delete') }}">
+            <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="row">
+                                <h5 class="text-danger ms-4 mt-4"><i class="fas fa-trash"></i> Hapus Data</h5>
+                                <p class=" ms-4 mt-4">Apa anda yakin ingin menghapus ?</p>
+                                <input type="hidden" class="no_nota" name="no_nota">
+                                <input type="hidden" name="tgl1" value="{{ $tgl1 }}">
+                                <input type="hidden" name="tgl2" value="{{ $tgl2 }}">
+                                <input type="hidden" name="id_proyek" value="{{ $id_proyek }}">
+                            </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-danger">Hapus</button>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-danger"
+                                data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-danger">Hapus</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
+        </form>
 
         <x-theme.modal title="Detail Jurnal" size="modal-lg-max" idModal="detail">
             <div class="row">

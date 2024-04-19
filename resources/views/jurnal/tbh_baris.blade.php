@@ -28,13 +28,13 @@
 
     </td>
     <td style="vertical-align: top;">
-        <input type="text" class="form-control debit_rupiah text-end" value="Rp 0" count="{{ $count }}">
-        <input type="hidden" class="form-control debit_biasa debit_biasa{{ $count }}" value="0"
+        <input onfocus="this.select()" type="text" class="form-control debit_rupiah text-end" value="Rp 0" count="{{ $count }}">
+        <input onfocus="this.select()" type="hidden" class="form-control debit_biasa debit_biasa{{ $count }}" value="0"
             name="debit[]">
     </td>
     <td style="vertical-align: top;">
-        <input type="text" class="form-control kredit_rupiah text-end" value="Rp 0" count="{{ $count }}">
-        <input type="hidden" class="form-control kredit_biasa kredit_biasa{{ $count }}" value="0"
+        <input onfocus="this.select()" type="text" class="form-control kredit_rupiah text-end" value="Rp 0" count="{{ $count }}">
+        <input onfocus="this.select()" type="hidden" class="form-control kredit_biasa kredit_biasa{{ $count }}" value="0"
             name="kredit[]">
     </td>
     {{-- <td style="vertical-align: top;">
