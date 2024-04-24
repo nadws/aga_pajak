@@ -43,12 +43,14 @@
                     <th class="dhead" rowspan="2">No Box</th>
                     <th class="dhead" rowspan="2">Pengawas</th>
                     <th class="dhead text-center" colspan="2">BK</th>
-                    <th class="dhead text-center" colspan="6">Cabut</th>
+                    <th class="dhead text-center" colspan="7">Cabut</th>
                     <th class="dhead text-center" colspan="2">Sisa</th>
                 </tr>
                 <tr>
                     <th class="dhead text-center">Pcs</th>
                     <th class="dhead text-center">Gr</th>
+
+                    <th class="dhead text-center">Nama Anak</th>
 
                     <th class="dhead text-center">Pcs Awal</th>
                     <th class="dhead text-center">Gr Awal</th>
@@ -77,6 +79,7 @@
                         <td class="text-center">{{ $g->name ?? '-' }}</td>
                         <td class="text-center">{{ $g->pcs_awal_bk ?? 0 }}</td>
                         <td class="text-center">{{ $g->gr_awal_bk ?? 0 }}</td>
+                        <td>{{ $g->nm_anak_cabut == null ? $g->nm_anak_eo : $g->nm_anak_cabut }}</td>
                         <td class="text-center">{{ $g->pcs_awal ?? 0 }}</td>
                         <td class="text-center">{{ $g->gr_awal ?? 0 + $gr_eo_awal }}</td>
                         <td class="text-center">{{ $g->pcs_akhir ?? 0 }}</td>
@@ -90,8 +93,15 @@
                             $pcs_akhir_cbt = $g->pcs_akhir ?? 0;
                             $gr_akhir_cbt = $g->gr_akhir ?? 0;
 
+                            $susut =
+                                $gr_akhir_cbt + $gr_eo_akhir == 0
+                                    ? '0'
+                                    : number_format(
+                                        (1 - ($gr_akhir_cbt + $gr_eo_akhir) / ($gr_awal_cbt + $gr_eo_awal)) * 100,
+                                        1,
+                                    );
                         @endphp
-                        <td class="text-center">
+                        <td class="text-center {{ $susut > 23 ? 'text-danger' : '' }}">
                             {{ $gr_akhir_cbt + $gr_eo_akhir == 0 ? '0' : number_format((1 - ($gr_akhir_cbt + $gr_eo_akhir) / ($gr_awal_cbt + $gr_eo_awal)) * 100, 1) }}
                             %
                         </td>

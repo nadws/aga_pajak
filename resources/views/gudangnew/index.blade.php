@@ -145,47 +145,60 @@
 
             </x-theme.modal>
         </form>
-        <form action="" method="post" enctype="multipart/form-data">
+        <form action="{{ route('gudangnew.save_gudang_bk') }}" method="post">
             @csrf
             <x-theme.modal title="Tambah Bk Awal" size="modal-lg-max" idModal="tambah" btnSave="Y">
                 <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col-lg-12">
+                        <h5>gudang {{ $nm_gudang }}</h5>
+                    </div>
+                    <input type="hidden" value="{{ $nm_gudang }}" name="gudang">
+                    <input type="hidden" value="herry" name="lokasi">
+                    <div class="col-lg-2">
                         <label for="">Suplier Awal</label>
-                        <input type="text" class="form-control" name="suplier_awal">
+                        <input type="text" class="form-control" name="suplier_awal[]">
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-2">
                         <label for="">Date</label>
-                        <input type="text" class="form-control" name="suplier_awal">
+                        <input type="date" class="form-control" name="tgl[]">
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-1">
                         <label for="">Grade</label>
-                        <input type="text" class="form-control" name="suplier_awal">
+                        <input type="text" class="form-control" name="grade[]">
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-2">
                         <label for="">Pcs</label>
-                        <input type="text" class="form-control" name="suplier_awal">
+                        <input type="text" class="form-control" name="pcs[]">
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-2">
                         <label for="">Gr</label>
-                        <input type="text" class="form-control" name="suplier_awal">
+                        <input type="text" class="form-control" name="gr[]">
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-2">
                         <label for="">Rp/Gr</label>
-                        <input type="text" class="form-control" name="suplier_awal">
+                        <input type="text" class="form-control" name="rp_gram[]">
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-1">
                         <label for="">Lot</label>
-                        <input type="text" class="form-control" name="suplier_awal">
+                        <input type="text" class="form-control" name="lot[]">
                     </div>
-                    <div class="col-lg-4">
-                        <label for="">Keterangan/Nama Partai Herry
+                    <div class="col-lg-2 mt-2">
+                        <label for="">Nama Partai Herry
                         </label>
-                        <input type="text" class="form-control" name="suplier_awal">
+                        <input type="text" class="form-control" name="ket1[]">
                     </div>
-                    <div class="col-lg-4">
-                        <label for="">Keterangan/Nama Partai Sinta</label>
-                        <input type="text" class="form-control" name="suplier_awal">
+                    <div class="col-lg-2 mt-2">
+                        <label for="">Nama Partai Sinta</label>
+                        <input type="text" class="form-control" name="ket2[]">
                     </div>
+
+                </div>
+                <div class="tambah-data"></div>
+                <div class="col-lg-12 mt-2">
+                    <button type="button" class="btn btn-block btn-lg tbh_baris"
+                        style="background-color: #F4F7F9; color: #8FA8BD; font-size: 14px; padding: 13px;">
+                        <i class="fas fa-plus"></i> Tambah Baris Baru
+                    </button>
                 </div>
 
             </x-theme.modal>
@@ -199,6 +212,24 @@
                 $(document).on('click', '#checkAll', function() {
                     // Setel properti checked dari kotak centang individu sesuai dengan status "cek semua"
                     $('.checkbox-item').prop('checked', $(this).prop('checked'));
+                });
+
+
+                var count = 3;
+                $(document).on("click", ".tbh_baris", function() {
+                    count = count + 1;
+                    $.ajax({
+                        url: "/gudangnew/tbh_baris?count=" + count,
+                        type: "Get",
+                        success: function(data) {
+                            $(".tambah-data").append(data);
+                        },
+                    });
+                });
+
+                $(document).on("click", ".remove_baris", function() {
+                    var delete_row = $(this).attr("count");
+                    $(".baris" + delete_row).remove();
                 });
             });
         </script>

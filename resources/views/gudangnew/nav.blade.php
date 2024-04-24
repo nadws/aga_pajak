@@ -14,6 +14,11 @@
             href="{{ route('gudangnew.index', ['nm_gudang' => 'produksi']) }}" type="button" role="tab"
             aria-controls="pills-home" aria-selected="true">Rencana Produksi</a>
     </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link {{ $nm_gudang == 'wip' ? 'active' : '' }}"
+            href="{{ route('gudangnew.index', ['nm_gudang' => 'wip']) }}" type="button" role="tab"
+            aria-controls="pills-home" aria-selected="true">Campur Produksi</a>
+    </li>
     {{-- <li class="nav-item" role="presentation">
         <a class="nav-link {{ $nm_gudang == 'summary_produksi' ? 'active' : '' }}"
             href="{{ route('gudangnew.index', ['nm_gudang' => 'summary_produksi']) }}" type="button" role="tab"

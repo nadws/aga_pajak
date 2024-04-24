@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
 use Illuminate\Support\Facades\Http;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Reader\Exception;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
 class GudangNewController extends Controller
 {
@@ -68,6 +72,94 @@ class GudangNewController extends Controller
         return view('gudangnew.index', $data);
     }
 
+    public function tbh_baris(Request $r)
+    {
+        $data = [
+            'count' => $r->count
+
+        ];
+        return view('gudangnew.tbh_baris', $data);
+    }
+
+    public function save_gudang_bk(Request $r)
+    {
+        for ($x = 0; $x < count($r->suplier_awal); $x++) {
+            DB::table('buku_campur')->insert([
+                'no_lot' => $r->lot[$x],
+                'id_grade' => '1',
+                'pcs' => $r->pcs[$x],
+                'gr' => $r->gr[$x],
+                'rupiah' => $r->rp_gram[$x],
+                'ket' => $r->ket1[$x],
+                'ket2' => $r->ket2[$x],
+                'lok_tgl' => ' ',
+                'approve' => 'Y',
+                'gudang' => $r->gudang,
+                'gabung' => 'T'
+            ]);
+            $idBukuCampur = DB::getPdo()->lastInsertId();
+            DB::table('buku_campur_approve')->insert([
+                'id_buku_campur' => $idBukuCampur,
+                'buku' => '',
+                'suplier_awal' => $r->suplier_awal[$x],
+                'tgl' => $r->tgl[$x],
+                'nm_grade' => $r->grade[$x],
+                'pcs' => $r->pcs[$x],
+                'gr' => $r->gr[$x],
+                'rupiah' => $r->rp_gram[$x],
+                'no_lot' => $r->lot[$x],
+                'ket' => $r->ket1[$x],
+                'ket2' => $r->ket2[$x],
+                'lok_tgl' => '',
+                'gudang' => $r->gudang,
+            ]);
+        }
+
+        if ($r->lokasi == 'herry') {
+            return redirect()->route('gudangnew.index', ['nm_gudang' => $r->gudang])->with('sukses', 'Data berhasil ditambhkan');
+        } else {
+            return redirect()->route('gudangnew.gudang_p_kerja')->with('sukses', 'Data berhasil ditambhkan');
+        }
+    }
+
+
+
+
+    public function gudang_p_kerja(Request $r)
+    {
+        $gudang = GudangBkModel::g_p_kerja();
+
+
+        $data =  [
+            'title' => 'Gudang Partai Kerja',
+            'gudang' => $gudang,
+            'linkApi' => $this->linkApi,
+        ];
+        return view('gudangnew.p_kerja', $data);
+    }
+
+    public function gudang_c_pgws(Request $r)
+    {
+        $response = Http::get("https://sarang.ptagafood.com/api/apibk/bikin_box");
+        $cabut = $response->object();
+        $data =  [
+            'title' => 'Gudang Cabut Pgws',
+            'cabut' => $cabut,
+        ];
+        return view('gudangnew.g_cbt_pgws', $data);
+    }
+    public function gudang_cabut(Request $r)
+    {
+        $response = Http::get("https://sarang.ptagafood.com/api/apibk/cabut_selesai_new");
+        $cabut = $response->object();
+        $data =  [
+            'title' => 'Gudang Cabut',
+            'cabut' => $cabut,
+        ];
+        return view('gudangnew.g_cabut', $data);
+    }
+
+    // Laporan 
 
     public function laporan_produksi(Request $r)
     {
@@ -81,15 +173,315 @@ class GudangNewController extends Controller
         ];
         return view('laporan_produksi.index', $data);
     }
-
-    public function gudang_p_kerja(Request $r)
+    public function laporan_boxproduksi(Request $r)
     {
-        $response = Http::get("https://sarang.ptagafood.com/api/apibk/bikin_box");
+        $response = Http::get("https://sarang.ptagafood.com/api/apibk/cabut_laporan");
         $cabut = $response->object();
         $data =  [
-            'title' => 'Gudang Partai Kerja',
+            'title' => 'Laporan Box Produksi',
             'cabut' => $cabut,
         ];
-        return view('gudangnew.p_kerja', $data);
+        return view('laporan_produksi.cabut', $data);
+    }
+
+
+    public function import_buku_campur_produksi(Request $r)
+    {
+
+        $hasError = false; // Variabel flag untuk melacak apakah ada kesalahan
+        if ($r->hasFile('file')) {
+            $file = $r->file('file');
+            $filePath = $file->storeAs('temp', 'imported_file.xlsx');
+
+            try {
+                $spreadsheet = IOFactory::load(storage_path("app/{$filePath}"));
+                $sheetNames = $spreadsheet->getSheetNames();
+
+                foreach ($sheetNames as $sheetName) {
+                    $currentSheet = $spreadsheet->getSheetByName($sheetName);
+                    $title = $currentSheet->getTitle();
+
+                    if ($title === 'rencana produksi') {
+                        $gudang = 'produksi';
+                    } elseif ($title === 'campur produksi') {
+                        $gudang = 'wip';
+                    } else {
+                        $hasError = true;
+                    }
+
+                    foreach ($currentSheet->getRowIterator() as $rowIndex => $row) {
+                        if ($rowIndex === 1) {
+                            continue;
+                        }
+                        $rowData = [];
+                        $cellIterator = $row->getCellIterator();
+
+                        foreach ($cellIterator as $cell) {
+                            $rowData[] = $cell->getValue();
+                        }
+
+                        if (empty(array_filter(array_slice($rowData, 0, 13), 'strlen'))) {
+                            continue;
+                        }
+
+                        try {
+                            if (empty($rowData[0]) && $gudang == 'wip') {
+                                DB::table('buku_campur')->insert([
+                                    'ket2' => $rowData[1],
+                                    'ket' => $rowData[2],
+                                    'id_grade' => '1',
+                                    'pcs' => $rowData[5],
+                                    'gr' => $rowData[6],
+                                    'rupiah' => $rowData[7],
+                                    'approve' => 'Y',
+                                    'gudang' => $gudang,
+                                    'gabung' => 'T'
+
+                                ]);
+                                $idBukuCampur = DB::getPdo()->lastInsertId();
+
+                                $tgl = $rowData[3];
+                                if (is_numeric($tgl)) {
+                                    $tanggalExcel = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($tgl);
+                                    $tanggalFormatted = $tanggalExcel->format('Y-m-d');
+                                } else {
+                                    // Jika nilai sudah dalam format tanggal, pastikan formatnya adalah 'Y-m-d'
+                                    $tanggalFormatted = date('Y-m-d', strtotime($tgl));
+                                }
+                                DB::table('buku_campur_approve')->insert([
+                                    'id_buku_campur' => $idBukuCampur,
+                                    'tgl' => empty($tanggalFormatted) ? '0000-00-00' : $tanggalFormatted,
+                                    'nm_grade' => $rowData[4],
+                                    'pcs' => $rowData[5],
+                                    'gr' => $rowData[6],
+                                    'rupiah' => $rowData[7],
+                                    'ket' => empty($rowData[2]) ? ' ' : $rowData[2],
+                                    'ket2' => empty($rowData[1]) ? ' ' : $rowData[1],
+                                    'gudang' => $gudang,
+                                ]);
+                            } else {
+                                $buku_campur = DB::table('buku_campur')->where('id_buku_campur', $rowData[0])->first();
+                                DB::table('buku_campur')->where('id_buku_campur', $rowData[0])->update([
+                                    'approve' => 'Y',
+                                    'gudang' => $gudang,
+                                    'gabung' => 'T'
+                                ]);
+
+                                $bk_approve = DB::table('buku_campur_approve')->where('id_buku_campur', $rowData[0])->first();
+
+                                $tgl = $rowData[3];
+                                if (is_numeric($tgl)) {
+                                    // Jika nilai berupa angka, konversi ke format tanggal
+                                    $tanggalExcel = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($tgl);
+                                    $tanggalFormatted = $tanggalExcel->format('Y-m-d');
+                                } else {
+                                    // Jika nilai sudah dalam format tanggal, pastikan formatnya adalah 'Y-m-d'
+                                    $tanggalFormatted = date('Y-m-d', strtotime($tgl));
+                                }
+
+                                if (empty($bk_approve) && $gudang == 'wip') {
+                                    DB::table('buku_campur_approve')->insert([
+                                        'id_buku_campur' => $rowData[0],
+                                        'ket2' => empty($rowData[1]) ? ' ' : $rowData[1],
+                                        'ket' => empty($rowData[2]) ? ' ' : $rowData[2],
+                                        'tgl' => empty($tanggalFormatted) ? '0000-00-00' : $tanggalFormatted,
+                                        'nm_grade' => $rowData[4],
+                                        'pcs' => $rowData[5],
+                                        'gr' => $rowData[6],
+                                        'rupiah' => $rowData[7],
+                                        'gudang' => $gudang,
+                                    ]);
+                                } else {
+                                    if ($gudang == 'wip') {
+                                        DB::table('buku_campur_approve')->where('id_buku_campur', $rowData[0])->update([
+                                            'id_buku_campur' => $rowData[0],
+                                            'ket2' => empty($rowData[1]) ? ' ' : $rowData[1],
+                                            'ket' => empty($rowData[2]) ? ' ' : $rowData[2],
+                                            'tgl' => empty($tanggalFormatted) ? '0000-00-00' : $tanggalFormatted,
+                                            'nm_grade' => $rowData[4],
+                                            'pcs' => $rowData[5],
+                                            'gr' => $rowData[6],
+                                            'rupiah' => $rowData[7],
+                                            'lok_tgl' => empty($rowData[12]) ? ' ' : $rowData[12],
+                                            'gudang' => $gudang,
+                                        ]);
+                                    } else {
+                                        DB::table('buku_campur_approve')->where('id_buku_campur', $rowData[0])->update([
+                                            'id_buku_campur' => $rowData[0],
+                                            'buku' => $rowData[1],
+                                            'suplier_awal' => $rowData[2],
+                                            'tgl' => empty($tanggalFormatted) ? '0000-00-00' : $tanggalFormatted,
+                                            'nm_grade' => $rowData[4],
+                                            'pcs' => $rowData[5],
+                                            'gr' => $rowData[6],
+                                            'rupiah' => $rowData[7],
+                                            'no_lot' => empty($buku_campur->no_nota) ? $rowData[8] : $buku_campur->no_lot,
+                                            'ket' => empty($rowData[9]) ? ' ' : $rowData[9],
+                                            'ket2' => empty($rowData[10]) ? ' ' : $rowData[10],
+                                            'lok_tgl' => empty($rowData[12]) ? ' ' : $rowData[12],
+                                            'gudang' => $gudang,
+                                        ]);
+                                    }
+                                }
+                            }
+                        } catch (\Exception $e) {
+                            // Jika terjadi kesalahan, atur flag dan hentikan pembaruan
+                            $hasError = true;
+                            break 2; // Keluar dari kedua loop (sheet dan row)
+                        }
+                    }
+                }
+            } catch (\Exception $e) {
+                echo 'Error loading spreadsheet: ' . $e->getMessage();
+            }
+
+            unlink(storage_path("app/{$filePath}"));
+
+            // Jika ada kesalahan, batalkan semua pembaruan
+            if ($hasError) {
+                return redirect()->route('gudangnew.gudang_p_kerja')->with('error', 'Data gagal di import');
+            }
+        }
+    }
+
+    public function export_g_c_pgws(Request $r)
+    {
+        $style_atas = array(
+            'font' => [
+                'bold' => true, // Mengatur teks menjadi tebal
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ]
+            ],
+        );
+
+        $style = [
+            'borders' => [
+                'alignment' => [
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                ],
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ],
+            ],
+        ];
+        $spreadsheet = new Spreadsheet();
+
+        $spreadsheet->setActiveSheetIndex(0);
+        $sheet1 = $spreadsheet->getActiveSheet();
+        $sheet1->setTitle('wipcetak');
+
+
+        $sheet1->getStyle("A1:M1")->applyFromArray($style_atas);
+
+        $sheet1->setCellValue('A1', 'No');
+        $sheet1->setCellValue('B1', 'Partai');
+        $sheet1->setCellValue('C1', 'No Box');
+        $sheet1->setCellValue('D1', 'Tipe');
+        $sheet1->setCellValue('E1', 'Ket');
+        $sheet1->setCellValue('F1', 'Warna');
+        $sheet1->setCellValue('G1', 'Tgl Terima');
+        $sheet1->setCellValue('H1', 'Pengawas');
+        $sheet1->setCellValue('I1', 'Penerima');
+        $sheet1->setCellValue('J1', 'Pcs');
+        $sheet1->setCellValue('K1', 'Gr');
+        $sheet1->setCellValue('L1', 'Pcs Sisa');
+        $sheet1->setCellValue('M1', 'Gr Sisa');
+        $kolom = 2;
+        $response = Http::get("https://sarang.ptagafood.com/api/apibk/bikin_box");
+        $cabut = $response->object();
+        foreach ($cabut as $no => $g) {
+            $sheet1->setCellValue('A' . $kolom, $no + 1);
+            $sheet1->setCellValue('B' . $kolom, $g->nm_partai);
+            $sheet1->setCellValue('C' . $kolom, $g->no_box);
+            $sheet1->setCellValue('D' . $kolom, $g->tipe);
+            $sheet1->setCellValue('E' . $kolom, $g->ket);
+            $sheet1->setCellValue('F' . $kolom, $g->warna);
+            $sheet1->setCellValue('G' . $kolom, $g->tgl);
+            $sheet1->setCellValue('H' . $kolom, $g->pengawas);
+            $sheet1->setCellValue('I' . $kolom, $g->name);
+            $sheet1->setCellValue('J' . $kolom, $g->pcs_awal);
+            $sheet1->setCellValue('K' . $kolom, $g->gr_awal);
+            $sheet1->setCellValue('L' . $kolom, $g->pcs_sisa);
+            $sheet1->setCellValue('M' . $kolom, $g->gr_sisa);
+
+            $kolom++;
+        }
+        $sheet1->getStyle('A2:M' . $kolom - 1)->applyFromArray($style);
+        $namafile = "Gudang Cabut Pengawas.xlsx";
+
+        $writer = new Xlsx($spreadsheet);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename=' . $namafile);
+        header('Cache-Control: max-age=0');
+
+
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
+        exit();
+    }
+
+    public function get_no_box(Request $r)
+    {
+        $response = Http::get(
+            "$this->linkApi/cabut_detail",
+            [
+                'nm_partai' => $r->nm_partai,
+                'limit' => $r->limit,
+            ]
+        );
+        $b = $response->object();
+        $data =  [
+            'bk' => $b,
+            'linkApi' => $this->linkApi,
+            'nm_partai' => $r->nm_partai,
+        ];
+        return view('laporan_produksi.get_box', $data);
+    }
+
+    public function export_show_box(Request $r)
+    {
+        $response = Http::get(
+            "$this->linkApi/cabut_detail",
+            [
+                'nm_partai' => $r->nm_partai,
+                'no_lot' => $r->no_lot,
+                'limit' => $r->limit,
+            ]
+        );
+        $b = $response->object();
+        $data =  [
+            'bk' => $b,
+            'linkApi' => $this->linkApi
+        ];
+        return view('laporan_produksi.export_show', $data);
+    }
+
+    public function get_susut(Request $r)
+    {
+        $partai = $r->partai;
+        $get = DB::table('table_susut')->where('ket', $partai)->where('gudang', 'wip')->first();
+        $data = [
+            'partai' => $partai,
+            'get_partai' => $get
+        ];
+        return view('gudangnew.get_susut', $data);
+    }
+
+    public function save_susut(Request $r)
+    {
+        $data = [
+            'pcs' => $r->pcs_susut,
+            'gr' => $r->gr_susut
+        ];
+        DB::table('table_susut')->where('ket', $r->partai)->where('gudang', 'wip')->update($data);
+        return redirect()->route('gudangnew.gudang_p_kerja')->with('sukses', 'Data susut ditambhkan');
     }
 }

@@ -96,6 +96,13 @@
             font-size: 14px;
         }
 
+        .dhead_second {
+            background-color: #1e525c !important;
+            color: white;
+            font-weight: normal;
+            font-size: 14px;
+        }
+
         #image-preview img {
             width: 200px;
             height: 200px;

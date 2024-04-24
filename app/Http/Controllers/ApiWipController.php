@@ -137,8 +137,8 @@ class ApiWipController extends Controller
 
             'pcs_susut' => $pcs_susut,
             'gr_susut' => $gr_susut,
-            
-            'ttl_gr_selesai' => $ttl_gr_selesai ,
+
+            'ttl_gr_selesai' => $ttl_gr_selesai,
 
             'pcs_sisa' => $pcs_sisa,
             'gr_sisa' => $gr_sisa,
@@ -150,7 +150,7 @@ class ApiWipController extends Controller
 
     public function detailOpname($no)
     {
-        
+
         $que = DB::select("SELECT a.nm_grade,count(a.no_lot) as no_lot1, a.id_buku_campur, a.no_lot, a.ket,a.ket2, sum(a.pcs) as pcs, sum(a.gr) as gr, sum(a.rupiah * a.gr) as total_rp , a.selesai_1, a.selesai_2, a.ket2, c.pcs as pcs_susut, c.gr as gr_susut, c.selesai
         FROM buku_campur_approve as a 
         left join buku_campur as b on b.id_buku_campur = a.id_buku_campur
@@ -161,7 +161,7 @@ class ApiWipController extends Controller
 
         $linkApi = "https://sarang.ptagafood.com/api/apibk";
         $res = [];
-        
+
         foreach ($que as $d) {
             $api = Http::get("$linkApi/datacabutsum2", ['nm_partai' => $d->ket2])->object();
             $wipGr = $d->gr ?? 0;
@@ -189,7 +189,7 @@ class ApiWipController extends Controller
                         'ttl_rp' => $modal,
                     ];
                     break;
-                
+
                 default:
                     # code...
                     break;

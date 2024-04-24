@@ -74,6 +74,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/kandang', 'kandang')->name('kandang');
         Route::get('/gudang_new', 'gudang_new')->name('gudang_new');
         Route::get('/kelompok_gudang', 'kelompok_gudang')->name('kelompok_gudang');
+        Route::get('/kelompok_laporan', 'kelompok_laporan')->name('kelompok_laporan');
     });
 
 
@@ -456,7 +457,19 @@ Route::middleware('auth')->group(function () {
         ->name('gudangnew.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
-            Route::get('/laporan_produksi', 'laporan_produksi')->name('laporan_produksi');
+            Route::get('/tbh_baris', 'tbh_baris')->name('tbh_baris');
+            Route::post('/save_gudang_bk', 'save_gudang_bk')->name('save_gudang_bk');
             Route::get('/gudang_p_kerja', 'gudang_p_kerja')->name('gudang_p_kerja');
+            Route::post('/import_buku_campur_produksi', 'import_buku_campur_produksi')->name('import_buku_campur_produksi');
+            Route::get('/gudang_cabut', 'gudang_cabut')->name('gudang_cabut');
+            Route::get('/gudang_c_pgws', 'gudang_c_pgws')->name('gudang_c_pgws');
+            // Laporan
+            Route::get('/laporan_produksi', 'laporan_produksi')->name('laporan_produksi');
+            Route::get('/laporan_boxproduksi', 'laporan_boxproduksi')->name('laporan_boxproduksi');
+            Route::get('/export_g_c_pgws', 'export_g_c_pgws')->name('export_g_c_pgws');
+            Route::get('/get_no_box', 'get_no_box')->name('get_no_box');
+            Route::get('/export_show_box', 'export_show_box')->name('export_show_box');
+            Route::get('/get_susut', 'get_susut')->name('get_susut');
+            Route::post('/save_susut', 'save_susut')->name('save_susut');
         });
 });

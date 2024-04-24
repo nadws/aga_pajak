@@ -292,7 +292,7 @@ class NavbarController extends Controller
             ],
             [
                 'judul' => 'Lap P Produksi',
-                'route' => 'gudangnew.laporan_produksi',
+                'route' => 'kelompok_laporan',
                 'img' => 'conveyor-belt.png',
                 'deskripsi' => 'Mencatat berbagai transaksi keuangan dengan menetapkan langsung rekening di sisi debit dan kredit.',
             ],
@@ -311,36 +311,68 @@ class NavbarController extends Controller
             ],
             [
                 'judul' => 'Gudang Partai Kerja',
-                'route' => 'gudangnew.laporan_produksi',
-                'img' => 'conveyor-belt.png',
+                'route' => 'gudangnew.gudang_p_kerja',
+                'img' => 'warehouse3.png',
                 'deskripsi' => 'Mencatat berbagai transaksi keuangan dengan menetapkan langsung rekening di sisi debit dan kredit.',
             ],
             [
-                'judul' => 'Gudang Cabut',
-                'route' => 'gudangnew.laporan_produksi',
-                'img' => 'conveyor-belt.png',
+                'judul' => 'Gudang Cabut Pengawas',
+                'route' => 'gudangnew.gudang_c_pgws',
+                'img' => 'warehouse3.png',
+                'deskripsi' => 'Mencatat berbagai transaksi keuangan dengan menetapkan langsung rekening di sisi debit dan kredit.',
+            ],
+            [
+                'judul' => 'Gudang Cabut In Progress',
+                'route' => 'gudangnew.gudang_cabut',
+                'img' => 'warehouse3.png',
                 'deskripsi' => 'Mencatat berbagai transaksi keuangan dengan menetapkan langsung rekening di sisi debit dan kredit.',
             ],
             [
                 'judul' => 'Gudang Cetak',
                 'route' => 'gudangnew.laporan_produksi',
-                'img' => 'conveyor-belt.png',
+                'img' => 'warehouse3.png',
                 'deskripsi' => 'Mencatat berbagai transaksi keuangan dengan menetapkan langsung rekening di sisi debit dan kredit.',
             ],
             [
                 'judul' => 'Gudang Grading',
                 'route' => 'gudangnew.laporan_produksi',
-                'img' => 'conveyor-belt.png',
+                'img' => 'warehouse3.png',
                 'deskripsi' => 'Mencatat berbagai transaksi keuangan dengan menetapkan langsung rekening di sisi debit dan kredit.',
             ],
             [
                 'judul' => 'Gudang Cetak Ulang',
                 'route' => 'gudangnew.laporan_produksi',
-                'img' => 'conveyor-belt.png',
+                'img' => 'warehouse3.png',
                 'deskripsi' => 'Mencatat berbagai transaksi keuangan dengan menetapkan langsung rekening di sisi debit dan kredit.',
             ],
         ];
         $title = 'Gudang';
+        return view('navbar.data_master', compact(['data', 'title']));
+    }
+
+    public function kelompok_laporan()
+    {
+        $data = [
+            [
+                'judul' => 'Laporan All',
+                'route' => 'gudangnew.laporan_produksi',
+                'img' => 'web.png',
+                'deskripsi' => 'Mencatat berbagai transaksi keuangan dengan menetapkan langsung rekening di sisi debit dan kredit.',
+            ],
+            [
+                'judul' => 'Campur Produksi',
+                'route' => 'gudangnew.laporan_produksi',
+                'img' => 'web.png',
+                'deskripsi' => 'Mencatat berbagai transaksi keuangan dengan menetapkan langsung rekening di sisi debit dan kredit.',
+            ],
+            [
+                'judul' => 'Box Produksi',
+                'route' => 'gudangnew.laporan_boxproduksi',
+                'img' => 'web.png',
+                'deskripsi' => 'Mencatat berbagai transaksi keuangan dengan menetapkan langsung rekening di sisi debit dan kredit.',
+            ],
+        ];
+        $title = 'Kelompok Laporan';
         return view('navbar.data_master', compact(['data', 'title']));
     }
     public function asset()
