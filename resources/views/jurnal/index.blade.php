@@ -43,6 +43,7 @@
                         <th>Keterangan</th>
                         <th style="text-align: right">Debit</th>
                         <th style="text-align: right">Kredit</th>
+                        <th>Admin</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -74,6 +75,7 @@
                             @endif
                             <td align="right">{{ number_format($a->debit, 2) }}</td>
                             <td align="right">{{ number_format($a->kredit, 2) }}</td>
+                            <td>{{ ucwords($a->admin) }}</td>
                             <td>
                                 <div class="btn-group" role="group">
                                     <span class="btn btn-sm" data-bs-toggle="dropdown">
@@ -132,8 +134,7 @@
             </x-theme.modal>
         </form>
 
-
-        <form action="{{ route('jurnal-delete') }}" method="get">
+        <form action="{{ route('jurnal-delete') }}">
             <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="exampleModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
@@ -157,7 +158,6 @@
                 </div>
             </div>
         </form>
-
 
         <x-theme.modal title="Detail Jurnal" size="modal-lg-max" idModal="detail">
             <div class="row">
