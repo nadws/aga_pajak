@@ -376,11 +376,8 @@ class GudangNewController extends Controller
 
         $spreadsheet->setActiveSheetIndex(0);
         $sheet1 = $spreadsheet->getActiveSheet();
-        $sheet1->setTitle('wipcetak');
-
-
+        $sheet1->setTitle('G Cabut Pgws');
         $sheet1->getStyle("A1:M1")->applyFromArray($style_atas);
-
         $sheet1->setCellValue('A1', 'No');
         $sheet1->setCellValue('B1', 'Partai');
         $sheet1->setCellValue('C1', 'No Box');
@@ -483,5 +480,89 @@ class GudangNewController extends Controller
         ];
         DB::table('table_susut')->where('ket', $r->partai)->where('gudang', 'wip')->update($data);
         return redirect()->route('gudangnew.gudang_p_kerja')->with('sukses', 'Data susut ditambhkan');
+    }
+
+
+
+    public function export_g_cabut(Request $r)
+    {
+        $style_atas = array(
+            'font' => [
+                'bold' => true, // Mengatur teks menjadi tebal
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ]
+            ],
+        );
+
+        $style = [
+            'borders' => [
+                'alignment' => [
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                ],
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ],
+            ],
+        ];
+        $spreadsheet = new Spreadsheet();
+
+        $spreadsheet->setActiveSheetIndex(0);
+        $sheet1 = $spreadsheet->getActiveSheet();
+        $sheet1->setTitle('Gudang Cabut');
+
+
+        $sheet1->getStyle("A1:L1")->applyFromArray($style_atas);
+
+        $sheet1->setCellValue('A1', 'No');
+        $sheet1->setCellValue('B1', 'Partai');
+        $sheet1->setCellValue('C1', 'No Box');
+        $sheet1->setCellValue('D1', 'Tipe');
+        $sheet1->setCellValue('E1', 'Ket');
+        $sheet1->setCellValue('F1', 'Warna');
+        $sheet1->setCellValue('G1', 'Tgl Terima');
+        $sheet1->setCellValue('H1', 'Pengawas');
+        $sheet1->setCellValue('I1', 'Nama Anak');
+        $sheet1->setCellValue('J1', 'Kelas');
+        $sheet1->setCellValue('K1', 'Pcs');
+        $sheet1->setCellValue('L1', 'Gr');
+        $kolom = 2;
+        $response = Http::get("https://sarang.ptagafood.com/api/apibk/cabut_selesai_new");
+        $cabut = $response->object();
+        foreach ($cabut as $no => $g) {
+            $sheet1->setCellValue('A' . $kolom, $no + 1);
+            $sheet1->setCellValue('B' . $kolom, $g->nm_partai);
+            $sheet1->setCellValue('C' . $kolom, $g->no_box);
+            $sheet1->setCellValue('D' . $kolom, $g->tipe);
+            $sheet1->setCellValue('E' . $kolom, $g->ket);
+            $sheet1->setCellValue('F' . $kolom, $g->warna);
+            $sheet1->setCellValue('G' . $kolom, $g->tgl_terima);
+            $sheet1->setCellValue('H' . $kolom, $g->pengawas);
+            $sheet1->setCellValue('I' . $kolom, $g->nama_anak);
+            $sheet1->setCellValue('J' . $kolom, $g->kelas);
+            $sheet1->setCellValue('K' . $kolom, $g->pcs_awal);
+            $sheet1->setCellValue('L' . $kolom, $g->gr_awal);
+
+            $kolom++;
+        }
+        $sheet1->getStyle('A2:L' . $kolom - 1)->applyFromArray($style);
+        $namafile = "Gudang Cabut in Progress.xlsx";
+
+        $writer = new Xlsx($spreadsheet);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename=' . $namafile);
+        header('Cache-Control: max-age=0');
+
+
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
+        exit();
     }
 }

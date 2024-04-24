@@ -463,6 +463,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/import_buku_campur_produksi', 'import_buku_campur_produksi')->name('import_buku_campur_produksi');
             Route::get('/gudang_cabut', 'gudang_cabut')->name('gudang_cabut');
             Route::get('/gudang_c_pgws', 'gudang_c_pgws')->name('gudang_c_pgws');
+            Route::get('/export_g_cabut', 'export_g_cabut')->name('export_g_cabut');
             // Laporan
             Route::get('/laporan_produksi', 'laporan_produksi')->name('laporan_produksi');
             Route::get('/laporan_boxproduksi', 'laporan_boxproduksi')->name('laporan_boxproduksi');

@@ -6,13 +6,8 @@
                 <h6 class="float-start mt-1">{{ $title }} </h6>
             </div>
             <div class="col-lg-6">
-
-                {{-- <x-theme.button modal="Y" idModal="import" icon="fas fa-upload" addClass="float-end"
-                    teks="Import" /> --}}
-                <form action="{{ route('gudangBk.export_buku_campur_bk') }}" method="post">
-                    @csrf
-                    <button class="btn btn-success float-end me-2"><i class="fas fa-file-excel"></i> Export</button>
-                </form>
+                <a href="{{ route('gudangnew.export_g_cabut') }}" class="btn btn-success float-end me-2"><i
+                        class="fas fa-file-excel"></i> Export</a>
             </div>
         </div>
     </x-slot>
