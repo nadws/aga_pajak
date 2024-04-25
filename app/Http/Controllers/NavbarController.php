@@ -329,7 +329,7 @@ class NavbarController extends Controller
             ],
             [
                 'judul' => 'Gudang Cetak',
-                'route' => 'gudangnew.laporan_produksi',
+                'route' => 'gudangcetak.index',
                 'img' => 'warehouse3.png',
                 'deskripsi' => 'Mencatat berbagai transaksi keuangan dengan menetapkan langsung rekening di sisi debit dan kredit.',
             ],

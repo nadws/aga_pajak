@@ -33,7 +33,7 @@ class GudangBkModel extends Model
         left join buku_campur_approve as d on d.id_buku_campur = a.id_buku_campur
         left join invoice_bk as e on e.no_nota = a.no_nota
         left join tb_suplier as f on f.id_suplier = e.id_suplier
-        where if(a.approve = 'T',a.gudang,d.gudang) = ? and a.gabung = 'T' ;
+        where if(a.approve = 'T',a.gudang,d.gudang) = ? and a.gabung = 'T' and  if(a.approve = 'T',a.rupiah,if(d.rupiah is null , a.rupiah,d.rupiah))  is not null;
         ", [$nmgudang]);
 
         return $result;
@@ -61,7 +61,7 @@ class GudangBkModel extends Model
         left join buku_campur_approve as d on d.id_buku_campur = a.id_buku_campur
         left join invoice_bk as e on e.no_nota = a.no_nota
         left join tb_suplier as f on f.id_suplier = e.id_suplier
-        where if(a.approve = 'T',a.gudang,d.gudang) = ? and a.gabung = 'T' ;
+        where if(a.approve = 'T',a.gudang,d.gudang) = ? and a.gabung = 'T' and if(a.approve = 'T',a.rupiah, if(d.rupiah is null , a.rupiah,d.rupiah)) is not null ;
         ", [$gudang]);
         return $result;
     }

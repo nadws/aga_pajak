@@ -10,6 +10,7 @@ use App\Http\Controllers\ControlflowController;
 use App\Http\Controllers\CrudPermissionController;
 use App\Http\Controllers\FakturPenjualanController;
 use App\Http\Controllers\GudangBkController;
+use App\Http\Controllers\GudangCetakController;
 use App\Http\Controllers\GudangController;
 use App\Http\Controllers\GudangNewController;
 use App\Http\Controllers\HalawalGudangController;
@@ -25,6 +26,7 @@ use App\Http\Controllers\Penjualan_umum_cekController;
 use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\Penyetoran_telurController;
 use App\Http\Controllers\PiutangtelurController;
+use App\Http\Controllers\PrintNotaPajakController;
 use App\Http\Controllers\Produk_telurController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\ProfileController;
@@ -472,5 +474,18 @@ Route::middleware('auth')->group(function () {
             Route::get('/export_show_box', 'export_show_box')->name('export_show_box');
             Route::get('/get_susut', 'get_susut')->name('get_susut');
             Route::post('/save_susut', 'save_susut')->name('save_susut');
+        });
+    Route::controller(GudangCetakController::class)
+        ->prefix('gudangcetak')
+        ->name('gudangcetak.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/export_g_cetak', 'export_g_cetak')->name('export_g_cetak');
+        });
+    Route::controller(PrintNotaPajakController::class)
+        ->prefix('printnota')
+        ->name('printnota.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
         });
 });
