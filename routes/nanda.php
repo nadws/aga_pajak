@@ -481,11 +481,15 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/export_g_cetak', 'export_g_cetak')->name('export_g_cetak');
+            Route::get('/masuk_bk_grading', 'masuk_bk_grading')->name('masuk_bk_grading');
+            Route::post('/import_bk_ctk', 'import_bk_ctk')->name('import_bk_ctk');
+            Route::post('/save_cetak', 'save_cetak')->name('save_cetak');
         });
     Route::controller(PrintNotaPajakController::class)
         ->prefix('printnota')
         ->name('printnota.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
+            Route::get('/get_data', 'get_data')->name('get_data');
         });
 });
