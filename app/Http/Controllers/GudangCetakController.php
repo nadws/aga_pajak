@@ -240,4 +240,30 @@ class GudangCetakController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
+
+
+    // 
+
+    public function g_ctk_pgws(Request $r)
+    {
+        $response = Http::get("https://sarang.ptagafood.com/api/apibk/cetak_pgws");
+        $cetak = $response->object();
+
+        $data =  [
+            'title' => 'Gudang Cetak',
+            'cetak' => $cetak,
+        ];
+        return view('gudangcetak.cetak_pgws', $data);
+    }
+    public function g_ctk_in_progres(Request $r)
+    {
+        $response = Http::get("https://sarang.ptagafood.com/api/apibk/cetak_belum_selesai");
+        $cetak = $response->object();
+
+        $data =  [
+            'title' => 'Gudang cetak in progress',
+            'cetak' => $cetak,
+        ];
+        return view('gudangcetak.cetak_in_progress', $data);
+    }
 }

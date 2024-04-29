@@ -469,6 +469,7 @@ Route::middleware('auth')->group(function () {
             // Laporan
             Route::get('/laporan_produksi', 'laporan_produksi')->name('laporan_produksi');
             Route::get('/laporan_boxproduksi', 'laporan_boxproduksi')->name('laporan_boxproduksi');
+            Route::get('/export_laporan_boxproduksi', 'export_laporan_boxproduksi')->name('export_laporan_boxproduksi');
             Route::get('/export_g_c_pgws', 'export_g_c_pgws')->name('export_g_c_pgws');
             Route::get('/get_no_box', 'get_no_box')->name('get_no_box');
             Route::get('/export_show_box', 'export_show_box')->name('export_show_box');
@@ -484,6 +485,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/masuk_bk_grading', 'masuk_bk_grading')->name('masuk_bk_grading');
             Route::post('/import_bk_ctk', 'import_bk_ctk')->name('import_bk_ctk');
             Route::post('/save_cetak', 'save_cetak')->name('save_cetak');
+            Route::get('/g_ctk_pgws', 'g_ctk_pgws')->name('g_ctk_pgws');
+            Route::get('/g_ctk_in_progres', 'g_ctk_in_progres')->name('g_ctk_in_progres');
         });
     Route::controller(PrintNotaPajakController::class)
         ->prefix('printnota')

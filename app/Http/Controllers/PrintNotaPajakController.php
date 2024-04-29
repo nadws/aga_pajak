@@ -22,6 +22,7 @@ class PrintNotaPajakController extends Controller
         $data = [
             'bk' => DB::table('bkinpajak')
                 ->whereRaw('id_bkin % 2 <> 0')
+                ->orderBy('nota_bk', 'ASC')
                 ->get()
         ];
         return view('printnota.getdata', $data);

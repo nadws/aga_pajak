@@ -6,6 +6,8 @@
                 <h6 class="float-start mt-1">{{ $title }} </h6>
             </div>
             <div class="col-lg-6">
+                <a href="{{ route('gudangnew.export_laporan_boxproduksi') }}" class="btn btn-success float-end me-2"><i
+                        class="fas fa-file-excel"></i> Export</a>
             </div>
         </div>
     </x-slot>

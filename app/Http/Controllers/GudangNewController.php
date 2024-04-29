@@ -159,32 +159,6 @@ class GudangNewController extends Controller
         return view('gudangnew.g_cabut', $data);
     }
 
-    // Laporan 
-
-    public function laporan_produksi(Request $r)
-    {
-        $gudang = GudangBkModel::getSummaryWip('data');
-        $listBulan = DB::table('bulan')->get();
-        $data =  [
-            'title' => 'Laporan Produksi',
-            'gudang' => $gudang,
-            'listbulan' => $listBulan,
-            'linkApi' => $this->linkApi,
-        ];
-        return view('laporan_produksi.index', $data);
-    }
-    public function laporan_boxproduksi(Request $r)
-    {
-        $response = Http::get("https://sarang.ptagafood.com/api/apibk/cabut_laporan");
-        $cabut = $response->object();
-        $data =  [
-            'title' => 'Laporan Box Produksi',
-            'cabut' => $cabut,
-        ];
-        return view('laporan_produksi.cabut', $data);
-    }
-
-
     public function import_buku_campur_produksi(Request $r)
     {
 
@@ -481,9 +455,6 @@ class GudangNewController extends Controller
         DB::table('table_susut')->where('ket', $r->partai)->where('gudang', 'wip')->update($data);
         return redirect()->route('gudangnew.gudang_p_kerja')->with('sukses', 'Data susut ditambhkan');
     }
-
-
-
     public function export_g_cabut(Request $r)
     {
         $style_atas = array(
@@ -554,6 +525,135 @@ class GudangNewController extends Controller
         }
         $sheet1->getStyle('A2:L' . $kolom - 1)->applyFromArray($style);
         $namafile = "Gudang Cabut in Progress.xlsx";
+
+        $writer = new Xlsx($spreadsheet);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename=' . $namafile);
+        header('Cache-Control: max-age=0');
+
+
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
+        exit();
+    }
+
+
+    // Laporan 
+
+    public function laporan_produksi(Request $r)
+    {
+        $gudang = GudangBkModel::getSummaryWipnew();
+        $listBulan = DB::table('bulan')->get();
+        $data =  [
+            'title' => 'Laporan Produksi',
+            'gudang' => $gudang,
+            'listbulan' => $listBulan,
+            'linkApi' => $this->linkApi,
+        ];
+        return view('laporan_produksi.index', $data);
+    }
+    public function laporan_boxproduksi(Request $r)
+    {
+        $response = Http::get("https://sarang.ptagafood.com/api/apibk/cabut_laporan");
+        $cabut = $response->object();
+        $data =  [
+            'title' => 'Laporan Box Produksi',
+            'cabut' => $cabut,
+        ];
+        return view('laporan_produksi.cabut', $data);
+    }
+
+    public function export_laporan_boxproduksi(Request $r)
+    {
+        $style_atas = array(
+            'font' => [
+                'bold' => true, // Mengatur teks menjadi tebal
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ]
+            ],
+        );
+
+        $style = [
+            'borders' => [
+                'alignment' => [
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                ],
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                ],
+            ],
+        ];
+        $spreadsheet = new Spreadsheet();
+
+        $spreadsheet->setActiveSheetIndex(0);
+        $sheet1 = $spreadsheet->getActiveSheet();
+        $sheet1->setTitle('Gudang Cabut');
+
+
+        $sheet1->getStyle("A1:U1")->applyFromArray($style_atas);
+
+        $sheet1->setCellValue('A1', 'no');
+        $sheet1->setCellValue('B1', 'ket / nama partai');
+        $sheet1->setCellValue('C1', 'no nox');
+        $sheet1->setCellValue('D1', 'tipe');
+        $sheet1->setCellValue('E1', 'pengawas');
+        $sheet1->setCellValue('F1', 'pcs bk');
+        $sheet1->setCellValue('G1', 'gr bk');
+        $sheet1->setCellValue('H1', 'pcs awal cbt');
+        $sheet1->setCellValue('I1', 'gr awal cbt');
+        $sheet1->setCellValue('J1', 'pcs akhir cbt');
+        $sheet1->setCellValue('K1', 'gr akhir cbt');
+        $sheet1->setCellValue('L1', 'eot');
+        $sheet1->setCellValue('M1', 'flx');
+        $sheet1->setCellValue('N1', 'sst%');
+        $sheet1->setCellValue('O1', 'cost cbt');
+        $sheet1->setCellValue('P1', 'gr awal eo');
+        $sheet1->setCellValue('Q1', 'gr akhir eo');
+        $sheet1->setCellValue('R1', 'sst%');
+        $sheet1->setCellValue('S1', 'cost eo');
+        $sheet1->setCellValue('T1', 'pcs sisa');
+        $sheet1->setCellValue('U1', 'gr sisa');
+        $kolom = 2;
+
+        $response = Http::get("https://sarang.ptagafood.com/api/apibk/cabut_laporan");
+        $cabut = $response->object();
+
+        foreach ($cabut as $no => $c) {
+            $sheet1->setCellValue('A' . $kolom, $no + 1);
+            $sheet1->setCellValue('B' . $kolom, $c->nm_partai);
+            $sheet1->setCellValue('C' . $kolom, $c->no_box);
+            $sheet1->setCellValue('D' . $kolom, $c->tipe);
+            $sheet1->setCellValue('E' . $kolom, $c->name);
+            $sheet1->setCellValue('F' . $kolom, $c->pcs_awal);
+            $sheet1->setCellValue('G' . $kolom, $c->gr_awal);
+
+            $sheet1->setCellValue('H' . $kolom, $c->pcs_awal_cbt);
+            $sheet1->setCellValue('I' . $kolom, $c->gr_awal_cbt);
+            $sheet1->setCellValue('J' . $kolom, $c->pcs_akhir_cbt);
+            $sheet1->setCellValue('K' . $kolom, $c->gr_akhir_cbt);
+            $sheet1->setCellValue('L' . $kolom, $c->eot ?? 0);
+            $sheet1->setCellValue('M' . $kolom, $c->flx ?? 0);
+            $sheet1->setCellValue('N' . $kolom, $c->gr_awal_cbt == 0 ? 0 : round((1 - $c->gr_akhir_cbt / $c->gr_awal_cbt) * 100, 1));
+            $sheet1->setCellValue('O' . $kolom, $c->cost_cabut ?? 0);
+            $sheet1->setCellValue('P' . $kolom, $c->gr_eo_awal ?? 0);
+            $sheet1->setCellValue('Q' . $kolom, $c->gr_eo_akhir ?? 0);
+            $sheet1->setCellValue('R' . $kolom, $c->gr_eo_awal == 0 ? 0 : round((1 - $c->gr_eo_akhir / $c->gr_eo_awal) * 100, 0));
+            $sheet1->setCellValue('S' . $kolom, $c->cost_eo ?? 0);
+            $sheet1->setCellValue('T' . $kolom, $c->pcs_awal - $c->pcs_awal_cbt);
+            $sheet1->setCellValue('U' . $kolom, $c->gr_awal - $c->gr_awal_cbt - $c->gr_eo_awal);
+            $kolom++;
+        }
+        $sheet1->getStyle('A2:U' . $kolom - 1)->applyFromArray($style);
+
+        $namafile = "Laporan Box Produksi.xlsx";
 
         $writer = new Xlsx($spreadsheet);
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
