@@ -11,6 +11,7 @@ use App\Http\Controllers\CrudPermissionController;
 use App\Http\Controllers\FakturPenjualanController;
 use App\Http\Controllers\GudangBkController;
 use App\Http\Controllers\GudangController;
+use App\Http\Controllers\GudangGradingController;
 use App\Http\Controllers\GudangNewController;
 use App\Http\Controllers\HalawalGudangController;
 use App\Http\Controllers\JurnalController;
@@ -460,6 +461,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/tbh_baris', 'tbh_baris')->name('tbh_baris');
             Route::post('/save_gudang_bk', 'save_gudang_bk')->name('save_gudang_bk');
             Route::get('/gudang_p_kerja', 'gudang_p_kerja')->name('gudang_p_kerja');
+            Route::get('/gudang_grading', 'gudang_grading')->name('gudang_grading');
             Route::post('/import_buku_campur_produksi', 'import_buku_campur_produksi')->name('import_buku_campur_produksi');
             Route::get('/gudang_cabut', 'gudang_cabut')->name('gudang_cabut');
             Route::get('/gudang_c_pgws', 'gudang_c_pgws')->name('gudang_c_pgws');
@@ -471,5 +473,14 @@ Route::middleware('auth')->group(function () {
             Route::get('/export_show_box', 'export_show_box')->name('export_show_box');
             Route::get('/get_susut', 'get_susut')->name('get_susut');
             Route::post('/save_susut', 'save_susut')->name('save_susut');
+        });
+    Route::controller(GudangGradingController::class)
+        ->prefix('gudang_grading')
+        ->name('gudang_grading.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/selesai', 'selesai')->name('selesai');
+            Route::get('/export', 'export')->name('export');
+            Route::post('/create_suntikan', 'create_suntikan')->name('create_suntikan');
         });
 });

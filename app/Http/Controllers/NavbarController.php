@@ -335,7 +335,7 @@ class NavbarController extends Controller
             ],
             [
                 'judul' => 'Gudang Grading',
-                'route' => 'gudangnew.laporan_produksi',
+                'route' => 'gudang_grading.index',
                 'img' => 'warehouse3.png',
                 'deskripsi' => 'Mencatat berbagai transaksi keuangan dengan menetapkan langsung rekening di sisi debit dan kredit.',
             ],

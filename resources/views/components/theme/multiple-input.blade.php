@@ -1,11 +1,11 @@
 <div>
     <div x-data="{
-        rows: []
+        rows: ['']
     }">
         <template x-for="(row, index) in rows" :key="index">
             <div class="row">
                 {{ $slot }}
-                <div class="col-lg-3">
+                <div class="col-lg-1">
                     <div class="form-group">
                         <label for="">Aksi</label><br>
                         <button class="btn btn-danger btn-sm" type="button" @click="rows.splice(index, 1)"><i
