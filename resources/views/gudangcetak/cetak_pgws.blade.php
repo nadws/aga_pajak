@@ -6,27 +6,15 @@
                 <h6 class="float-start mt-1">{{ $title }} </h6>
             </div>
             <div class="col-lg-6">
-                <a href="{{ route('gudangnew.export_g_cabut') }}" class="btn btn-success float-end me-2"><i
+                <a href="{{ route('gudangnew.export_g_c_pgws') }}" class="btn btn-success float-end me-2"><i
                         class="fas fa-file-excel"></i> Export</a>
             </div>
         </div>
     </x-slot>
     <x-slot name="cardBody">
-        {{-- <form action="{{ route('gudangBk.export_buku_campur_bk') }}" method="post"> --}}
-        @csrf
+
         <section class="row">
-
-            {{-- <div class="col-lg-9">
-                @include('gudangnew.nav')
-            </div> --}}
-            {{-- <div class="col-lg-3">
-                    <table class="float-end">
-                        <td>Search :</td>
-                        <td><input type="text" id="pencarian" class="form-control float-end"></td>
-                    </table>
-                </div> --}}
             <div class="col-lg-12 mt-2">
-
                 <table class="table table-hover table-bordered" id="table" width="100%">
                     <thead>
                         <tr>
@@ -38,15 +26,15 @@
                             <th>Warna</th>
                             <th>Tgl Terima</th>
                             <th>Pengawas</th>
-                            <th>Nama Anak</th>
-                            <th>Kelas</th>
+                            <th>Penerima</th>
                             <th class="text-end">Pcs</th>
                             <th class="text-end">Gr</th>
-                            <th>Kerja</th>
+                            <th class="bg-danger text-end text-white">Pcs Sisa</th>
+                            <th class="bg-danger text-end text-white">Gr Sisa</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($cabut as $no => $g)
+                        @foreach ($cetak as $no => $g)
                             <tr>
                                 <td>{{ $no + 1 }}</td>
                                 <td>{{ $g->nm_partai }}</td>
@@ -54,23 +42,20 @@
                                 <td>{{ $g->tipe }}</td>
                                 <td>{{ $g->ket }}</td>
                                 <td>{{ $g->warna }}</td>
-                                <td>{{ tanggal($g->tgl_terima) }}</td>
+                                <td>{{ tanggal($g->tgl) }}</td>
                                 <td>{{ $g->pengawas }}</td>
-                                <td>{{ $g->nama_anak }}</td>
-                                <td>{{ $g->kelas }}</td>
-                                <td class="text-end">{{ $g->pcs_awal }}</td>
-                                <td class="text-end">{{ $g->gr_awal }}</td>
-                                <td>{{ $g->kategori }}</td>
+                                <td>{{ $g->name }}</td>
+                                <td class="text-end">{{ number_format($g->pcs_awal, 0) }}</td>
+                                <td class="text-end">{{ number_format($g->gr_awal, 0) }}</td>
+                                <td class="text-end">{{ number_format($g->pcs_awal - $g->pcs_awal_ctk, 0) }}
+                                </td>
+                                <td class="text-end">{{ number_format($g->gr_awal - $g->gr_awal_ctk, 0) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
-
             </div>
-
         </section>
-        {{-- </form> --}}
-
     </x-slot>
 
     @section('scripts')
