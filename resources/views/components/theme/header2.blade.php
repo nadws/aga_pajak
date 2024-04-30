@@ -2,12 +2,12 @@
     <div class="container">
         <style>
             .layout-horizontal .header-top {
-                background-color: #fff;
+                background-color: #8c8989;
                 padding: 0rem;
             }
 
             .layout-horizontal .main-navbar {
-                background-color: #257687;
+                background-color: #F7914D;
                 padding: 4px;
             }
 
@@ -31,7 +31,7 @@
         </style>
         <div class="logo">
             <a href="dashboard"><img src="/assets/login/img/empat.svg" alt="Logo" width="90px"></a>
-            <p class="fw-bold text-center font-testing">KAS AGA</p>
+            <p class="fw-bold text-center font-testing text-white">KAS AGA</p>
         </div>
         <div class="header-top-right">
 

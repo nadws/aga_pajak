@@ -81,23 +81,23 @@
 
         /* Warna scrollbar itu sendiri */
         .table-container::-webkit-scrollbar-thumb {
-            background: #257687;
+            background: #8c8989;
         }
 
         /* Warna scrollbar saat dihover */
         .table-container::-webkit-scrollbar-thumb:hover {
-            background: #257687;
+            background: #8c8989;
         }
 
         .dhead {
-            background-color: #257687 !important;
+            background-color: #8c8989 !important;
             color: white;
             font-weight: normal;
             font-size: 14px;
         }
 
         .dhead_second {
-            background-color: #1e525c !important;
+            background-color: #757474 !important;
             color: white;
             font-weight: normal;
             font-size: 14px;
@@ -233,7 +233,7 @@
         }
 
         th {
-            background-color: #257687;
+            background-color: #8c8989;
 
         }
 
@@ -250,7 +250,7 @@
             cursor: pointer;
             position: relative;
             padding-right: 26px;
-            background-color: #257687;
+            background-color: #8c8989;
             color: white;
         }
     </style>

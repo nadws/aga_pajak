@@ -486,6 +486,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/selesai', 'selesai')->name('selesai');
             Route::get('/export', 'export')->name('export');
             Route::post('/create_suntikan', 'create_suntikan')->name('create_suntikan');
+        });
     Route::controller(GudangCetakController::class)
         ->prefix('gudangcetak')
         ->name('gudangcetak.')

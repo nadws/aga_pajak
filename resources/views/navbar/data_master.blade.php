@@ -4,7 +4,7 @@
             @foreach ($data as $d)
                 <div class="col-lg-3 col-6">
                     <a href="{{ route($d['route']) }}">
-                        <div style="cursor:pointer;background-color: #29877D" class="card border card-hover text-white">
+                        <div style="cursor:pointer;background-color: #8c8989" class="card border card-hover text-white">
                             <div class="card-front">
                                 <div class="card-body">
                                     <h6 class="card-title text-white text-center" style="white-space: nowrap;"><img

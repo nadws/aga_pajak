@@ -3,7 +3,7 @@
 
     <style>
         .layout-horizontal .main-navbar ul .menu-link {
-            color: white !important;
+            color: rgb(255, 255, 255) !important;
             padding: 1rem 0;
         }
     </style>
