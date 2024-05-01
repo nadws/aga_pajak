@@ -352,7 +352,7 @@ class NavbarController extends Controller
                 'deskripsi' => 'Mencatat berbagai transaksi keuangan dengan menetapkan langsung rekening di sisi debit dan kredit.',
             ],
             [
-                'judul' => 'Gudang Cetak Ulang',
+                'judul' => 'Gudang Bj',
                 'route' => 'gudangnew.laporan_produksi',
                 'img' => 'warehouse3.png',
                 'deskripsi' => 'Mencatat berbagai transaksi keuangan dengan menetapkan langsung rekening di sisi debit dan kredit.',
