@@ -383,6 +383,12 @@ class NavbarController extends Controller
                 'img' => 'web.png',
                 'deskripsi' => 'Mencatat berbagai transaksi keuangan dengan menetapkan langsung rekening di sisi debit dan kredit.',
             ],
+            [
+                'judul' => 'Laporan Box Produksi Cetak',
+                'route' => 'gudangcetak.lap_box_cetak',
+                'img' => 'web.png',
+                'deskripsi' => 'Mencatat berbagai transaksi keuangan dengan menetapkan langsung rekening di sisi debit dan kredit.',
+            ],
         ];
         $title = 'Kelompok Laporan';
         return view('navbar.data_master', compact(['data', 'title']));

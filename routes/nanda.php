@@ -498,6 +498,8 @@ Route::middleware('auth')->group(function () {
             Route::post('/save_cetak', 'save_cetak')->name('save_cetak');
             Route::get('/g_ctk_pgws', 'g_ctk_pgws')->name('g_ctk_pgws');
             Route::get('/g_ctk_in_progres', 'g_ctk_in_progres')->name('g_ctk_in_progres');
+            Route::get('/lap_box_cetak', 'lap_box_cetak')->name('lap_box_cetak');
+            Route::get('/export_laporan_boxproduksicetak', 'export_laporan_boxproduksicetak')->name('export_laporan_boxproduksicetak');
         });
     Route::controller(PrintNotaPajakController::class)
         ->prefix('printnota')
