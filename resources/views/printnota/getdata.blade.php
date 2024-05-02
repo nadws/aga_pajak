@@ -6,7 +6,7 @@
                 <h6 class="float-start mt-1">Data </h6>
             </div>
             <div class="col-lg-6">
-
+                <a class="btn btn-primary float-end" href=""><i class="fas fa-plus"> </i> Data</a>
             </div>
         </div>
     </x-slot>
@@ -34,9 +34,14 @@
                         <td class="text-end">{{ round($b->gr_beli, 0) }}</td>
                         <td class="text-end">{{ number_format($b->harga, 0) }}</td>
                         <td class="text-end">{{ number_format($b->harga * $b->gr_beli, 0) }}</td>
-                        <td class="text-center"><a target="_blank" class="btn btn-primary btn-sm"
+                        <td class="text-center">
+                            <a href="" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+                            <a href="" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></a>
+                            <a target="_blank" class="btn btn-primary btn-sm"
                                 href="{{ route('bahanbaku.print_nota', ['id_bkin' => $b->id_bkin]) }}"><i
-                                    class="fas fa-print"></i></a></td>
+                                    class="fas fa-print"></i>
+                            </a>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
