@@ -18,10 +18,10 @@
                     <th>No Nota</th>
                     <th>Tanggal</th>
                     <th>Suplier</th>
-                    <th>Gr</th>
-                    <th>Rp Gr</th>
-                    <th>Ttl Rp</th>
-                    <th>Print</th>
+                    <th class="text-end">Gr</th>
+                    <th class="text-end">Rp Gr</th>
+                    <th class="text-end">Ttl Rp</th>
+                    <th class="text-center">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -31,11 +31,12 @@
                         <td>{{ $b->nota_bk }}</td>
                         <td>{{ tanggal($b->tanggal) }}</td>
                         <td>{{ $b->suplier_akhir }}</td>
-                        <td>{{ round($b->gr_beli, 0) }}</td>
-                        <td>{{ number_format($b->harga, 0) }}</td>
-                        <td>{{ number_format($b->harga * $b->gr_beli, 0) }}</td>
-                        <td><a target="_blank"
-                                href="{{ route('bahanbaku.print_nota', ['id_bkin' => $b->id_bkin]) }}">print</a></td>
+                        <td class="text-end">{{ round($b->gr_beli, 0) }}</td>
+                        <td class="text-end">{{ number_format($b->harga, 0) }}</td>
+                        <td class="text-end">{{ number_format($b->harga * $b->gr_beli, 0) }}</td>
+                        <td class="text-center"><a target="_blank" class="btn btn-primary btn-sm"
+                                href="{{ route('bahanbaku.print_nota', ['id_bkin' => $b->id_bkin]) }}"><i
+                                    class="fas fa-print"></i></a></td>
                     </tr>
                 @endforeach
             </tbody>

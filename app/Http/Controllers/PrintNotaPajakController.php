@@ -21,7 +21,7 @@ class PrintNotaPajakController extends Controller
     {
         $data = [
             'bk' => DB::table('bkinpajak')
-                ->orderBy('nota_bk', 'ASC')
+                ->orderBy('nota_bk', 'DESC')
                 ->get()
         ];
         return view('printnota.getdata', $data);
