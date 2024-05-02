@@ -35,7 +35,7 @@
                         <td>{{ number_format($b->harga, 0) }}</td>
                         <td>{{ number_format($b->harga * $b->gr_beli, 0) }}</td>
                         <td><a target="_blank"
-                                href="{{ route('printnota.index', ['id_bkin' => $b->id_bkin]) }}">print</a></td>
+                                href="{{ route('bahanbaku.index', ['id_bkin' => $b->id_bkin]) }}">print</a></td>
                     </tr>
                 @endforeach
             </tbody>

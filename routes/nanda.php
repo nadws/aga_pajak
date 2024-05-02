@@ -510,8 +510,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/bk_sortir', 'bk_sortir')->name('bk_sortir');
         });
     Route::controller(PrintNotaPajakController::class)
-        ->prefix('printnota')
-        ->name('printnota.')
+        ->prefix('bahanbaku')
+        ->name('bahanbaku.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/get_data', 'get_data')->name('get_data');
