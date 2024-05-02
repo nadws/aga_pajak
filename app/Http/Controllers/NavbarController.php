@@ -353,7 +353,13 @@ class NavbarController extends Controller
             ],
             [
                 'judul' => 'Gudang Bj',
-                'route' => 'gudangnew.laporan_produksi',
+                'route' => 'gudangBj.index',
+                'img' => 'warehouse3.png',
+                'deskripsi' => 'Mencatat berbagai transaksi keuangan dengan menetapkan langsung rekening di sisi debit dan kredit.',
+            ],
+            [
+                'judul' => 'Gudang Box Sortir Pengawas',
+                'route' => 'gudangBj.bk_sortir',
                 'img' => 'warehouse3.png',
                 'deskripsi' => 'Mencatat berbagai transaksi keuangan dengan menetapkan langsung rekening di sisi debit dan kredit.',
             ],
