@@ -7,6 +7,7 @@
             </div>
             <div class="col-lg-6">
                 <a class="btn btn-primary float-end" href=""><i class="fas fa-plus"> </i> Data</a>
+                <x-theme.btn_filter />
             </div>
         </div>
     </x-slot>
@@ -35,12 +36,12 @@
                         <td class="text-end">{{ number_format($b->harga, 0) }}</td>
                         <td class="text-end">{{ number_format($b->harga * $b->gr_beli, 0) }}</td>
                         <td class="text-center">
-                            <a href="" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
-                            <a href="" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></a>
                             <a target="_blank" class="btn btn-primary btn-sm"
-                                href="{{ route('bahanbaku.print_nota', ['id_bkin' => $b->id_bkin]) }}"><i
+                                href="{{ route('bahanbaku.index', ['id_bkin' => $b->id_bkin]) }}"><i
                                     class="fas fa-print"></i>
                             </a>
+                            <a href="" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+                            <a href="" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></a>
                         </td>
                     </tr>
                 @endforeach
